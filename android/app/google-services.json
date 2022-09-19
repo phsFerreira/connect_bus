@@ -1,33 +1,33 @@
 {
   "project_info": {
-    "project_number": "381946787721",
-    "project_id": "connectbus-tcc",
-    "storage_bucket": "connectbus-tcc.appspot.com"
+    "project_number": "128399003759",
+    "project_id": "connectbus-7d8d9",
+    "storage_bucket": "connectbus-7d8d9.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:381946787721:android:2f1f7a1ca1e4388e055358",
+        "mobilesdk_app_id": "1:128399003759:android:96ba3bb76dbf2aa1c73d9a",
         "android_client_info": {
           "package_name": "com.example.connect_bus"
         }
       },
       "oauth_client": [
         {
-          "client_id": "381946787721-nqvmgqs4ms5uh6fgcl44dhihpjqovh5v.apps.googleusercontent.com",
+          "client_id": "128399003759-rcq4pggqlq0sm8mvoo5qvgs2rf3sc7do.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyBR0TH_JDTtbLz5cBVtgpuoCBoYi9Wz7Wg"
+          "current_key": "AIzaSyACsY0rrYcxqSitmkKbn6BAr0ABR9Yi-ek"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "381946787721-nqvmgqs4ms5uh6fgcl44dhihpjqovh5v.apps.googleusercontent.com",
+              "client_id": "128399003759-rcq4pggqlq0sm8mvoo5qvgs2rf3sc7do.apps.googleusercontent.com",
               "client_type": 3
             }
           ]
