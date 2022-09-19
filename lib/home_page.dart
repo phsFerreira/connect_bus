@@ -1,5 +1,6 @@
-// ignore_for_file: prefer_const_constructors
+// ignore_for_file: prefer_const_constructors, prefer_interpolation_to_compose_strings
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class HomePage extends StatefulWidget {
@@ -10,28 +11,29 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  final user = FirebaseAuth.instance.currentUser!;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.grey[100],
-      body: SafeArea(
-          child: Center(
+      body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Container(
-                alignment: Alignment.center,
-                padding: EdgeInsets.all(32),
-                decoration: BoxDecoration(
-                  image: DecorationImage(
-                    image: NetworkImage(
-                        'https://img.freepik.com/free-vector/isometric-vehicle_24877-50903.jpg?w=2000'),
-                    fit: BoxFit.cover,
-                  ),
-                ))
+            Text('signed in as: ' + user.email!),
+            MaterialButton(
+              onPressed: () {
+                FirebaseAuth.instance.signOut();
+              },
+              color: Colors.black,
+              child: Text(
+                'sign out',
+                style: TextStyle(color: Colors.white),
+              ),
+            )
           ],
         ),
-      )),
+      ),
     );
   }
 }
