@@ -1,6 +1,8 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'pessoa.dart';
 
 class RegisterPage extends StatefulWidget {
   const RegisterPage({Key? key}) : super(key: key);
@@ -10,6 +12,26 @@ class RegisterPage extends StatefulWidget {
 }
 
 class _RegisterPageState extends State<RegisterPage> {
+  final nomeController = TextEditingController();
+  final cpfController = TextEditingController();
+  final telefoneController = TextEditingController();
+  final nomeUsuarioController = TextEditingController();
+  final emailController = TextEditingController();
+  final senhaController = TextEditingController();
+
+  Pessoa pessoaToAdd = Pessoa(
+    nome: "teste",
+    CPF: "12345",
+    telefone: "1413234",
+    nomeUsuario: "testePessoa",
+    email: "teste@gmai.com",
+    senha: "teste123",
+  );
+
+  void addPessoaBanco() {
+    FirebaseFirestore.instance.collection("Pessoas").add(pessoaToAdd.toMap());
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -33,6 +55,7 @@ class _RegisterPageState extends State<RegisterPage> {
             child: Container(
               decoration: BoxDecoration(color: Colors.white),
               child: TextField(
+                controller: nomeController,
                 decoration: InputDecoration(
                     border: OutlineInputBorder(
                         borderRadius: BorderRadius.all(Radius.circular(12)),
@@ -50,6 +73,7 @@ class _RegisterPageState extends State<RegisterPage> {
             child: Container(
               decoration: BoxDecoration(color: Colors.white),
               child: TextField(
+                controller: cpfController,
                 decoration: InputDecoration(
                     border: OutlineInputBorder(
                         borderRadius: BorderRadius.all(Radius.circular(12)),
@@ -84,6 +108,7 @@ class _RegisterPageState extends State<RegisterPage> {
             child: Container(
               decoration: BoxDecoration(color: Colors.white),
               child: TextField(
+                controller: emailController,
                 decoration: InputDecoration(
                     border: OutlineInputBorder(
                         borderRadius: BorderRadius.all(Radius.circular(12)),
@@ -101,6 +126,7 @@ class _RegisterPageState extends State<RegisterPage> {
             child: Container(
               decoration: BoxDecoration(color: Colors.white),
               child: TextField(
+                controller: senhaController,
                 obscureText: true,
                 decoration: InputDecoration(
                     border: OutlineInputBorder(
@@ -134,17 +160,20 @@ class _RegisterPageState extends State<RegisterPage> {
           //register button
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 30),
-            child: Container(
-              padding: EdgeInsets.all(20),
-              decoration: BoxDecoration(
-                  color: Colors.black,
-                  borderRadius: BorderRadius.all(Radius.circular(12))),
-              child: Center(
-                child: Text('Avançar',
-                    style: TextStyle(
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 18)),
+            child: GestureDetector(
+              onTap: addPessoaBanco,
+              child: Container(
+                padding: EdgeInsets.all(20),
+                decoration: BoxDecoration(
+                    color: Colors.black,
+                    borderRadius: BorderRadius.all(Radius.circular(12))),
+                child: Center(
+                  child: Text('Avançar',
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 18)),
+                ),
               ),
             ),
           ),
