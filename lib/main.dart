@@ -22,9 +22,36 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Widget buttonSection = Container(
+      padding: const EdgeInsets.symmetric(horizontal: 10.0),
+      child: Row(
+        children: [
+          Container(
+            height: 120.0,
+            decoration:
+                BoxDecoration(border: Border.all(color: Colors.blueAccent)),
+            child: Text('Passageiro'),
+          ),
+        ],
+      ),
+    );
+
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: MainPage(),
+      home: Scaffold(
+        body: Column(
+          children: [
+            Expanded(
+              flex: 4,
+              child: Image.asset(
+                'images/bus_home.png',
+                fit: BoxFit.cover,
+              ),
+            ),
+            buttonSection,
+          ],
+        ),
+      ),
     );
   }
 }
