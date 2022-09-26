@@ -23,30 +23,66 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Widget buttonSection = Container(
-      padding: const EdgeInsets.symmetric(horizontal: 10.0),
-      child: Row(
-        children: [
-          Container(
-            height: 120.0,
-            decoration:
-                BoxDecoration(border: Border.all(color: Colors.blueAccent)),
-            child: Text('Passageiro'),
-          ),
-        ],
+      padding: const EdgeInsets.all(25.0),
+      child: Center(
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Container(
+                height: 52.0,
+                width: 167.0,
+                padding: const EdgeInsets.all(8.0),
+                decoration: BoxDecoration(
+                  border: Border.all(color: Colors.black, width: 2.0),
+                  borderRadius: BorderRadius.all(Radius.circular(6.0)),
+                ),
+                child: const Center(
+                  child: Text('PASSAGEIRO', style: TextStyle(fontSize: 13.0)),
+                )),
+            Container(
+              height: 52.0,
+              width: 167.0,
+              padding: const EdgeInsets.all(8.0),
+              decoration: BoxDecoration(
+                color: Colors.black,
+                borderRadius: BorderRadius.all(Radius.circular(6.0)),
+              ),
+              child: const Center(
+                child: Text(
+                  'MOTORISTA',
+                  style: TextStyle(color: Colors.white),
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
     );
 
     return MaterialApp(
       debugShowCheckedModeBanner: false,
+      theme: ThemeData(fontFamily: 'Comfortaa'),
       home: Scaffold(
         body: Column(
           children: [
-            Expanded(
-              flex: 4,
-              child: Image.asset(
-                'images/bus_home.png',
-                fit: BoxFit.cover,
-              ),
+            Stack(
+              children: [
+                Image.asset(
+                  'images/bus_home.png',
+                  fit: BoxFit.cover,
+                  width: 600,
+                  height: 700,
+                ),
+                Container(
+                  height: 700,
+                  child: Center(
+                    child: Text(
+                      'CONNECT BUS',
+                      style: TextStyle(color: Colors.white, fontSize: 25.0),
+                    ),
+                  ),
+                ),
+              ],
             ),
             buttonSection,
           ],
