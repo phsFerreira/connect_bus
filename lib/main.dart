@@ -28,32 +28,10 @@ class MyApp extends StatelessWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Container(
-                height: 52.0,
-                width: 167.0,
-                padding: const EdgeInsets.all(8.0),
-                decoration: BoxDecoration(
-                  border: Border.all(color: Colors.black, width: 2.0),
-                  borderRadius: BorderRadius.all(Radius.circular(6.0)),
-                ),
-                child: const Center(
-                  child: Text('PASSAGEIRO', style: TextStyle(fontSize: 13.0)),
-                )),
-            Container(
-              height: 52.0,
-              width: 167.0,
-              padding: const EdgeInsets.all(8.0),
-              decoration: BoxDecoration(
-                color: Colors.black,
-                borderRadius: BorderRadius.all(Radius.circular(6.0)),
-              ),
-              child: const Center(
-                child: Text(
-                  'MOTORISTA',
-                  style: TextStyle(color: Colors.white),
-                ),
-              ),
-            ),
+            _buildButton(
+                'PASSAGEIRO', Colors.black, 167.0, Colors.black, Colors.white),
+            _buildButton(
+                'MOTORISTA', Colors.white, 167, Colors.black, Colors.black)
           ],
         ),
       ),
@@ -73,12 +51,15 @@ class MyApp extends StatelessWidget {
                   width: 600,
                   height: 700,
                 ),
-                Container(
+                SizedBox(
                   height: 700,
                   child: Center(
                     child: Text(
                       'CONNECT BUS',
-                      style: TextStyle(color: Colors.white, fontSize: 25.0),
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 25.0,
+                          fontWeight: FontWeight.w400),
                     ),
                   ),
                 ),
@@ -86,6 +67,32 @@ class MyApp extends StatelessWidget {
             ),
             buttonSection,
           ],
+        ),
+      ),
+    );
+  }
+
+  // Método privado auxiliar que retorna um botão ao passar os dados por parâmetros
+  Container _buildButton(String textButton, Color colorTextButton,
+      double widthButton, Color borderButton, Color backgroundButton) {
+    return Container(
+      height: 52.0,
+      width: widthButton,
+      padding: const EdgeInsets.all(8.0),
+      decoration: BoxDecoration(
+        color: backgroundButton,
+        border: Border.all(color: borderButton, width: 2.0),
+        borderRadius: BorderRadius.all(Radius.circular(6.0)),
+      ),
+      child: Center(
+        child: Text(
+          textButton,
+          style: TextStyle(
+            fontSize: 13,
+            fontFamily: 'Roboto',
+            fontWeight: FontWeight.w900,
+            color: colorTextButton,
+          ),
         ),
       ),
     );

@@ -86,6 +86,9 @@ flutter:
         - asset: fonts/Comfortaa-Regular.ttf
         - asset: fonts/Comfortaa-SemiBold.ttf
 
+    - family: Roboto
+      fonts:
+        - asset: fonts/Roboto-Black.ttf
 
   #   - family: Trajan Pro
   #     fonts:
