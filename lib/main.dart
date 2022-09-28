@@ -1,5 +1,6 @@
 // ignore_for_file: prefer_const_constructors, unused_import
 
+import 'package:connect_bus/cadastroPassageiro.dart';
 import 'package:connect_bus/home_page.dart';
 import 'package:connect_bus/login_motorista.dart';
 import 'package:flutter/material.dart';
@@ -24,7 +25,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: MainPage(),
+      home: CadastroPassageiroForm(),
     );
   }
 }

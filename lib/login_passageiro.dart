@@ -1,6 +1,8 @@
 // ignore_for_file: prefer_const_constructors
 
+import 'package:connect_bus/cadastroPassageiro.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 
 class LoginPage extends StatefulWidget {
@@ -116,12 +118,21 @@ class _LoginPageState extends State<LoginPage> {
                 SizedBox(height: 25),
 
                 //create account button
-                Text(
-                  'Criar Conta',
-                  style: TextStyle(
-                      color: Colors.blue,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 16),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 30.0),
+                  child: GestureDetector(
+                    onTap: () {
+                      Navigator.of(context).push(MaterialPageRoute(
+                          builder: (_) => CadastroPassageiroForm()));
+                    },
+                    child: Text(
+                      'Criar Conta',
+                      style: TextStyle(
+                          color: Colors.blue,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 16),
+                    ),
+                  ),
                 ),
               ],
             ),
