@@ -40,9 +40,6 @@ class MyApp extends StatelessWidget {
 
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-<<<<<<< HEAD
-      home: CadastroPassageiroForm(),
-=======
       theme: ThemeData(fontFamily: 'Comfortaa'),
       home: Scaffold(
         body: Column(
@@ -80,26 +77,24 @@ class MyApp extends StatelessWidget {
   Container _buildButton(String textButton, Color colorTextButton,
       double widthButton, Color borderButton, Color backgroundButton) {
     return Container(
-      height: 52.0,
-      width: widthButton,
-      padding: const EdgeInsets.all(8.0),
-      decoration: BoxDecoration(
-        color: backgroundButton,
-        border: Border.all(color: borderButton, width: 2.0),
-        borderRadius: BorderRadius.all(Radius.circular(6.0)),
-      ),
-      child: Center(
-        child: Text(
-          textButton,
-          style: TextStyle(
-            fontSize: 13,
-            fontFamily: 'Roboto',
-            fontWeight: FontWeight.w900,
-            color: colorTextButton,
-          ),
+        height: 52.0,
+        width: widthButton,
+        padding: const EdgeInsets.all(8.0),
+        decoration: BoxDecoration(
+          color: backgroundButton,
+          border: Border.all(color: borderButton, width: 2.0),
+          borderRadius: BorderRadius.all(Radius.circular(6.0)),
         ),
-      ),
->>>>>>> criando-pagina-principal
-    );
+        child: Center(
+          child: Text(
+            textButton,
+            style: TextStyle(
+              fontSize: 13,
+              fontFamily: 'Roboto',
+              fontWeight: FontWeight.w900,
+              color: colorTextButton,
+            ),
+          ),
+        ));
   }
 }
