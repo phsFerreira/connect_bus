@@ -26,6 +26,7 @@ class _CadastroPassageiroFormState extends State<CadastroPassageiroForm> {
     final TextEditingController telefoneController;
     final TextEditingController emailController;
     final TextEditingController senhaControoler;
+    String email = "1234";
 
     return Scaffold(
       backgroundColor: Colors.grey[100],

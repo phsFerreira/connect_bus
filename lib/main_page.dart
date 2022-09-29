@@ -16,11 +16,7 @@ class MainPage extends StatelessWidget {
           if (snapshot.hasData) {
             return const HomePage();
           } else {
-<<<<<<< HEAD
             return RegisterPage();
-=======
-            return const LoginPage();
->>>>>>> criando-pagina-principal
           }
         },
       ),

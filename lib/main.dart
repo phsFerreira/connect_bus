@@ -29,8 +29,18 @@ class MyApp extends StatelessWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            _buildButton(
-                'PASSAGEIRO', Colors.black, 167.0, Colors.black, Colors.white),
+            Builder(builder: (context) {
+              return GestureDetector(
+                onTap: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const LoginPage()));
+                },
+                child: _buildButton('PASSAGEIRO', Colors.black, 167.0,
+                    Colors.black, Colors.white),
+              );
+            }),
             _buildButton(
                 'MOTORISTA', Colors.white, 167, Colors.black, Colors.black)
           ],
@@ -42,32 +52,34 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       theme: ThemeData(fontFamily: 'Comfortaa'),
       home: Scaffold(
-        body: Column(
-          children: [
-            Stack(
-              children: [
-                Image.asset(
-                  'images/bus_home.png',
-                  fit: BoxFit.cover,
-                  width: 600,
-                  height: 700,
-                ),
-                SizedBox(
-                  height: 700,
-                  child: Center(
-                    child: Text(
-                      'CONNECT BUS',
-                      style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 25.0,
-                          fontWeight: FontWeight.w400),
+        body: SingleChildScrollView(
+          child: Column(
+            children: [
+              Stack(
+                children: [
+                  Image.asset(
+                    'images/bus_home.png',
+                    fit: BoxFit.cover,
+                    width: 600,
+                    height: 700,
+                  ),
+                  SizedBox(
+                    height: 700,
+                    child: Center(
+                      child: Text(
+                        'CONNECT BUS',
+                        style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 25.0,
+                            fontWeight: FontWeight.w400),
+                      ),
                     ),
                   ),
-                ),
-              ],
-            ),
-            buttonSection,
-          ],
+                ],
+              ),
+              buttonSection,
+            ],
+          ),
         ),
       ),
     );
