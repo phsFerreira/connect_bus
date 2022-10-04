@@ -1,9 +1,11 @@
 // ignore_for_file: prefer_const_constructors
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:connect_bus/cadastroPassageiro.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -16,13 +18,30 @@ class _LoginPageState extends State<LoginPage> {
   //text controllers
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
+  final String email = "", senha = "";
+
+  //bd
+  // CollectionReference bd =
+  //     FirebaseFirestore.instance.collection("ConnectBus-Usuarios");
+  final DatabaseReference db =
+      FirebaseDatabase.instance.ref().child('ConnectBus-Usuarios');
 
   //methods
   Future signIn() async {
-    await FirebaseAuth.instance.signInWithEmailAndPassword(
-      email: emailController.text.trim(),
-      password: passwordController.text.trim(),
-    );
+    if (emailController.text.isEmpty | passwordController.text.isEmpty) {
+      Fluttertoast.showToast(
+          msg: 'Preencha todos os campos.',
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.BOTTOM,
+          backgroundColor: Colors.grey,
+          textColor: Colors.black);
+    } else {
+      // await FirebaseAuth.instance.signInWithEmailAndPassword(
+      //   email: emailController.text.trim(),
+      //   password: passwordController.text.trim(),
+      // );
+      DatabaseReference ref = db.child("ConnectBus-Usuarios");
+    }
   }
 
   @override
@@ -98,7 +117,25 @@ class _LoginPageState extends State<LoginPage> {
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 30.0),
                   child: GestureDetector(
-                    onTap: signIn,
+                    onTap: () {
+                      String email = "";
+                      String teste = "";
+                      email = emailController.toString();
+                      FirebaseFirestore dbTeste = FirebaseFirestore.instance;
+                      teste = dbTeste
+                          .collection('ConnectBus-Usuarios')
+                          .where('email', isEqualTo: email)
+                          .get()
+                          .toString();
+                      if (email == teste) {
+                        Fluttertoast.showToast(
+                            msg: 'deu bom',
+                            toastLength: Toast.LENGTH_SHORT,
+                            gravity: ToastGravity.BOTTOM,
+                            backgroundColor: Colors.grey,
+                            textColor: Colors.black);
+                      }
+                    },
                     child: Container(
                       padding: EdgeInsets.all(20),
                       decoration: BoxDecoration(

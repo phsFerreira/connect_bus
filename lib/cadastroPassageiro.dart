@@ -1,4 +1,4 @@
-// ignore_for_file: prefer_const_constructors, body_might_complete_normally_nullable
+// ignore_for_file: prefer_const_constructors, body_might_complete_normally_nullable, unused_local_variable
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:connect_bus/campo_form.dart';
@@ -7,7 +7,7 @@ import 'package:connect_bus/login_passageiro.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'pessoa.dart';
+import 'passageiro.dart';
 
 class CadastroPassageiroForm extends StatefulWidget {
   const CadastroPassageiroForm({Key? key}) : super(key: key);
@@ -21,12 +21,14 @@ class _CadastroPassageiroFormState extends State<CadastroPassageiroForm> {
 
   @override
   Widget build(BuildContext context) {
-    final TextEditingController nomeController;
-    final TextEditingController cpfController;
-    final TextEditingController telefoneController;
-    final TextEditingController emailController;
-    final TextEditingController senhaControoler;
-    String email = "1234";
+    // // ignore: valid_regexps
+    // final RegExp nameRegExp = RegExp(r'[!@#<>?"/·:_`~;[]\\|=+)(*&^%0-9-]');
+
+    String nome = "";
+    String cpf = "";
+    String telefone = "";
+    String email = "";
+    String senha = "";
 
     return Scaffold(
       backgroundColor: Colors.grey[100],
@@ -51,9 +53,13 @@ class _CadastroPassageiroFormState extends State<CadastroPassageiroForm> {
                     CampoForm(
                       hintText: 'Nome Completo',
                       validator: (value) {
-                        if (value!.isValidName) {
-                          return 'digite um nome válido.';
+                        nome = value.toString();
+                        if (nome.isEmpty) {
+                          return 'Digite seu nome.';
+                        } else if (nome.isValidName) {
+                          return 'Digite um nome válido.';
                         }
+                        return null;
                       },
                     ),
                     SizedBox(height: 20),
@@ -62,8 +68,11 @@ class _CadastroPassageiroFormState extends State<CadastroPassageiroForm> {
                     CampoForm(
                       hintText: 'CPF',
                       validator: (value) {
-                        if (value!.isValidCPF) {
-                          return 'digite um cpf válido.';
+                        cpf = value.toString();
+                        if (cpf.isEmpty) {
+                          return 'Digite seu CPF.';
+                        } else if (cpf.isValidCPF) {
+                          return 'Digite um CPF válido.';
                         }
                       },
                     ),
@@ -73,8 +82,11 @@ class _CadastroPassageiroFormState extends State<CadastroPassageiroForm> {
                     CampoForm(
                       hintText: 'Telefone',
                       validator: (value) {
-                        if (value!.isValidPhone) {
-                          return 'digite um telefone válido.';
+                        telefone = value.toString();
+                        if (telefone.isEmpty) {
+                          return 'Digite seu telefone.';
+                        } else if (telefone.isValidPhone) {
+                          return 'Digite um telefone válido.';
                         }
                       },
                     ),
@@ -84,8 +96,11 @@ class _CadastroPassageiroFormState extends State<CadastroPassageiroForm> {
                     CampoForm(
                       hintText: 'E-mail',
                       validator: (value) {
-                        if (value!.isValidEmail) {
-                          return 'digite um email valido';
+                        email = value.toString();
+                        if (email.isEmpty) {
+                          return 'Digite seu email.';
+                        } else if (email.isValidEmail) {
+                          return 'Digite um email valido';
                         }
                       },
                     ),
@@ -95,8 +110,12 @@ class _CadastroPassageiroFormState extends State<CadastroPassageiroForm> {
                     CampoForm(
                       hintText: 'Senha',
                       validator: (value) {
-                        if (value!.isValidPassword) {
-                          return 'digite uma senha válida';
+                        senha = value.toString();
+                        if (senha.isEmpty) {
+                          return 'Digite sua senha.';
+                        }
+                        if (senha.isValidPassword) {
+                          return 'Digite uma senha válida';
                         }
                       },
                     ),
@@ -107,6 +126,15 @@ class _CadastroPassageiroFormState extends State<CadastroPassageiroForm> {
                             primary: Colors.black, minimumSize: Size(400, 50)),
                         onPressed: () {
                           if (_formKey.currentState!.validate()) {
+                            Passageiro passageiro = Passageiro(
+                                nomeCompleto: nome,
+                                cpf: cpf,
+                                telefone: telefone,
+                                email: email,
+                                senha: senha);
+
+                            passageiro.registrarPassageiro();
+
                             Navigator.of(context).push(
                                 MaterialPageRoute(builder: (_) => LoginPage()));
                           }

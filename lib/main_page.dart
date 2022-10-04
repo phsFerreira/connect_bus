@@ -1,3 +1,4 @@
+import 'package:connect_bus/cadastroPassageiro.dart';
 import 'package:connect_bus/login_passageiro.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -16,7 +17,7 @@ class MainPage extends StatelessWidget {
           if (snapshot.hasData) {
             return const HomePage();
           } else {
-            return RegisterPage();
+            return CadastroPassageiroForm();
           }
         },
       ),
