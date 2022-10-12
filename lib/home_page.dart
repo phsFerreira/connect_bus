@@ -1,5 +1,6 @@
 // ignore_for_file: prefer_const_constructors, prefer_interpolation_to_compose_strings
 
+import 'package:connect_bus/login_passageiro.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
@@ -20,14 +21,16 @@ class _HomePageState extends State<HomePage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text('signed in as: ' + user.email!),
+            Text('logado como: ' + user.email!),
             MaterialButton(
               onPressed: () {
                 FirebaseAuth.instance.signOut();
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => const LoginPage()));
               },
               color: Colors.black,
               child: Text(
-                'sign out',
+                'sair',
                 style: TextStyle(color: Colors.white),
               ),
             )

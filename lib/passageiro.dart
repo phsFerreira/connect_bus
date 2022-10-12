@@ -58,7 +58,7 @@ class Passageiro {
 
   void registrarPassageiro() {
     late DatabaseReference db;
-    db = FirebaseDatabase.instance.ref().child('ConnectBus-Usuarios');
+    db = FirebaseDatabase.instance.ref().child('Usuarios');
 
     Map<String, String> passageiros = {
       'nomeCompleto': nomeCompleto,
@@ -70,15 +70,15 @@ class Passageiro {
     db.push().set(passageiros);
   }
 
-  signup(Passageiro passageiro, AuthCredential authCredential) async {}
+  // signup(Passageiro passageiro, AuthCredential authCredential) async {}
 
-  // void login(String emailTeste, String senha){
-  //   FirebaseFirestore db=FirebaseFirestore.instance;
+  // // void login(String emailTeste, String senha){
+  // //   FirebaseFirestore db=FirebaseFirestore.instance;
 
-  //   db.collection('ConnectBus-Usuarios').where('email', isEqualTo: emailTeste).get().then((doc) {
-  //     if(doc!=){
+  // //   db.collection('ConnectBus-Usuarios').where('email', isEqualTo: emailTeste).get().then((doc) {
+  // //     if(doc!=){
 
-  //     }
-  //   });
-  // }
+  // //     }
+  // //   });
+  // // }
 }

@@ -1,12 +1,9 @@
 // ignore_for_file: prefer_const_constructors, body_might_complete_normally_nullable, unused_local_variable
 
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:connect_bus/campo_form.dart';
 import 'package:connect_bus/extensoes.dart';
 import 'package:connect_bus/login_passageiro.dart';
 import 'package:flutter/material.dart';
-import 'package:firebase_database/firebase_database.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'passageiro.dart';
 
 class CadastroPassageiroForm extends StatefulWidget {

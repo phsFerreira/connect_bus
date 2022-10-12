@@ -2,6 +2,7 @@
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:connect_bus/cadastroPassageiro.dart';
+import 'package:connect_bus/home_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
@@ -20,12 +21,6 @@ class _LoginPageState extends State<LoginPage> {
   final passwordController = TextEditingController();
   final String email = "", senha = "";
 
-  //bd
-  // CollectionReference bd =
-  //     FirebaseFirestore.instance.collection("ConnectBus-Usuarios");
-  final DatabaseReference db =
-      FirebaseDatabase.instance.ref().child('ConnectBus-Usuarios');
-
   //methods
   Future signIn() async {
     if (emailController.text.isEmpty | passwordController.text.isEmpty) {
@@ -36,11 +31,13 @@ class _LoginPageState extends State<LoginPage> {
           backgroundColor: Colors.grey,
           textColor: Colors.black);
     } else {
-      // await FirebaseAuth.instance.signInWithEmailAndPassword(
-      //   email: emailController.text.trim(),
-      //   password: passwordController.text.trim(),
-      // );
-      DatabaseReference ref = db.child("ConnectBus-Usuarios");
+      await FirebaseAuth.instance.signInWithEmailAndPassword(
+        email: emailController.text.trim(),
+        password: passwordController.text.trim(),
+      );
+      // ignore: use_build_context_synchronously
+      Navigator.push(
+          context, MaterialPageRoute(builder: (context) => const HomePage()));
     }
   }
 
@@ -117,25 +114,7 @@ class _LoginPageState extends State<LoginPage> {
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 30.0),
                   child: GestureDetector(
-                    onTap: () {
-                      String email = "";
-                      String teste = "";
-                      email = emailController.toString();
-                      FirebaseFirestore dbTeste = FirebaseFirestore.instance;
-                      teste = dbTeste
-                          .collection('ConnectBus-Usuarios')
-                          .where('email', isEqualTo: email)
-                          .get()
-                          .toString();
-                      if (email == teste) {
-                        Fluttertoast.showToast(
-                            msg: 'deu bom',
-                            toastLength: Toast.LENGTH_SHORT,
-                            gravity: ToastGravity.BOTTOM,
-                            backgroundColor: Colors.grey,
-                            textColor: Colors.black);
-                      }
-                    },
+                    onTap: signIn,
                     child: Container(
                       padding: EdgeInsets.all(20),
                       decoration: BoxDecoration(

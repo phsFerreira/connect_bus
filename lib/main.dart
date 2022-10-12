@@ -15,7 +15,7 @@ Future main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   await Firebase.initializeApp();
-  runApp(const MyApp());
+  runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
@@ -41,8 +41,18 @@ class MyApp extends StatelessWidget {
                     Colors.black, Colors.white),
               );
             }),
-            _buildButton(
-                'MOTORISTA', Colors.white, 167, Colors.black, Colors.black)
+            Builder(builder: (context) {
+              return GestureDetector(
+                onTap: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const LoginPageMotorista()));
+                },
+                child: _buildButton(
+                    'MOTORISTA', Colors.white, 167, Colors.black, Colors.black),
+              );
+            }),
           ],
         ),
       ),
