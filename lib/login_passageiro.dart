@@ -3,6 +3,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:connect_bus/cadastroPassageiro.dart';
 import 'package:connect_bus/home_page.dart';
+import 'package:connect_bus/maps.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
@@ -114,7 +115,11 @@ class _LoginPageState extends State<LoginPage> {
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 30.0),
                   child: GestureDetector(
-                    onTap: signIn,
+                    onTap: () {
+                      signIn;
+                      Navigator.of(context)
+                          .push(MaterialPageRoute(builder: (_) => MapScreen()));
+                    },
                     child: Container(
                       padding: EdgeInsets.all(20),
                       decoration: BoxDecoration(
