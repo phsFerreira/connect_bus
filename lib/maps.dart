@@ -9,17 +9,17 @@ import 'autocomplete_predictions.dart';
 import 'network_utility.dart';
 import 'place_autocomplete_response.dart';
 
-void main() => runApp(MyApp());
+// void main() => runApp(MyApp());
 
-class MyApp extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Google Maps Demo',
-      home: MapSample(),
-    );
-  }
-}
+// class MyApp extends StatelessWidget {
+//   @override
+//   Widget build(BuildContext context) {
+//     return MaterialApp(
+//       title: 'Flutter Google Maps Demo',
+//       home: MapSample(),
+//     );
+//   }
+// }
 
 class MapSample extends StatefulWidget {
   @override
@@ -76,25 +76,6 @@ class MapSampleState extends State<MapSample> {
     strokeWidth: 5,
   );
 
-  Future<void> placeAutoComplete(String query) async {
-    Uri uri =
-        Uri.https("maps.googleapis.com", "/maps/api/place/autocomplete/json", {
-      "input": query,
-      "key": 'AIzaSyCFNQ4YtPdA3ha5lJNZ00aMbp_SCK9tow0',
-    });
-    // its time to make the GET request
-    String? response = await NetworkUtility.fetchUrl(uri);
-    if (response != null) {
-      PlacesAutocompleteResponse result =
-          PlacesAutocompleteResponse.parseAutocompleteResult(response);
-      if (result.predictions != null) {
-        setState(() {
-          placePredictions = result.predictions!;
-        });
-      }
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -125,7 +106,7 @@ class MapSampleState extends State<MapSample> {
                             controller: _searchController,
                             textCapitalization: TextCapitalization.words,
                             onChanged: (value) {
-                              placeAutoComplete(value);
+                              print(value);
                             },
                             decoration: InputDecoration(
                                 border: OutlineInputBorder(
@@ -136,15 +117,6 @@ class MapSampleState extends State<MapSample> {
                                 ),
                                 hintText: 'Informe o local de partida',
                                 contentPadding: EdgeInsets.all(20.0)),
-                          ),
-                          Expanded(
-                            child: ListView.builder(
-                              itemCount: placePredictions.length,
-                              itemBuilder: (context, index) => LocationListTile(
-                                  press: () {},
-                                  location:
-                                      placePredictions[index].description!),
-                            ),
                           ),
                           TextFormField(
                             decoration: InputDecoration(
