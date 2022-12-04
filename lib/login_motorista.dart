@@ -1,8 +1,10 @@
-// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
+// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, use_build_context_synchronously, unused_import
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:connect_bus/cadastroPassageiro.dart';
+import 'package:connect_bus/cadastro_passageiro.dart';
 import 'package:connect_bus/home_page.dart';
+import 'package:connect_bus/maps.dart';
+import 'package:connect_bus/profile_motorista.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
@@ -28,13 +30,12 @@ class _LoginPageMotoristaState extends State<LoginPageMotorista> {
           backgroundColor: Colors.grey,
           textColor: Colors.black);
     } else {
-      await FirebaseAuth.instance.signInWithEmailAndPassword(
+      FirebaseAuth.instance.signInWithEmailAndPassword(
         email: emailController.text.trim(),
         password: passwordController.text.trim(),
       );
-      // ignore: use_build_context_synchronously
-      Navigator.push(
-          context, MaterialPageRoute(builder: (context) => const HomePage()));
+      Navigator.push(context,
+          MaterialPageRoute(builder: (context) => const MotoristaPage()));
     }
   }
 

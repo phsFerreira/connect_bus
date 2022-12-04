@@ -1,4 +1,6 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
+//import 'package:cloud_firestore/cloud_firestore.dart';
+// ignore_for_file: unused_import
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 
@@ -81,4 +83,22 @@ class Passageiro {
   // //     }
   // //   });
   // // }
+
+  // void login(String email, String senha) {
+  //   late DatabaseReference db;
+  //   db = FirebaseDatabase.instance.ref().child('Usuarios');
+
+  //   Query query = FirebaseDatabase.instance
+  //       .ref()
+  //       .child('Usuarios')
+  //       .orderByChild('email')
+  //       .equalTo('teste');
+
+  //   // db.orderByChild("email").equalTo("pedro.ferreirasilva777@gmail.com");
+
+  //   // const q=query(db.orderByChild("email").equalTo("pedro.ferreirasilva777@gmail.com"));
+
+  //   // final usuariosRef=FirebaseDatabase.instance.ref().child('Usuarios');
+  //   // final query=usuariosRef.where("email", isEqualTo: "teste");
+  // }
 }

@@ -1,8 +1,10 @@
-// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, non_constant_identifier_names
+// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, non_constant_identifier_names, prefer_const_declarations
 
 import 'package:connect_bus/headerDrawer.dart';
 import 'package:connect_bus/main.dart';
+import 'package:connect_bus/profile_passageiro.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_phone_direct_caller/flutter_phone_direct_caller.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class MapScreen extends StatefulWidget {
@@ -32,10 +34,9 @@ class _MapScreenState extends State<MapScreen> {
       ),
       drawer: Drawer(
         child: SingleChildScrollView(
-          child: Container(
-              child: Column(
+          child: Column(
             children: [HeaderDrawer(), DrawerList()],
-          )),
+          ),
         ),
       ),
     );
@@ -68,7 +69,9 @@ class _MapScreenState extends State<MapScreen> {
             "Home",
             style: TextStyle(color: Colors.black, fontSize: 16),
           ),
-          onTap: () {},
+          onTap: () {
+            Navigator.pop(context);
+          },
         ),
         ListTile(
           leading: Icon(
@@ -76,76 +79,93 @@ class _MapScreenState extends State<MapScreen> {
             size: 25,
             color: Colors.black,
           ),
-          title: Text("Profile"),
-          onTap: () {},
+          title: Text(
+            "Profile",
+            style: TextStyle(color: Colors.black, fontSize: 16),
+          ),
+          onTap: () {
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => const PassageiroPage()));
+          },
         ),
         SizedBox(height: 60),
 
         //emergencia button
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 30.0),
-          child: Container(
-            padding: EdgeInsets.all(20),
-            decoration:
-                BoxDecoration(color: Colors.white, border: Border.all()),
-            child: Center(
+        SizedBox(
+          width: 230,
+          height: 50,
+          child: ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                  primary: Colors.white,
+                  onPrimary: Colors.grey,
+                  padding: EdgeInsets.symmetric(horizontal: 30),
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(12)),
+                      side: BorderSide(width: 1, color: Colors.black))),
+              onPressed: () {
+                final number = '+55190';
+                FlutterPhoneDirectCaller.callNumber(number);
+              },
               child: Text(
-                "emergência",
+                'Emergência',
                 style: TextStyle(
                     color: Colors.black,
                     fontWeight: FontWeight.bold,
                     fontSize: 16),
-              ),
-            ),
-          ),
+              )),
         ),
+
         SizedBox(height: 20),
 
         //ajuda button
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 30.0),
-          child: Container(
-            padding: EdgeInsets.all(20),
-            decoration:
-                BoxDecoration(color: Colors.white, border: Border.all()),
-            child: Center(
+        SizedBox(
+          width: 230,
+          height: 50,
+          child: ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                  primary: Colors.white,
+                  onPrimary: Colors.grey,
+                  padding: EdgeInsets.symmetric(horizontal: 30),
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(12)),
+                      side: BorderSide(width: 1, color: Colors.black))),
+              onPressed: () {},
               child: Text(
-                "ajuda",
+                'Ajuda',
                 style: TextStyle(
                     color: Colors.black,
                     fontWeight: FontWeight.bold,
                     fontSize: 16),
-              ),
-            ),
-          ),
+              )),
         ),
+
         SizedBox(height: 100),
 
         //sair button
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 30.0),
-          child: GestureDetector(
-            onTap: () {
-              //volta para a pagina inicial do app
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => const MyApp()));
-            },
-            child: Container(
-              padding: EdgeInsets.all(20),
-              decoration: BoxDecoration(
-                  color: Colors.red,
-                  borderRadius: BorderRadius.all(Radius.circular(12))),
-              child: Center(
-                child: Text(
-                  "sair",
-                  style: TextStyle(
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 16),
-                ),
-              ),
-            ),
-          ),
+        SizedBox(
+          width: 230,
+          height: 50,
+          child: ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                  primary: Colors.red,
+                  onPrimary: Color.fromARGB(255, 82, 9, 9),
+                  padding: EdgeInsets.symmetric(horizontal: 30),
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(12)),
+                      side: BorderSide(width: 1, color: Colors.red))),
+              onPressed: () {
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => const MyApp()));
+              },
+              child: Text(
+                'sair',
+                style: TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 16),
+              )),
         ),
       ],
     );

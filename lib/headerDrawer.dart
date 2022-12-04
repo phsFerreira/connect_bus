@@ -29,7 +29,7 @@ class _HeaderDrawerState extends State<HeaderDrawer> {
                     DecorationImage(image: AssetImage('images/profile.jpg'))),
           ),
           Text(
-            "Teste Drawer",
+            "Passageiro",
             style: TextStyle(color: Colors.white, fontSize: 20),
           ),
           Text(

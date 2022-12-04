@@ -1,7 +1,7 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:connect_bus/cadastroPassageiro.dart';
+import 'package:connect_bus/cadastro_passageiro.dart';
 import 'package:connect_bus/home_page.dart';
 import 'package:connect_bus/maps.dart';
 import 'package:firebase_auth/firebase_auth.dart';
