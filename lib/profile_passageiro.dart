@@ -138,10 +138,8 @@ class _PassageiroPageState extends State<PassageiroPage> {
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.all(Radius.circular(12)))),
                   onPressed: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => const MapScreen()));
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) => MapSample()));
                   },
                   child: Text(
                     "Voltar",

@@ -1,30 +1,16 @@
+// ignore_for_file: prefer_const_constructors, prefer_final_fields, avoid_print, non_constant_identifier_names
+
+import 'dart:async';
+
+import 'package:connect_bus/headerDrawer.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_phone_direct_caller/flutter_phone_direct_caller.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:connect_bus/main.dart';
+import 'package:connect_bus/profile_passageiro.dart';
+import 'package:flutter_phone_direct_caller/flutter_phone_direct_caller.dart';
+import 'autocomplete_predictions.dart';
 
-// void main() {
-//   runApp(const MyApp());
-// }
-
-// class MyApp extends StatelessWidget {
-//   const MyApp({super.key});
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return MaterialApp(
-//       title: 'Flutter Google Maps',
-//       debugShowCheckedModeBanner: false,
-//       theme: ThemeData(
-//         primaryColor: Colors.white,
-//       ),
-//       home: const MapScreen(),
-//     );
-//   }
-// }
-
-class MapScreen extends StatefulWidget {
-  const MapScreen({super.key});
-
+class MapSample extends StatefulWidget {
   @override
   State<MapSample> createState() => MapSampleState();
 }
@@ -79,25 +65,6 @@ class MapSampleState extends State<MapSample> {
     strokeWidth: 5,
   );
 
-  @override
-  Widget build(BuildContext context) {
-    return const Scaffold(
-      body: GoogleMap(
-        myLocationButtonEnabled: false,
-        zoomControlsEnabled: false,
-        initialCameraPosition: _initialCameraPosition,
-      ),
-      drawer: Drawer(
-        child: SingleChildScrollView(
-          child: Column(
-            children: [HeaderDrawer(), DrawerList()],
-          ),
-        ),
-      ),
-    );
-  }
-
-//MENU DRAWER
   Widget DrawerList() {
     return Container(
       padding: EdgeInsets.only(
@@ -226,8 +193,94 @@ class MapSampleState extends State<MapSample> {
     );
   }
 
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.grey[700],
+        title: Text("Connect Bus"),
+      ),
+      body: Stack(
+        children: [
+          Expanded(
+            child: GoogleMap(
+              mapType: MapType.normal,
+              markers: {_kGooglePlexMarker, _kLakeMarker},
+              polylines: {_kPolyline},
+              polygons: {_kPolygon},
+              initialCameraPosition: _kGooglePlex,
+              onMapCreated: (GoogleMapController controller) {
+                _controller.complete(controller);
+              },
+            ),
+          ),
+          Column(
+            children: [
+              Row(
+                children: [
+                  Expanded(
+                    child: Padding(
+                      padding: const EdgeInsets.all(45.0),
+                      child: Column(
+                        children: [
+                          TextFormField(
+                            controller: _searchController,
+                            textCapitalization: TextCapitalization.words,
+                            onChanged: (value) {
+                              print(value);
+                            },
+                            decoration: InputDecoration(
+                                border: OutlineInputBorder(
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(12)),
+                                  borderSide:
+                                      BorderSide(color: Colors.black, width: 1),
+                                ),
+                                hintText: 'Informe o local de partida',
+                                contentPadding: EdgeInsets.all(20.0)),
+                          ),
+                          TextFormField(
+                            decoration: InputDecoration(
+                                border: OutlineInputBorder(
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(12)),
+                                  borderSide:
+                                      BorderSide(color: Colors.black, width: 1),
+                                ),
+                                hintText: 'Informe o destino',
+                                contentPadding: EdgeInsets.all(20.0)),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  //IconButton(onPressed: () {}, icon: Icon(Icons.search))
+                ],
+              )
+            ],
+          )
+        ],
+      ),
+      // floatingActionButton: FloatingActionButton.extended(
+      //   onPressed: _goToTheLake,
+      //   icon: Icon(Icons.menu),
+      //   label: Text('Menu'),
+      // ),
+      drawer: Drawer(
+        child: SingleChildScrollView(
+          child: Column(
+            children: [HeaderDrawer(), DrawerList()],
+          ),
+        ),
+      ),
+    );
+  }
+
   Future<void> _goToTheLake() async {
     final GoogleMapController controller = await _controller.future;
     controller.animateCamera(CameraUpdate.newCameraPosition(_kLake));
   }
 }
+
+//MENU DRAWER
+
