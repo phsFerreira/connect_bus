@@ -118,7 +118,7 @@ class _LoginPageState extends State<LoginPage> {
                     onTap: () {
                       signIn;
                       Navigator.of(context)
-                          .push(MaterialPageRoute(builder: (_) => MapScreen()));
+                          .push(MaterialPageRoute(builder: (_) => MapSample()));
                     },
                     child: Container(
                       padding: EdgeInsets.all(20),

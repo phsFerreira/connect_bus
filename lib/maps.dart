@@ -1,32 +1,87 @@
-// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, non_constant_identifier_names, prefer_const_declarations
-
-import 'package:connect_bus/headerDrawer.dart';
-import 'package:connect_bus/main.dart';
-import 'package:connect_bus/profile_passageiro.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_phone_direct_caller/flutter_phone_direct_caller.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+
+// void main() {
+//   runApp(const MyApp());
+// }
+
+// class MyApp extends StatelessWidget {
+//   const MyApp({super.key});
+
+//   @override
+//   Widget build(BuildContext context) {
+//     return MaterialApp(
+//       title: 'Flutter Google Maps',
+//       debugShowCheckedModeBanner: false,
+//       theme: ThemeData(
+//         primaryColor: Colors.white,
+//       ),
+//       home: const MapScreen(),
+//     );
+//   }
+// }
 
 class MapScreen extends StatefulWidget {
   const MapScreen({super.key});
 
   @override
-  State<MapScreen> createState() => _MapScreenState();
+  State<MapSample> createState() => MapSampleState();
 }
 
-class _MapScreenState extends State<MapScreen> {
-  static const _initialCameraPosition = CameraPosition(
-    target: LatLng(-23.284715789779046, -47.675556474036625),
-    zoom: 15.5,
+class MapSampleState extends State<MapSample> {
+  Completer<GoogleMapController> _controller = Completer();
+  TextEditingController _searchController = TextEditingController();
+  List<AutocompletePrediction> placePredictions = [];
+
+  static final CameraPosition _kGooglePlex = CameraPosition(
+    target: LatLng(-23.288331355021306, -47.6521741838258),
+    zoom: 14.4746,
+  );
+
+  static final CameraPosition _kLake = CameraPosition(
+      bearing: 192.8334901395799,
+      target: LatLng(37.43296265331129, -122.08832357078792),
+      tilt: 59.440717697143555,
+      zoom: 19.151926040649414);
+
+  static final Marker _kGooglePlexMarker = Marker(
+    markerId: MarkerId('_kGooglePlex'),
+    infoWindow: InfoWindow(title: 'Google Plex '),
+    icon: BitmapDescriptor.defaultMarker,
+    position: LatLng(-23.288005014742865, -47.65236675133978),
+  );
+
+  static final Marker _kLakeMarker = Marker(
+    markerId: MarkerId('_kLakePlex'),
+    infoWindow: InfoWindow(title: 'Google Plex '),
+    icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueBlue),
+    position: LatLng(-23.292608716064695, -47.65043051831898),
+  );
+
+  static final Polyline _kPolyline = Polyline(
+    polylineId: PolylineId('_kPolyline'),
+    points: const [
+      LatLng(-23.288005014742865, -47.65236675133978),
+      LatLng(-23.292608716064695, -47.65043051831898),
+    ],
+    width: 5,
+  );
+
+  static final Polygon _kPolygon = Polygon(
+    polygonId: PolygonId('_kPolygon'),
+    points: const [
+      LatLng(-23.288005014742865, -47.65236675133978),
+      LatLng(-23.292608716064695, -47.65043051831898),
+      LatLng(-23.291812332267323, -47.64591929133111),
+      LatLng(-23.28613798687782, -47.652327539612706),
+    ],
+    strokeWidth: 5,
   );
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.grey[700],
-        title: Text("Connect Bus"),
-      ),
+    return const Scaffold(
       body: GoogleMap(
         myLocationButtonEnabled: false,
         zoomControlsEnabled: false,
@@ -169,5 +224,10 @@ class _MapScreenState extends State<MapScreen> {
         ),
       ],
     );
+  }
+
+  Future<void> _goToTheLake() async {
+    final GoogleMapController controller = await _controller.future;
+    controller.animateCamera(CameraUpdate.newCameraPosition(_kLake));
   }
 }
