@@ -76,6 +76,7 @@ class _LoginPageState extends State<LoginPage> {
                   child: Container(
                     decoration: BoxDecoration(color: Colors.white),
                     child: TextField(
+                      key: ValueKey('emailField'),
                       controller: emailController,
                       decoration: InputDecoration(
                           border: OutlineInputBorder(
@@ -96,6 +97,7 @@ class _LoginPageState extends State<LoginPage> {
                   child: Container(
                     decoration: BoxDecoration(color: Colors.white),
                     child: TextField(
+                      key: ValueKey('passwordField'),
                       controller: passwordController,
                       obscureText: true,
                       decoration: InputDecoration(
@@ -121,6 +123,7 @@ class _LoginPageState extends State<LoginPage> {
                           .push(MaterialPageRoute(builder: (_) => MapSample()));
                     },
                     child: Container(
+                      key: ValueKey('loginButton'),
                       padding: EdgeInsets.all(20),
                       decoration: BoxDecoration(
                           color: Colors.black,

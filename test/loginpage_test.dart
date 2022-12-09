@@ -9,10 +9,24 @@ Widget createLoginScreen() => const MaterialApp(
 
 void main() {
   group('Teste de login', () {
-    testWidgets('Inserir dados passageiro', (tester) async {
+    testWidgets('Verificar se campos email e senha aparecem', (tester) async {
       await tester.pumpWidget(createLoginScreen());
-      final emailField = find.byType(TextField);
+      final emailField = find.byKey(const ValueKey('emailField'));
       expect(emailField, findsWidgets);
+      final passwordField = find.byKey(const ValueKey('passwordField'));
+      expect(passwordField, findsWidgets);
+    });
+
+    testWidgets('Verifica se o Icone do Onibus aparece', (tester) async {
+      await tester.pumpWidget(createLoginScreen());
+      final iconBus = find.byIcon(Icons.bus_alert);
+      expect(iconBus, findsOneWidget);
+    });
+
+    testWidgets('Verifica se o botão login aparece', (tester) async {
+      await tester.pumpWidget(createLoginScreen());
+      final loginButton = find.byKey(const ValueKey('loginButton'));
+      expect(loginButton, findsOneWidget);
     });
   });
 }
