@@ -32,6 +32,7 @@ class MyApp extends StatelessWidget {
           children: [
             Builder(builder: (context) {
               return GestureDetector(
+                key: ValueKey('keyPassageiro'),
                 onTap: () {
                   Navigator.push(
                       context,
