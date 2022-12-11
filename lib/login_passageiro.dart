@@ -1,6 +1,7 @@
-// ignore_for_file: prefer_const_constructors
+// ignore_for_file: prefer_const_constructors, use_build_context_synchronously
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:connect_bus/cadastro_paradas.dart';
 import 'package:connect_bus/cadastro_passageiro.dart';
 import 'package:connect_bus/home_page.dart';
 import 'package:connect_bus/maps.dart';
@@ -33,12 +34,11 @@ class _LoginPageState extends State<LoginPage> {
           textColor: Colors.black);
     } else {
       await FirebaseAuth.instance.signInWithEmailAndPassword(
-        email: emailController.text.trim(),
-        password: passwordController.text.trim(),
-      );
-      // ignore: use_build_context_synchronously
-      Navigator.push(
-          context, MaterialPageRoute(builder: (context) => const HomePage()));
+          email: emailController.text.trim(),
+          password: passwordController.text.trim());
+
+      Navigator.push(context,
+          MaterialPageRoute(builder: (context) => const CadastroParadaForm()));
     }
   }
 

@@ -1,5 +1,6 @@
 // ignore_for_file: prefer_const_constructors, unused_import
 
+import 'package:connect_bus/cadastro_paradas.dart';
 import 'package:connect_bus/cadastro_passageiro.dart';
 import 'package:connect_bus/home_page.dart';
 import 'package:connect_bus/login_motorista.dart';

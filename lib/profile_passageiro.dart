@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:connect_bus/profile_widget.dart';
 import 'package:connect_bus/campo_form.dart';
 import 'package:connect_bus/extensoes.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class PassageiroPage extends StatefulWidget {
   const PassageiroPage({super.key});
@@ -24,6 +25,9 @@ class _PassageiroPageState extends State<PassageiroPage> {
     String senha = "";
 
     return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.grey[700],
+      ),
       resizeToAvoidBottomInset: false,
       body: SafeArea(
           child: Center(
@@ -129,6 +133,7 @@ class _PassageiroPageState extends State<PassageiroPage> {
             ),
             SizedBox(height: 20),
 
+            //voltar button
             SizedBox(
               width: 360,
               height: 60,
@@ -138,11 +143,12 @@ class _PassageiroPageState extends State<PassageiroPage> {
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.all(Radius.circular(12)))),
                   onPressed: () {
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => MapSample()));
+                    Fluttertoast.showToast(
+                        msg: "Preencha todos os campos.",
+                        toastLength: Toast.LENGTH_LONG);
                   },
                   child: Text(
-                    "Voltar",
+                    "Salvar",
                     style: TextStyle(
                         color: Colors.white,
                         fontWeight: FontWeight.bold,

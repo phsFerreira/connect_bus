@@ -1,9 +1,10 @@
-// ignore_for_file: prefer_const_constructors, prefer_final_fields, avoid_print, non_constant_identifier_names
+// ignore_for_file: prefer_const_constructors, prefer_final_fields, avoid_print, non_constant_identifier_names, unused_element
 
 import 'dart:async';
 
 import 'package:connect_bus/headerDrawer.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:connect_bus/main.dart';
 import 'package:connect_bus/profile_passageiro.dart';
@@ -127,7 +128,7 @@ class MapSampleState extends State<MapSample> {
                       borderRadius: BorderRadius.all(Radius.circular(12)),
                       side: BorderSide(width: 1, color: Colors.black))),
               onPressed: () {
-                final number = '+55190';
+                const number = '+55190';
                 FlutterPhoneDirectCaller.callNumber(number);
               },
               child: Text(
@@ -153,7 +154,14 @@ class MapSampleState extends State<MapSample> {
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.all(Radius.circular(12)),
                       side: BorderSide(width: 1, color: Colors.black))),
-              onPressed: () {},
+              onPressed: () {
+                Fluttertoast.showToast(
+                    msg:
+                        "Solicitação enviada ao suporte. Logo entraremos em contato.",
+                    toastLength: Toast.LENGTH_LONG,
+                    gravity: ToastGravity.CENTER,
+                    fontSize: 20.0);
+              },
               child: Text(
                 'Ajuda',
                 style: TextStyle(
@@ -281,6 +289,3 @@ class MapSampleState extends State<MapSample> {
     controller.animateCamera(CameraUpdate.newCameraPosition(_kLake));
   }
 }
-
-//MENU DRAWER
-
