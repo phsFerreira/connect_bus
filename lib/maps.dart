@@ -3,6 +3,7 @@
 import 'dart:async';
 
 import 'package:connect_bus/headerDrawer.dart';
+import 'package:connect_bus/screens/search_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -231,32 +232,45 @@ class MapSampleState extends State<MapSample> {
                       padding: const EdgeInsets.all(45.0),
                       child: Column(
                         children: [
+                          // TextFormField(
+                          //   controller: _searchController,
+                          //   textCapitalization: TextCapitalization.words,
+                          //   onChanged: (value) {
+                          //     print(value);
+                          //   },
+                          //   decoration: InputDecoration(
+                          //       border: OutlineInputBorder(
+                          //         borderRadius:
+                          //             BorderRadius.all(Radius.circular(12)),
+                          //         borderSide:
+                          //             BorderSide(color: Colors.black, width: 1),
+                          //       ),
+                          //       hintText: 'Informe o local de partida',
+                          //       contentPadding: EdgeInsets.all(20.0)),
+                          // ),
                           TextFormField(
-                            controller: _searchController,
-                            textCapitalization: TextCapitalization.words,
-                            onChanged: (value) {
-                              print(value);
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => SearchScreen(),
+                                    fullscreenDialog: true),
+                              );
                             },
+                            autofocus: false,
+                            showCursor: false,
                             decoration: InputDecoration(
-                                border: OutlineInputBorder(
-                                  borderRadius:
-                                      BorderRadius.all(Radius.circular(12)),
-                                  borderSide:
-                                      BorderSide(color: Colors.black, width: 1),
-                                ),
-                                hintText: 'Informe o local de partida',
-                                contentPadding: EdgeInsets.all(20.0)),
-                          ),
-                          TextFormField(
-                            decoration: InputDecoration(
-                                border: OutlineInputBorder(
-                                  borderRadius:
-                                      BorderRadius.all(Radius.circular(12)),
-                                  borderSide:
-                                      BorderSide(color: Colors.black, width: 1),
-                                ),
-                                hintText: 'Informe o destino',
-                                contentPadding: EdgeInsets.all(20.0)),
+                              border: OutlineInputBorder(
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(12)),
+                                borderSide:
+                                    BorderSide(color: Colors.black, width: 1),
+                              ),
+                              hintText: 'Para onde?',
+                              contentPadding: EdgeInsets.all(20.0),
+                              filled: true,
+                              fillColor: Colors.white,
+                            ),
                           ),
                         ],
                       ),
