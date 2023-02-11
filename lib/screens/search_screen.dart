@@ -1,4 +1,4 @@
-import 'dart:async';
+/**import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:google_place/google_place.dart';
@@ -83,6 +83,8 @@ class _SearchScreenState extends State<SearchScreen> {
                   border: InputBorder.none),
               onChanged: (value) {
                 if (_debounce?.isActive ?? false) _debounce!.cancel();
+
+                // A cada 1 segundo verifica se o value esta vazio
                 _debounce = Timer(const Duration(milliseconds: 1000), () {
                   if (value.isNotEmpty) {
                     //places api
@@ -99,3 +101,4 @@ class _SearchScreenState extends State<SearchScreen> {
     );
   }
 }
+*/

@@ -23,14 +23,13 @@ environment:
 # Dependencies specify other packages that your package needs in order to work.
 # To automatically upgrade your package dependencies to the latest versions
 # consider running `flutter pub upgrade --major-versions`. Alternatively,
-# dependencies can be manually updated by changing the version numbers below to
+# dependencies can be manually updated by changing the version numbers below toflutter pub add http
 # the latest version available on pub.dev. To see which dependencies have newer
 # versions available, run `flutter pub outdated`.
 dependencies:
   flutter:
     sdk: flutter
-  google_place: ^0.4.7
-    
+
     
   #Firestore Database
   cloud_firestore: ^4.3.1
@@ -43,12 +42,14 @@ dependencies:
   firebase_auth: ^4.2.5
   firebase_core: ^2.4.1
   fluttertoast: ^8.0.8
-  google_maps_flutter: ^2.2.1
+  google_maps_flutter: ^2.2.3
   flutter_polyline_points: ^1.0.0
   dio: ^4.0.6
   flutter_phone_direct_caller: ^2.1.1
   flutter_rating_bar: ^4.0.1
   provider: ^6.0.5
+  http: ^0.13.5
+  geolocator: ^9.0.2
 
   
 dev_dependencies:
