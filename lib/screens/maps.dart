@@ -2,42 +2,21 @@
 
 import 'dart:async';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:connect_bus/controllers/paradas_controller.dart';
 import 'package:connect_bus/headerDrawer.dart';
+import 'package:connect_bus/screens/bus_stop_details.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:connect_bus/main.dart';
 import 'package:connect_bus/profile_passageiro.dart';
 import 'package:flutter_phone_direct_caller/flutter_phone_direct_caller.dart';
-import 'autocomplete_predictions.dart';
-
-final Set<Marker> mapMarkers = {
-  Marker(
-      markerId: const MarkerId('parada_test_nvmundo1'),
-      position: LatLng(-23.261009142007083, -47.671992198992314)),
-  Marker(
-      markerId: const MarkerId('parada_test_centro'),
-      position: LatLng(-23.2860909, -47.6741624)),
-  Marker(
-      markerId: const MarkerId('parada_test_grupao'),
-      position: LatLng(-23.2821963,-47.6723522)),
-  Marker(
-      markerId: const MarkerId('parada_test_grupao'),
-      position: LatLng(-23.2777673,-47.6731613)),
-  Marker(
-      markerId: const MarkerId('parada_test_nvmundo2'),
-      position: LatLng(-23.2625092, -47.6716789)),
-  Marker(
-      markerId: const MarkerId('parada_test_nvmundo3'),
-      position: LatLng(-23.2644994, -47.6712476)),
-  Marker(
-      markerId: const MarkerId('parada_test_nvmundo4'),
-      position: LatLng(-23.2661207, -47.6709187)),
-  Marker(
-      markerId: const MarkerId('parada_test_nvmundo5'),
-      position: LatLng(-23.2668392, -47.6702893)),
-};
+import '../autocomplete_predictions.dart';
+import '../constants/markers.dart';
+import '../database/db.dart';
 
 class MapSample extends StatefulWidget {
   @override
@@ -45,14 +24,17 @@ class MapSample extends StatefulWidget {
 }
 
 class MapSampleState extends State<MapSample> {
-  late GoogleMapController googleMapController;
+  final paradasController = Get.put(ParadasController());
   List<AutocompletePrediction> placePredictions = [];
 
-  static final CameraPosition _kGooglePlex = CameraPosition(
+  final Set<Marker> mapMarkers = {};
+
+  static final CameraPosition _rodoviariaLocalizacao = CameraPosition(
     target: LatLng(-23.28452854478957, -47.675545745249664),
     zoom: 14.4746,
   );
 
+  //#region: MENU DRAWER
   Widget DrawerList() {
     return Container(
       padding: EdgeInsets.only(
@@ -186,56 +168,105 @@ class MapSampleState extends State<MapSample> {
         ),
       ],
     );
-  }
+  } //#endregion: MENU DRAWER
 
-  /*Set<Marker> _buildMarkers(){
-    for(int i = 0; i <= mapMarkers.length; i++){
+  Future<Set<Marker>> _buildMarkers() async {
+    String nomeBairro = '';
+    List paradas = [];
+    // final Set<Marker> setMarkerBusStops = {};
+    // for (int i = 0; i < paradasController.paradas.length; i++) {
+    //   final busStopItem = mapMarkerBusStops[i];
+    //   setMarkerBusStops.add(
+    //     Marker(
+    //         markerId: const MarkerId(''),
+    //         position: busStopItem.latlgnPosition,
+    //         onTap: () {
+    //           Navigator.push(
+    //               context,
+    //               MaterialPageRoute(
+    //                   builder: (context) =>
+    //                       const BusStopDetails(neighborhood: 'Novo Mundo')));
+    //         }),
+    //   );
+    // }
 
+    FirebaseFirestore db = DB.get();
+    try {
+      final bairros = await db.collection('Bairros').get();
+      for (var bairro in bairros.docs) {
+        {
+          nomeBairro = bairro.get('nomeBairro');
+          paradas = bairro.get('parada');
+        }
+      }
+    } catch (e) {
+      // todo: Tratar o erro
+      printError(info: e.toString());
     }
-  }*/
+
+    paradas.forEach((parada) async {
+      var paradaId = parada['id'];
+      var position = parada['position'];
+      GeoPoint point = position['geopoint'];
+
+      mapMarkers.add(
+        Marker(
+          markerId: MarkerId(paradaId.toString()),
+          position: LatLng(point.latitude, point.longitude),
+          infoWindow: InfoWindow(title: nomeBairro),
+          icon: await BitmapDescriptor.fromAssetImage(
+              const ImageConfiguration(), 'assets/images/bus-stop.png'),
+          onTap: () => {
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) =>
+                        const BusStopDetails(neighborhood: 'Novo Mundo')))
+          },
+        ),
+      );
+    });
+    return mapMarkers;
+  }
 
   @override
   Widget build(BuildContext context) {
-    // final _markers = _buildMarkers();
+    final markers = _buildMarkers();
 
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.grey[700],
         title: Text("Connect Bus"),
       ),
-      body: GoogleMap(
-        mapType: MapType.normal,
-        markers: mapMarkers,
-        initialCameraPosition: _kGooglePlex,
-        onMapCreated: (GoogleMapController controller) {
-          googleMapController = controller;
-        },
+      body: GetBuilder<ParadasController>(
+        init: paradasController,
+        builder: (controller) => GoogleMap(
+          mapType: MapType.normal,
+          zoomControlsEnabled: false,
+          myLocationEnabled: true,
+          onMapCreated: controller.onMapCreated,
+          markers: mapMarkers,
+          initialCameraPosition: _rodoviariaLocalizacao,
+        ),
       ),
       floatingActionButton: FloatingActionButton.extended(
-        onPressed: () async {
-          print('Buscando localização atual...');
-          try {
-            Position position = await _determinePosition();
-
-            googleMapController.animateCamera(CameraUpdate.newCameraPosition(
-                CameraPosition(
-                    target: LatLng(position.latitude, position.longitude),
-                    zoom: 16)));
-
-            mapMarkers.add(Marker(
-                markerId: const MarkerId('currentLocation'),
-                position: LatLng(position.latitude, position.longitude),
-                onTap: () {
-                  print('Clicou no marcador!');
-                }));
-
-            setState(() {});
-          } catch (error) {
-            print(error);
-          }
-        },
         label: const Text('Minha localização atual'),
         icon: const Icon(Icons.location_history),
+        onPressed: () async {
+          print('Buscando localização atual...');
+          paradasController.getPosicaoAtualUsuario();
+
+          mapMarkers.add(Marker(
+              markerId: const MarkerId('currentLocation'),
+              infoWindow: InfoWindow(title: 'Você está aqui!'),
+              position: LatLng(paradasController.latitude.value,
+                  paradasController.longitude.value),
+              onTap: () {
+                print('Clicou no marcador!');
+              }));
+
+          setState(() {});
+        },
       ),
       drawer: Drawer(
         child: SingleChildScrollView(
@@ -245,36 +276,5 @@ class MapSampleState extends State<MapSample> {
         ),
       ),
     );
-  }
-
-  Future<Position> _determinePosition() async {
-    // #region: Verifica se o serviço de GPS do usuário esta ativo
-    bool serviceEnabled;
-    LocationPermission permission;
-
-    serviceEnabled = await Geolocator.isLocationServiceEnabled();
-
-    if (!serviceEnabled) {
-      return Future.error('Serviço de localização esta desabilitado');
-    }
-
-    permission = await Geolocator.checkPermission();
-
-    if (permission == LocationPermission.denied) {
-      permission = await Geolocator.requestPermission();
-
-      if (permission == LocationPermission.denied) {
-        return Future.error("Permissão de localização negada");
-      }
-    }
-
-    if (permission == LocationPermission.deniedForever) {
-      return Future.error('Permissão de localização permanentemente negada');
-    }
-    // #endregion
-
-    Position position = await Geolocator.getCurrentPosition();
-
-    return position;
   }
 }

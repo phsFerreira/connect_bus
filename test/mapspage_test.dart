@@ -1,4 +1,4 @@
-import 'package:connect_bus/maps.dart';
+import 'package:connect_bus/screens/maps.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';

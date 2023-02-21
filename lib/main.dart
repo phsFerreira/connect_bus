@@ -5,7 +5,6 @@ import 'package:connect_bus/cadastro_passageiro.dart';
 import 'package:connect_bus/home_page.dart';
 import 'package:connect_bus/login_motorista.dart';
 import 'package:flutter/material.dart';
-import 'cadastro_passageiro.dart';
 import 'login_passageiro.dart';
 import 'main_page.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -62,7 +61,9 @@ class MyApp extends StatelessWidget {
 
     return MaterialApp(
       debugShowCheckedModeBanner: false,
+      title: 'Connect Bus', // Nome do aplicativo nos recentes
       theme: ThemeData(fontFamily: 'Comfortaa'),
+      darkTheme: ThemeData(brightness: Brightness.dark),
       home: Scaffold(
         body: SingleChildScrollView(
           child: Column(
@@ -70,7 +71,7 @@ class MyApp extends StatelessWidget {
               Stack(
                 children: [
                   Image.asset(
-                    'images/bus_home.png',
+                    'assets/images/bus_home.png',
                     fit: BoxFit.cover,
                     width: 600,
                     height: 700,

@@ -1,6 +1,12 @@
-<manifest xmlns:android="http://schemas.android.com/apk/res/android" package="com.example.connect_bus">
+<!-- atributo android:installLocation="preferExternal" é para evitar o erro INSTALL_FAILED_INSUFFICIENT_STORAGE forçando o app ser instalado
+no armazenamento externo-->
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" package="com.example.connect_bus" android:installLocation="preferExternal">
+    <!-- Permissões para acessar a localização -->
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+
+    <!-- Acessando a localização mesmo se o usuário deixar o app em segundo plano  -->
+    <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />
 
     <application android:label="connect_bus" android:name="${applicationName}" android:icon="@mipmap/ic_launcher">
         <activity android:name=".MainActivity" android:exported="true" android:launchMode="singleTop" android:theme="@style/LaunchTheme" android:configChanges="orientation|keyboardHidden|keyboard|screenSize|smallestScreenSize|locale|layoutDirection|fontScale|screenLayout|density|uiMode" android:hardwareAccelerated="true" android:windowSoftInputMode="adjustResize">
