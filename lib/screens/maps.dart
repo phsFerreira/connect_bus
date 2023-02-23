@@ -25,6 +25,7 @@ class MapSample extends StatefulWidget {
 
 class MapSampleState extends State<MapSample> {
   final paradasController = Get.put(ParadasController());
+  late GoogleMapController googleMapController;
   List<AutocompletePrediction> placePredictions = [];
 
   final Set<Marker> mapMarkers = {};
@@ -173,31 +174,13 @@ class MapSampleState extends State<MapSample> {
   Future<Set<Marker>> _buildMarkers() async {
     String nomeBairro = '';
     List paradas = [];
-    // final Set<Marker> setMarkerBusStops = {};
-    // for (int i = 0; i < paradasController.paradas.length; i++) {
-    //   final busStopItem = mapMarkerBusStops[i];
-    //   setMarkerBusStops.add(
-    //     Marker(
-    //         markerId: const MarkerId(''),
-    //         position: busStopItem.latlgnPosition,
-    //         onTap: () {
-    //           Navigator.push(
-    //               context,
-    //               MaterialPageRoute(
-    //                   builder: (context) =>
-    //                       const BusStopDetails(neighborhood: 'Novo Mundo')));
-    //         }),
-    //   );
-    // }
 
     FirebaseFirestore db = DB.get();
     try {
       final bairros = await db.collection('Bairros').get();
       for (var bairro in bairros.docs) {
-        {
-          nomeBairro = bairro.get('nomeBairro');
-          paradas = bairro.get('parada');
-        }
+        nomeBairro = bairro.get('nomeBairro');
+        paradas = bairro.get('paradas');
       }
     } catch (e) {
       // todo: Tratar o erro
@@ -206,8 +189,7 @@ class MapSampleState extends State<MapSample> {
 
     paradas.forEach((parada) async {
       var paradaId = parada['id'];
-      var position = parada['position'];
-      GeoPoint point = position['geopoint'];
+      GeoPoint point = parada['geopoint'];
 
       mapMarkers.add(
         Marker(
@@ -231,41 +213,65 @@ class MapSampleState extends State<MapSample> {
 
   @override
   Widget build(BuildContext context) {
-    final markers = _buildMarkers();
+    //final markers = _buildMarkers();
 
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.grey[700],
         title: Text("Connect Bus"),
       ),
-      body: GetBuilder<ParadasController>(
-        init: paradasController,
-        builder: (controller) => GoogleMap(
-          mapType: MapType.normal,
-          zoomControlsEnabled: false,
-          myLocationEnabled: true,
-          onMapCreated: controller.onMapCreated,
-          markers: mapMarkers,
-          initialCameraPosition: _rodoviariaLocalizacao,
-        ),
+      body: GoogleMap(
+        mapType: MapType.normal,
+        zoomControlsEnabled: false,
+        myLocationEnabled: true,
+        onMapCreated: (GoogleMapController controller) async {
+          googleMapController = controller;
+          final posicaoAtual = await _posicaoAtual();
+          // Movendo a camera do google maps para a localização do usuario
+          googleMapController.animateCamera(
+            CameraUpdate.newCameraPosition(
+              CameraPosition(
+                  target: LatLng(posicaoAtual.latitude, posicaoAtual.longitude),
+                  zoom: 16),
+            ),
+          );
+          loadParadas();
+        },
+        markers: mapMarkers,
+        initialCameraPosition: _rodoviariaLocalizacao,
       ),
       floatingActionButton: FloatingActionButton.extended(
         label: const Text('Minha localização atual'),
         icon: const Icon(Icons.location_history),
         onPressed: () async {
           print('Buscando localização atual...');
-          paradasController.getPosicaoAtualUsuario();
+          try {
+            Position posicaoAtual = await _posicaoAtual();
 
-          mapMarkers.add(Marker(
-              markerId: const MarkerId('currentLocation'),
-              infoWindow: InfoWindow(title: 'Você está aqui!'),
-              position: LatLng(paradasController.latitude.value,
-                  paradasController.longitude.value),
-              onTap: () {
-                print('Clicou no marcador!');
-              }));
+            // Movendo a camera do google maps para a localização do usuario
+            googleMapController.animateCamera(
+              CameraUpdate.newCameraPosition(
+                CameraPosition(
+                    target:
+                        LatLng(posicaoAtual.latitude, posicaoAtual.longitude),
+                    zoom: 16),
+              ),
+            );
 
-          setState(() {});
+            // Adicionando marcador na posição atual do usuário
+            mapMarkers.add(Marker(
+                markerId: const MarkerId('currentLocation'),
+                infoWindow: InfoWindow(title: 'Você está aqui!'),
+                position: LatLng(posicaoAtual.latitude, posicaoAtual.longitude),
+                onTap: () {
+                  print('Clicou no marcador!');
+                }));
+
+            setState(() {});
+          } catch (e) {
+            // todo: Tratar o erro
+            printError(info: e.toString());
+          }
         },
       ),
       drawer: Drawer(
@@ -276,5 +282,83 @@ class MapSampleState extends State<MapSample> {
         ),
       ),
     );
+  }
+
+  Future<Position> _posicaoAtual() async {
+    // #region: Verifica se o serviço de GPS do usuário esta ativo
+    bool ativado;
+    LocationPermission permissao;
+
+    // Checando se o serviço de localização esta ativado no celular.
+    ativado = await Geolocator.isLocationServiceEnabled();
+
+    // Se o serviço de localização não estiver ativo retorne um erro.
+    if (!ativado) {
+      return Future.error('Por favor, habilite a localização do smartphone.');
+    }
+
+    permissao = await Geolocator.checkPermission();
+
+    // Se o usuário negou a permissão de localização se sim requisita para o usuário a sua localização.
+    if (permissao == LocationPermission.denied) {
+      permissao = await Geolocator.requestPermission();
+
+      // Se mesmo solicitando o acesso o usuário negar, então mostre mensagem de erro.
+      if (permissao == LocationPermission.denied) {
+        return Future.error("Voce precisa autorizar o acesso a localização");
+      }
+    }
+
+    // Se o usuário tem a permissão de localização permanentemente desabilitada, então precisa orientá-lo
+    // a ativar pelas configurações
+    if (permissao == LocationPermission.deniedForever) {
+      return Future.error('Autorize o acesso à localização nas configurações.');
+    }
+    // #endregion
+
+    Position posicaoAtual = await Geolocator.getCurrentPosition();
+
+    return posicaoAtual;
+  }
+
+  loadParadas() async {
+    FirebaseFirestore db = DB.get();
+    try {
+      final bairros = await db.collection('Bairros').get();
+      for (var bairro in bairros.docs) {
+        generateMarkers(bairro);
+      }
+
+      setState(() {});
+    } catch (e) {
+      // todo: Tratar o erro
+      printError(info: e.toString());
+    }
+  }
+
+  generateMarkers(bairro) {
+    List paradas = bairro.get('paradas');
+    paradas.forEach((parada) async {
+      var paradaId = parada['id'];
+      GeoPoint point = parada['geopoint'];
+
+      mapMarkers.add(
+        Marker(
+          markerId: MarkerId(paradaId.toString()),
+          position: LatLng(point.latitude, point.longitude),
+          infoWindow: InfoWindow(title: bairro.get('nomeBairro')),
+          icon: await BitmapDescriptor.fromAssetImage(
+              const ImageConfiguration(), 'assets/images/bus-stop.png'),
+          onTap: () => {
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) =>
+                        const BusStopDetails(neighborhood: 'Novo Mundo')))
+          },
+        ),
+      );
+    });
+    setState(() {});
   }
 }
