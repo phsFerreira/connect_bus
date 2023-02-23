@@ -169,46 +169,6 @@ class MapSampleState extends State<MapSample> {
     );
   } //#endregion: MENU DRAWER
 
-  Future<Set<Marker>> _buildMarkers() async {
-    String nomeBairro = '';
-    List paradas = [];
-
-    FirebaseFirestore db = DB.get();
-    try {
-      final bairros = await db.collection('Bairros').get();
-      for (var bairro in bairros.docs) {
-        nomeBairro = bairro.get('nomeBairro');
-        paradas = bairro.get('paradas');
-      }
-    } catch (e) {
-      // todo: Tratar o erro
-      printError(info: e.toString());
-    }
-
-    paradas.forEach((parada) async {
-      var paradaId = parada['id'];
-      GeoPoint point = parada['geopoint'];
-
-      mapMarkers.add(
-        Marker(
-          markerId: MarkerId(paradaId.toString()),
-          position: LatLng(point.latitude, point.longitude),
-          infoWindow: InfoWindow(title: nomeBairro),
-          icon: await BitmapDescriptor.fromAssetImage(
-              const ImageConfiguration(), 'assets/images/bus-stop.png'),
-          onTap: () => {
-            Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) =>
-                        const BusStopDetails(neighborhood: 'Novo Mundo')))
-          },
-        ),
-      );
-    });
-    return mapMarkers;
-  }
-
   @override
   Widget build(BuildContext context) {
     //final markers = _buildMarkers();
@@ -224,16 +184,25 @@ class MapSampleState extends State<MapSample> {
         myLocationEnabled: true,
         onMapCreated: (GoogleMapController controller) async {
           googleMapController = controller;
-          final posicaoAtual = await _posicaoAtual();
-          // Movendo a camera do google maps para a localização do usuario
-          googleMapController.animateCamera(
-            CameraUpdate.newCameraPosition(
-              CameraPosition(
-                  target: LatLng(posicaoAtual.latitude, posicaoAtual.longitude),
-                  zoom: 16),
-            ),
-          );
-          loadParadas();
+          try {
+            final posicaoAtual = await _posicaoAtual();
+            // Movendo a camera do google maps para a localização do usuario
+            googleMapController.animateCamera(
+              CameraUpdate.newCameraPosition(
+                CameraPosition(
+                    target:
+                        LatLng(posicaoAtual.latitude, posicaoAtual.longitude),
+                    zoom: 16),
+              ),
+            );
+            loadParadas();
+          } catch (e) {
+            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+              content: Text(e.toString()),
+              behavior: SnackBarBehavior.floating,
+              backgroundColor: Color.fromARGB(200, 202, 2, 2),
+            ));
+          }
         },
         markers: mapMarkers,
         initialCameraPosition: _rodoviariaLocalizacao,
@@ -242,7 +211,11 @@ class MapSampleState extends State<MapSample> {
         label: const Text('Minha localização atual'),
         icon: const Icon(Icons.location_history),
         onPressed: () async {
-          print('Buscando localização atual...');
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            content: Text('Buscando localização atual...'),
+            behavior: SnackBarBehavior.floating,
+            backgroundColor: Color.fromARGB(30, 0, 0, 0),
+          ));
           try {
             Position posicaoAtual = await _posicaoAtual();
 
@@ -267,8 +240,11 @@ class MapSampleState extends State<MapSample> {
 
             setState(() {});
           } catch (e) {
-            // todo: Tratar o erro
-            printError(info: e.toString());
+            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+              content: Text(e.toString()),
+              behavior: SnackBarBehavior.floating,
+              backgroundColor: Color.fromARGB(200, 202, 2, 2),
+            ));
           }
         },
       ),
@@ -292,7 +268,11 @@ class MapSampleState extends State<MapSample> {
 
     // Se o serviço de localização não estiver ativo retorne um erro.
     if (!ativado) {
-      return Future.error('Por favor, habilite a localização do smartphone.');
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text('Por favor, habilite a localização do smartphone.'),
+        behavior: SnackBarBehavior.floating,
+        backgroundColor: Color.fromARGB(200, 202, 2, 2),
+      ));
     }
 
     permissao = await Geolocator.checkPermission();
@@ -303,14 +283,22 @@ class MapSampleState extends State<MapSample> {
 
       // Se mesmo solicitando o acesso o usuário negar, então mostre mensagem de erro.
       if (permissao == LocationPermission.denied) {
-        return Future.error("Voce precisa autorizar o acesso a localização");
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text("Voce precisa autorizar o acesso a localização"),
+          behavior: SnackBarBehavior.floating,
+          backgroundColor: Color.fromARGB(200, 202, 2, 2),
+        ));
       }
     }
 
     // Se o usuário tem a permissão de localização permanentemente desabilitada, então precisa orientá-lo
     // a ativar pelas configurações
     if (permissao == LocationPermission.deniedForever) {
-      return Future.error('Autorize o acesso à localização nas configurações.');
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text('Autorize o acesso à localização nas configurações.'),
+        behavior: SnackBarBehavior.floating,
+        backgroundColor: Color.fromARGB(200, 202, 2, 2),
+      ));
     }
     // #endregion
 
@@ -329,8 +317,11 @@ class MapSampleState extends State<MapSample> {
 
       setState(() {});
     } catch (e) {
-      // todo: Tratar o erro
-      printError(info: e.toString());
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text(e.toString()),
+        behavior: SnackBarBehavior.floating,
+        backgroundColor: Color.fromARGB(200, 202, 2, 2),
+      ));
     }
   }
 
