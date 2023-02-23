@@ -3,7 +3,6 @@
 import 'dart:async';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:connect_bus/controllers/paradas_controller.dart';
 import 'package:connect_bus/headerDrawer.dart';
 import 'package:connect_bus/screens/bus_stop_details.dart';
 import 'package:flutter/material.dart';
@@ -24,7 +23,6 @@ class MapSample extends StatefulWidget {
 }
 
 class MapSampleState extends State<MapSample> {
-  final paradasController = Get.put(ParadasController());
   late GoogleMapController googleMapController;
   List<AutocompletePrediction> placePredictions = [];
 
