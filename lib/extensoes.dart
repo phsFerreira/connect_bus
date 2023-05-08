@@ -1,5 +1,7 @@
 // ignore: camel_case_extensions
 
+// ignore_for_file: camel_case_extensions
+
 extension extString on String {
   bool get isValidEmail {
     final emailRegExp = RegExp(r'/^[a-z0-9.]+@[a-z0-9]+\.[a-z]+\.([a-z]+)?$/i');

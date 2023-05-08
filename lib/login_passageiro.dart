@@ -1,14 +1,12 @@
 // ignore_for_file: prefer_const_constructors, use_build_context_synchronously
 
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:connect_bus/cadastro_paradas.dart';
 import 'package:connect_bus/cadastro_passageiro.dart';
-import 'package:connect_bus/home_page.dart';
 import 'package:connect_bus/maps.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_database/firebase_database.dart';
+import 'package:connect_bus/passageiro.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+
+import 'functions.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -21,27 +19,10 @@ class _LoginPageState extends State<LoginPage> {
   //text controllers
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
-  final String email = "", senha = "";
+  String email = "", senha = "", nomePassageiro="";
 
   //methods
-  Future signIn() async {
-    if (emailController.text.isEmpty | passwordController.text.isEmpty) {
-      Fluttertoast.showToast(
-          msg: 'Preencha todos os campos.',
-          toastLength: Toast.LENGTH_SHORT,
-          gravity: ToastGravity.BOTTOM,
-          backgroundColor: Colors.grey,
-          textColor: Colors.black);
-    } else {
-      await FirebaseAuth.instance.signInWithEmailAndPassword(
-          email: emailController.text.trim(),
-          password: passwordController.text.trim());
-
-      Navigator.push(context,
-          MaterialPageRoute(builder: (context) => const CadastroParadaForm()));
-    }
-  }
-
+  
   @override
   void dispose() {
     emailController.dispose();
@@ -117,10 +98,16 @@ class _LoginPageState extends State<LoginPage> {
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 30.0),
                   child: GestureDetector(
-                    onTap: () {
-                      signIn;
-                      Navigator.of(context)
-                          .push(MaterialPageRoute(builder: (_) => MapSample()));
+                    onTap: () async {
+                      email=emailController.text;
+                      senha=passwordController.text;
+                      
+                      if(await loginPassageiro(email, senha)){
+                        nomePassageiro= await buscaNomePassageiro(email);
+                        Navigator.push(context, MaterialPageRoute(builder: (context)=> MapSample(), settings: RouteSettings(arguments: ScreenArguments(email, nomePassageiro))));
+                      }else{
+                        Fluttertoast.showToast(msg: "error");
+                      }
                     },
                     child: Container(
                       key: ValueKey('loginButton'),
@@ -165,4 +152,11 @@ class _LoginPageState extends State<LoginPage> {
       ),
     );
   }
+}
+
+class ScreenArguments{
+  final String email;
+  final String nome;
+
+  ScreenArguments(this.email, this.nome);
 }

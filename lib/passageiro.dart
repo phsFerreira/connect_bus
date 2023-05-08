@@ -1,8 +1,12 @@
 //import 'package:cloud_firestore/cloud_firestore.dart';
 // ignore_for_file: unused_import
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
+import 'package:flutter/widgets.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:http/http.dart';
 
 class Passageiro {
   String nomeCompleto = "";
@@ -26,8 +30,8 @@ class Passageiro {
     return nomeCompleto;
   }
 
-  set setCpf(String CPF) {
-    this.cpf = CPF;
+  set setCpf(String cpf) {
+    this.cpf = cpf;
   }
 
   String get getCpf {
@@ -59,8 +63,7 @@ class Passageiro {
   }
 
   void registrarPassageiro() {
-    late DatabaseReference db;
-    db = FirebaseDatabase.instance.ref().child('Usuarios');
+    var db=FirebaseFirestore.instance;
 
     Map<String, String> passageiros = {
       'nomeCompleto': nomeCompleto,
@@ -69,36 +72,95 @@ class Passageiro {
       'email': email,
       'senha': senha,
     };
-    db.push().set(passageiros);
+
+    db.collection('Usuarios').doc(email).set(passageiros);
   }
 
-  // signup(Passageiro passageiro, AuthCredential authCredential) async {}
+  static Passageiro fromJson(Map<String, dynamic> json)=>Passageiro(
+    nomeCompleto: json['nomeCompleto'], 
+    cpf: json['cpf'], 
+    telefone: json['telefone'], 
+    email: json['email'], 
+    senha: json['cpf']);
+  }
 
-  // // void login(String emailTeste, String senha){
-  // //   FirebaseFirestore db=FirebaseFirestore.instance;
+  Future<String> buscaNomePassageiro(String email) async{
+    String emailBusca=email;
+    String nome="";
 
-  // //   db.collection('ConnectBus-Usuarios').where('email', isEqualTo: emailTeste).get().then((doc) {
-  // //     if(doc!=){
+    var collection=FirebaseFirestore.instance.collection('Usuarios');
+    var docSnapshot=await collection.doc(emailBusca).get();
 
-  // //     }
-  // //   });
-  // // }
+    if(docSnapshot.exists){
+      Map<String, dynamic>? data=docSnapshot.data();
+      nome=data?['nomeCompleto'];
+    }
+    return nome;
+  }
 
-  // void login(String email, String senha) {
-  //   late DatabaseReference db;
-  //   db = FirebaseDatabase.instance.ref().child('Usuarios');
+  Future<Passageiro> buscaPassageiro(String email) async{
+    String emailBusca=email;
+    Passageiro passageiroBusca=Passageiro(nomeCompleto: "", cpf: "", telefone: "", email: "", senha: "");
 
-  //   Query query = FirebaseDatabase.instance
-  //       .ref()
-  //       .child('Usuarios')
-  //       .orderByChild('email')
-  //       .equalTo('teste');
+    var collection=FirebaseFirestore.instance.collection('Usuarios');
+    var docSnapshot=await collection.doc(emailBusca).get();
 
-  //   // db.orderByChild("email").equalTo("pedro.ferreirasilva777@gmail.com");
+    if(docSnapshot.exists){
+      Map<String, dynamic>? data=docSnapshot.data();
+      passageiroBusca.nomeCompleto=data?['nomeCompleto'];
+      passageiroBusca.cpf=data?['cpf'];
+      passageiroBusca.telefone=data?['telefone'];
+      passageiroBusca.email=data?['email'];
+      passageiroBusca.senha=data?['senha'];
+    }
+    
+    return passageiroBusca;
+  }
 
-  //   // const q=query(db.orderByChild("email").equalTo("pedro.ferreirasilva777@gmail.com"));
+  Future<bool> loginPassageiro(String email, String senha) async{
+    String emailBusca=email;
 
-  //   // final usuariosRef=FirebaseDatabase.instance.ref().child('Usuarios');
-  //   // final query=usuariosRef.where("email", isEqualTo: "teste");
-  // }
-}
+    var collection=FirebaseFirestore.instance.collection('Usuarios');
+    var docSnapshot=await collection.doc(emailBusca).get();
+    
+    if(docSnapshot.exists){
+      Map<String, dynamic>? data=docSnapshot.data();
+      String emailLogin=data?['email'];
+      String senhaLogin=data?['senha'];
+      
+      if(emailLogin==email && senhaLogin==senha){
+        Fluttertoast.showToast(msg:"logado com sucesso.", toastLength: Toast.LENGTH_LONG);
+        return true;
+      }else{
+        Fluttertoast.showToast(msg:"Email ou senha incorretos.", toastLength: Toast.LENGTH_LONG);
+        return false;
+      }
+    }
+    else{
+      Fluttertoast.showToast(
+      msg: "Usuário não cadastrado.",
+      toastLength: Toast.LENGTH_LONG);
+      return false;
+    } 
+  }
+
+  Future<Passageiro> updatePassageiro(Passageiro passageiro) async{
+    Passageiro passageiroUpdate=passageiro;
+    String emailBusca=passageiroUpdate.email;
+
+    var collection=FirebaseFirestore.instance.collection('Usuarios');
+    var docSnapshot=await collection.doc(emailBusca).get();
+
+    if(docSnapshot.exists){
+      Map<String, dynamic>? data=docSnapshot.data();
+      String emailUpdate=data?['email'];
+
+      if(emailUpdate==emailBusca){
+        
+      }
+    }
+
+    return passageiro;
+  }
+
+
