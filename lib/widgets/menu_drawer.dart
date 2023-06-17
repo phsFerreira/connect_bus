@@ -1,151 +1,127 @@
-// import 'dart:js';
+import 'package:connect_bus/profile_passageiro.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_phone_direct_caller/flutter_phone_direct_caller.dart';
 
-// import 'package:flutter/material.dart';
-// import 'package:flutter/widgets.dart';
-// import 'package:flutter_phone_direct_caller/flutter_phone_direct_caller.dart';
-// import 'package:fluttertoast/fluttertoast.dart';
+class MenuDrawer extends StatelessWidget {
+  const MenuDrawer({Key? key}) : super(key: key);
 
-// import '../main.dart';
-// import '../profile_passageiro.dart';
+  @override
+  Widget build(BuildContext context) {
+    return Drawer(
+      // Add a ListView to the drawer. This ensures the user can scroll
+      // through the options in the drawer if there isn't enough vertical
+      // space to fit everything.
+      child: ListView(
+        // Important: Remove any padding from the ListView.
+        padding: EdgeInsets.zero,
+        children: const [
+          DrawerHeader(
+            decoration: BoxDecoration(
+              color: Colors.blue,
+            ),
+            child: Text('Drawer Header'),
+          ),
+          MenuItems(),
+        ],
+      ),
+    );
+  }
+}
 
-// class DrawerList extends StatelessWidget {
-//   const DrawerList({super.key});
+class MenuItems extends StatelessWidget {
+  const MenuItems({super.key});
 
-//   @override
-//   Widget build(BuildContext context) {
-//     return Container(
-//       padding: const EdgeInsets.only(
-//         top: 15,
-//       ),
-//       child: Column(
-//         children: [
-//           menuItem(),
-//         ],
-//       ),
-//     );
-//   }
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        // TODO: Refatorar ListTile, codigo esta repetitivo
 
-//   Widget menuItem() {
-//     return Column(
-//       children: [
-//         ListTile(
-//           leading: const Icon(
-//             Icons.home,
-//             size: 25,
-//             color: Colors.black,
-//           ),
-//           title: const Text(
-//             "Home",
-//             style: TextStyle(color: Colors.black, fontSize: 16),
-//           ),
-//           onTap: () {
-//             Navigator.pop(context as BuildContext);
-//           },
-//         ),
-//         ListTile(
-//           leading: const Icon(
-//             Icons.person,
-//             size: 25,
-//             color: Colors.black,
-//           ),
-//           title: const Text(
-//             "Profile",
-//             style: TextStyle(color: Colors.black, fontSize: 16),
-//           ),
-//           onTap: () {
-//             Navigator.push(
-//                 context as BuildContext,
-//                 MaterialPageRoute(
-//                     builder: (context) => const PassageiroPage()));
-//           },
-//         ),
-//         const SizedBox(height: 60),
-
-//         //emergencia button
-//         SizedBox(
-//           width: 230,
-//           height: 50,
-//           child: ElevatedButton(
-//               style: ElevatedButton.styleFrom(
-//                   primary: Colors.white,
-//                   onPrimary: Colors.grey,
-//                   padding: const EdgeInsets.symmetric(horizontal: 30),
-//                   shape: const RoundedRectangleBorder(
-//                       borderRadius: BorderRadius.all(Radius.circular(12)),
-//                       side: BorderSide(width: 1, color: Colors.black))),
-//               onPressed: () {
-//                 const number = '+55190';
-//                 FlutterPhoneDirectCaller.callNumber(number);
-//               },
-//               child: const Text(
-//                 'Emergência',
-//                 style: TextStyle(
-//                     color: Colors.black,
-//                     fontWeight: FontWeight.bold,
-//                     fontSize: 16),
-//               )),
-//         ),
-
-//         const SizedBox(height: 20),
-
-//         //ajuda button
-//         SizedBox(
-//           width: 230,
-//           height: 50,
-//           child: ElevatedButton(
-//               style: ElevatedButton.styleFrom(
-//                   primary: Colors.white,
-//                   onPrimary: Colors.grey,
-//                   padding: const EdgeInsets.symmetric(horizontal: 30),
-//                   shape: const RoundedRectangleBorder(
-//                       borderRadius: BorderRadius.all(Radius.circular(12)),
-//                       side: BorderSide(width: 1, color: Colors.black))),
-//               onPressed: () {
-//                 Fluttertoast.showToast(
-//                     msg:
-//                         "Solicitação enviada ao suporte. Logo entraremos em contato.",
-//                     toastLength: Toast.LENGTH_LONG,
-//                     gravity: ToastGravity.CENTER,
-//                     fontSize: 20.0);
-//               },
-//               child: const Text(
-//                 'Ajuda',
-//                 style: TextStyle(
-//                     color: Colors.black,
-//                     fontWeight: FontWeight.bold,
-//                     fontSize: 16),
-//               )),
-//         ),
-
-//         const SizedBox(height: 100),
-
-//         //sair button
-//         SizedBox(
-//           width: 230,
-//           height: 50,
-//           child: ElevatedButton(
-//               style: ElevatedButton.styleFrom(
-//                   primary: Colors.red,
-//                   onPrimary: const Color.fromARGB(255, 82, 9, 9),
-//                   padding: const EdgeInsets.symmetric(horizontal: 30),
-//                   shape: const RoundedRectangleBorder(
-//                       borderRadius: BorderRadius.all(Radius.circular(12)),
-//                       side: BorderSide(width: 1, color: Colors.red))),
-//               onPressed: () {
-//                 Builder(builder: (context) {
-//                   Navigator.push(context,
-//                       MaterialPageRoute(builder: (context) => const MyApp()));
-//                 });
-//               },
-//               child: const Text(
-//                 'sair',
-//                 style: TextStyle(
-//                     color: Colors.white,
-//                     fontWeight: FontWeight.bold,
-//                     fontSize: 16),
-//               )),
-//         ),
-//       ],
-//     );
-//   }
-// }
+        // Menu Home
+        ListTile(
+          leading: const Icon(
+            Icons.home,
+            size: 25,
+            color: Colors.black,
+          ),
+          title: const Text(
+            "Home",
+            style: TextStyle(color: Colors.black, fontSize: 16),
+          ),
+          onTap: () {
+            Navigator.pop(context);
+          },
+        ),
+        // Menu Perfil
+        ListTile(
+          leading: const Icon(
+            Icons.person,
+            size: 25,
+            color: Colors.black,
+          ),
+          title: const Text(
+            "Perfil",
+            style: TextStyle(color: Colors.black, fontSize: 16),
+          ),
+          onTap: () {
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => const PassageiroPage()));
+          },
+        ),
+        // Menu Polícia
+        ListTile(
+          leading: const Icon(
+            Icons.local_police,
+            size: 25,
+            color: Colors.black,
+          ),
+          title: const Text(
+            "Polícia",
+            style: TextStyle(color: Colors.black, fontSize: 16),
+          ),
+          onTap: () {
+            const number = '+55190';
+            FlutterPhoneDirectCaller.callNumber(number);
+          },
+        ),
+        // Menu Ajuda
+        ListTile(
+          leading: const Icon(
+            Icons.help,
+            size: 25,
+            color: Colors.black,
+          ),
+          title: const Text(
+            "Ajuda",
+            style: TextStyle(color: Colors.black, fontSize: 16),
+          ),
+          onTap: () {
+            // Navigator.push(
+            //     context,
+            //     MaterialPageRoute(
+            //         builder: (context) => const PassageiroPage()));
+          },
+        ),
+        // Botão sair
+        ElevatedButton(
+          style: ElevatedButton.styleFrom(
+            backgroundColor: Colors.red,
+            foregroundColor: const Color.fromARGB(255, 82, 9, 9),
+            padding: const EdgeInsets.symmetric(horizontal: 30),
+          ),
+          onPressed: () {
+            // Navigator.push(context,
+            //     MaterialPageRoute(builder: (context) => const MyApp()));
+          },
+          child: const Text(
+            'sair',
+            style: TextStyle(
+                color: Colors.white, fontWeight: FontWeight.bold, fontSize: 16),
+          ),
+        ),
+      ],
+    );
+  }
+}

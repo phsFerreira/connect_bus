@@ -10,6 +10,7 @@ import 'main_page.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 // ignore: depend_on_referenced_packages
 import 'package:firebase_core/firebase_core.dart';
+import 'package:connect_bus/screens/maps_screen.dart';
 
 Future main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -64,37 +65,38 @@ class MyApp extends StatelessWidget {
       title: 'Connect Bus', // Nome do aplicativo nos recentes
       theme: ThemeData(fontFamily: 'Comfortaa'),
       darkTheme: ThemeData(brightness: Brightness.dark),
-      home: Scaffold(
-        body: SingleChildScrollView(
-          child: Column(
-            children: [
-              Stack(
-                children: [
-                  Image.asset(
-                    'assets/images/bus_home.png',
-                    fit: BoxFit.cover,
-                    width: 600,
-                    height: 700,
-                  ),
-                  SizedBox(
-                    height: 700,
-                    child: Center(
-                      child: Text(
-                        'CONNECT BUS',
-                        style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 25.0,
-                            fontWeight: FontWeight.w400),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              buttonSection,
-            ],
-          ),
-        ),
-      ),
+      home: MapsScreen(),
+      // home: Scaffold(
+      //   body: SingleChildScrollView(
+      //     child: Column(
+      //       children: [
+      //         Stack(
+      //           children: [
+      //             Image.asset(
+      //               'assets/images/bus_home.png',
+      //               fit: BoxFit.cover,
+      //               width: 600,
+      //               height: 700,
+      //             ),
+      //             SizedBox(
+      //               height: 700,
+      //               child: Center(
+      //                 child: Text(
+      //                   'CONNECT BUS',
+      //                   style: TextStyle(
+      //                       color: Colors.white,
+      //                       fontSize: 25.0,
+      //                       fontWeight: FontWeight.w400),
+      //                 ),
+      //               ),
+      //             ),
+      //           ],
+      //         ),
+      //         buttonSection,
+      //       ],
+      //     ),
+      //   ),
+      // ),
     );
   }
 
