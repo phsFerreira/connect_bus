@@ -10,7 +10,7 @@ import 'main_page.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 // ignore: depend_on_referenced_packages
 import 'package:firebase_core/firebase_core.dart';
-import 'package:connect_bus/screens/maps_screen.dart';
+import 'package:connect_bus/screens/paradas_screen.dart';
 
 Future main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -65,7 +65,7 @@ class MyApp extends StatelessWidget {
       title: 'Connect Bus', // Nome do aplicativo nos recentes
       theme: ThemeData(fontFamily: 'Comfortaa'),
       darkTheme: ThemeData(brightness: Brightness.dark),
-      home: MapsScreen(),
+      home: ParadasScreen(),
       // home: Scaffold(
       //   body: SingleChildScrollView(
       //     child: Column(

@@ -4,7 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:connect_bus/cadastro_paradas.dart';
 import 'package:connect_bus/cadastro_passageiro.dart';
 import 'package:connect_bus/home_page.dart';
-import 'package:connect_bus/screens/maps_screen.dart';
+import 'package:connect_bus/screens/paradas_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
@@ -120,7 +120,7 @@ class _LoginPageState extends State<LoginPage> {
                     onTap: () {
                       signIn;
                       Navigator.of(context).push(
-                          MaterialPageRoute(builder: (_) => MapsScreen()));
+                          MaterialPageRoute(builder: (_) => ParadasScreen()));
                     },
                     child: Container(
                       key: ValueKey('loginButton'),

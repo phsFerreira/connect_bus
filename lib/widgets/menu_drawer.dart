@@ -2,6 +2,7 @@ import 'package:connect_bus/profile_passageiro.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_phone_direct_caller/flutter_phone_direct_caller.dart';
 
+/// Menu lateral
 class MenuDrawer extends StatelessWidget {
   const MenuDrawer({Key? key}) : super(key: key);
 
@@ -15,12 +16,14 @@ class MenuDrawer extends StatelessWidget {
         // Important: Remove any padding from the ListView.
         padding: EdgeInsets.zero,
         children: const [
+          // Cabeçalho do menu lateral que ficará informações da conta do usuario
           DrawerHeader(
             decoration: BoxDecoration(
               color: Colors.blue,
             ),
             child: Text('Drawer Header'),
           ),
+          // Opções do menu lateral
           MenuItems(),
         ],
       ),
@@ -28,6 +31,7 @@ class MenuDrawer extends StatelessWidget {
   }
 }
 
+/// Opções do menu lateral
 class MenuItems extends StatelessWidget {
   const MenuItems({super.key});
 

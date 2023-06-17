@@ -17,12 +17,14 @@ import '../autocomplete_predictions.dart';
 import '../constants/markers.dart';
 import '../database/db.dart';
 
-class MapSample extends StatefulWidget {
+class MapWithBusStops extends StatefulWidget {
+  const MapWithBusStops({super.key});
+
   @override
-  State<MapSample> createState() => MapSampleState();
+  State<MapWithBusStops> createState() => MapWithBusStopsState();
 }
 
-class MapSampleState extends State<MapSample> {
+class MapWithBusStopsState extends State<MapWithBusStops> {
   late GoogleMapController googleMapController;
   List<AutocompletePrediction> placePredictions = [];
 
