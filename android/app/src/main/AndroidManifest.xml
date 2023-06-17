@@ -23,6 +23,7 @@ no armazenamento externo-->
         <!-- Don't delete the meta-data below.
              This is used by the Flutter tool to generate GeneratedPluginRegistrant.java -->
         <meta-data android:name="flutterEmbedding" android:value="2" />
-        <meta-data android:name="com.google.android.geo.API_KEY" android:value="AIzaSyCFNQ4YtPdA3ha5lJNZ00aMbp_SCK9tow0" />
+        <!-- @string/ANDROID_MAPS_APIKEY esta fazendo referencia a variavel do .env-->
+        <meta-data android:name="com.google.android.geo.API_KEY" android:value="@string/ANDROID_MAPS_APIKEY"/>
     </application>
 </manifest>

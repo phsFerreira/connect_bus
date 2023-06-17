@@ -25,6 +25,7 @@ if (flutterVersionName == null) {
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply from: "$flutterRoot/packages/flutter_tools/gradle/flutter.gradle"
+apply from: project(':flutter_config').projectDir.getPath() + "/dotenv.gradle"
 
 android {
     compileSdkVersion flutter.compileSdkVersion
@@ -72,4 +73,6 @@ dependencies {
     implementation "com.squareup.okhttp3:okhttp:4.9.3"
 }
 
+// TODO: Verificar o arquivo google-services.json pois ele tem a chave da API do google
+// e isso pode ser perigoso.
 apply plugin: 'com.google.gms.google-services'
