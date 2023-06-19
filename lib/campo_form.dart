@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 class CampoForm extends StatelessWidget {
-  CampoForm({
+  const CampoForm({
     Key? key,
     required this.hintText,
     this.inputFormatters,

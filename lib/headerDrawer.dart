@@ -1,17 +1,29 @@
-// ignore_for_file: prefer_const_constructors
+// ignore_for_file: prefer_const_constructors, must_be_immutable
 
+import 'package:connect_bus/login_passageiro.dart';
 import 'package:flutter/material.dart';
 
 class HeaderDrawer extends StatefulWidget {
-  const HeaderDrawer({Key? key}) : super(key: key);
+
+  String email;
+  String nome;
+
+  HeaderDrawer({super.key, required this.email, required this.nome});
 
   @override
   State<HeaderDrawer> createState() => _HeaderDrawerState();
 }
 
 class _HeaderDrawerState extends State<HeaderDrawer> {
+
   @override
   Widget build(BuildContext context) {
+
+    final args=ModalRoute.of(context)!.settings.arguments as ScreenArguments;
+
+    String nomePassageiro=args.nome;
+    String emailPassageiro=args.email;
+
     return Container(
       color: Colors.grey[700],
       width: double.infinity,
@@ -30,11 +42,11 @@ class _HeaderDrawerState extends State<HeaderDrawer> {
                         "https://i.pinimg.com/736x/8b/16/7a/8b167af653c2399dd93b952a48740620.jpg"))),
           ),
           Text(
-            "Passageiro",
+            nomePassageiro,
             style: TextStyle(color: Colors.white, fontSize: 20),
           ),
           Text(
-            "teste@teste.com",
+            emailPassageiro,
             style: TextStyle(color: Colors.grey[200], fontSize: 14),
           )
         ],

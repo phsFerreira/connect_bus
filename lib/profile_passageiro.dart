@@ -1,5 +1,6 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
 
+import 'package:connect_bus/passageiro.dart';
 import 'package:flutter/material.dart';
 import 'package:connect_bus/profile_widget.dart';
 import 'package:connect_bus/campo_form.dart';
@@ -16,6 +17,12 @@ class PassageiroPage extends StatefulWidget {
 class _PassageiroPageState extends State<PassageiroPage> {
   @override
   Widget build(BuildContext context) {
+    //final args=ModalRoute.of(context)!.settings.arguments as String;
+
+    // Passageiro passageiroLogado;
+
+    // passageiroLogado=buscaPassageiro(args) as Passageiro;
+
     String nome = "";
     String cpf = "";
     String telefone = "";
@@ -34,7 +41,7 @@ class _PassageiroPageState extends State<PassageiroPage> {
             Padding(
               padding: const EdgeInsets.only(top: 40.0),
               child: Text(
-                'Edição',
+                'teste',
                 style: TextStyle(fontWeight: FontWeight.bold, fontSize: 30),
               ),
             ),
@@ -63,18 +70,20 @@ class _PassageiroPageState extends State<PassageiroPage> {
             SizedBox(height: 20),
 
             //CPF
-            SizedBox(
-              width: 360,
-              child: CampoForm(
-                hintText: 'CPF',
-                validator: (value) {
-                  cpf = value.toString();
-                  if (cpf.isEmpty) {
-                    return 'Digite seu CPF.';
-                  } else if (cpf.isValidCPF) {
-                    return 'Digite um CPF válido.';
-                  }
-                },
+            IgnorePointer(
+              child: SizedBox(
+                width: 360,
+                child: CampoForm(
+                  hintText: 'CPF',
+                  validator: (value) {
+                    cpf = value.toString();
+                    if (cpf.isEmpty) {
+                      return 'Digite seu CPF.';
+                    } else if (cpf.isValidCPF) {
+                      return 'Digite um CPF válido.';
+                    }
+                  },
+                ),
               ),
             ),
             SizedBox(height: 20),
@@ -137,7 +146,7 @@ class _PassageiroPageState extends State<PassageiroPage> {
               height: 60,
               child: ElevatedButton(
                   style: ElevatedButton.styleFrom(
-                      primary: Colors.black,
+                      backgroundColor: Colors.black,
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.all(Radius.circular(12)))),
                   onPressed: () {

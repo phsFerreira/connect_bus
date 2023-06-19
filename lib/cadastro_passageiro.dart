@@ -18,8 +18,6 @@ class _CadastroPassageiroFormState extends State<CadastroPassageiroForm> {
 
   @override
   Widget build(BuildContext context) {
-    // // ignore: valid_regexps
-    // final RegExp nameRegExp = RegExp(r'[!@#<>?"/·:_`~;[]\\|=+)(*&^%0-9-]');
 
     String nome = "";
     String cpf = "";
@@ -120,7 +118,7 @@ class _CadastroPassageiroFormState extends State<CadastroPassageiroForm> {
 
                     ElevatedButton(
                         style: ElevatedButton.styleFrom(
-                            primary: Colors.black, minimumSize: Size(400, 50)),
+                            backgroundColor: Colors.black, minimumSize: Size(400, 50)),
                         onPressed: () {
                           if (_formKey.currentState!.validate()) {
                             Passageiro passageiro = Passageiro(
