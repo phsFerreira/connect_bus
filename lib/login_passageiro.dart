@@ -1,6 +1,10 @@
 // ignore_for_file: prefer_const_constructors, use_build_context_synchronously
 
 import 'package:connect_bus/cadastro_passageiro.dart';
+import 'package:connect_bus/home_page.dart';
+import 'package:connect_bus/screens/paradas_screen.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:connect_bus/maps.dart';
 import 'package:connect_bus/passageiro.dart';
 import 'package:flutter/material.dart';
@@ -19,10 +23,10 @@ class _LoginPageState extends State<LoginPage> {
   //text controllers
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
-  String email = "", senha = "", nomePassageiro="";
+  String email = "", senha = "", nomePassageiro = "";
 
   //methods
-  
+
   @override
   void dispose() {
     emailController.dispose();
@@ -99,13 +103,19 @@ class _LoginPageState extends State<LoginPage> {
                   padding: const EdgeInsets.symmetric(horizontal: 30.0),
                   child: GestureDetector(
                     onTap: () async {
-                      email=emailController.text;
-                      senha=passwordController.text;
-                      
-                      if(await loginPassageiro(email, senha)){
-                        nomePassageiro= await buscaNomePassageiro(email);
-                        Navigator.push(context, MaterialPageRoute(builder: (context)=> MapSample(), settings: RouteSettings(arguments: ScreenArguments(email, nomePassageiro))));
-                      }else{
+                      email = emailController.text;
+                      senha = passwordController.text;
+
+                      if (await loginPassageiro(email, senha)) {
+                        nomePassageiro = await buscaNomePassageiro(email);
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => MapSample(),
+                                settings: RouteSettings(
+                                    arguments: ScreenArguments(
+                                        email, nomePassageiro))));
+                      } else {
                         Fluttertoast.showToast(msg: "error");
                       }
                     },
@@ -154,7 +164,7 @@ class _LoginPageState extends State<LoginPage> {
   }
 }
 
-class ScreenArguments{
+class ScreenArguments {
   final String email;
   final String nome;
 

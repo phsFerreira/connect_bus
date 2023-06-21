@@ -38,19 +38,20 @@ dependencies:
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.2
   google_fonts:
+
+  # Firebase
   firebase_database: ^10.0.9
   firebase_auth: ^4.2.5
   firebase_core: ^2.4.1
   fluttertoast: ^8.0.8
   google_maps_flutter: ^2.2.3
   flutter_polyline_points: ^1.0.0
-  dio: ^4.0.6
+  dio: ^5.2.1+1
   flutter_phone_direct_caller: ^2.1.1
   flutter_rating_bar: ^4.0.1
   provider: ^6.0.5
   http: ^0.13.5
   geolocator: ^9.0.2
-  js: ^0.6.2
 
   
 dev_dependencies:
@@ -80,9 +81,7 @@ flutter:
 
   # To add assets to your application, add an assets section, like this:
   assets:
-    - images/bus_home.png
-    - images/profile.jpg
-  #   - images/a_dot_ham.jpeg
+    - assets/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
