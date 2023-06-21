@@ -1,16 +1,9 @@
-// ignore_for_file: prefer_const_constructors, use_build_context_synchronously
-
-import 'package:connect_bus/cadastro_passageiro.dart';
-import 'package:connect_bus/home_page.dart';
 import 'package:connect_bus/screens/paradas_screen.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_database/firebase_database.dart';
-import 'package:connect_bus/maps.dart';
-import 'package:connect_bus/passageiro.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
-import 'functions.dart';
+import 'package:connect_bus/cadastro_passageiro.dart';
+import 'package:connect_bus/passageiro.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -45,25 +38,25 @@ class _LoginPageState extends State<LoginPage> {
               mainAxisAlignment: MainAxisAlignment.center,
               //login text
               children: [
-                Icon(
+                const Icon(
                   Icons.bus_alert,
                   size: 40,
                 ),
-                Text(
+                const Text(
                   'Login',
                   style: TextStyle(fontWeight: FontWeight.bold, fontSize: 50),
                 ),
-                SizedBox(height: 50),
+                const SizedBox(height: 50),
 
                 //email textfield
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 30),
                   child: Container(
-                    decoration: BoxDecoration(color: Colors.white),
+                    decoration: const BoxDecoration(color: Colors.white),
                     child: TextField(
-                      key: ValueKey('emailField'),
+                      key: const ValueKey('emailField'),
                       controller: emailController,
-                      decoration: InputDecoration(
+                      decoration: const InputDecoration(
                           border: OutlineInputBorder(
                               borderRadius:
                                   BorderRadius.all(Radius.circular(12)),
@@ -74,18 +67,18 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                   ),
                 ),
-                SizedBox(height: 20),
+                const SizedBox(height: 20),
 
                 //password textfield
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 30),
                   child: Container(
-                    decoration: BoxDecoration(color: Colors.white),
+                    decoration: const BoxDecoration(color: Colors.white),
                     child: TextField(
-                      key: ValueKey('passwordField'),
+                      key: const ValueKey('passwordField'),
                       controller: passwordController,
                       obscureText: true,
-                      decoration: InputDecoration(
+                      decoration: const InputDecoration(
                           border: OutlineInputBorder(
                               borderRadius:
                                   BorderRadius.all(Radius.circular(12)),
@@ -96,7 +89,7 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                   ),
                 ),
-                SizedBox(height: 20),
+                const SizedBox(height: 20),
 
                 //login button
                 Padding(
@@ -106,26 +99,29 @@ class _LoginPageState extends State<LoginPage> {
                       email = emailController.text;
                       senha = passwordController.text;
 
-                      if (await loginPassageiro(email, senha)) {
-                        nomePassageiro = await buscaNomePassageiro(email);
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => MapSample(),
-                                settings: RouteSettings(
-                                    arguments: ScreenArguments(
-                                        email, nomePassageiro))));
-                      } else {
-                        Fluttertoast.showToast(msg: "error");
-                      }
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => MapSample(),
+                          settings: RouteSettings(
+                            arguments: ScreenArguments(email, nomePassageiro),
+                          ),
+                        ),
+                      );
+
+                      // if (await loginPassageiro(email, senha)) {
+                      //   nomePassageiro = await buscaNomePassageiro(email);
+                      // } else {
+                      //   Fluttertoast.showToast(msg: "error");
+                      // }
                     },
                     child: Container(
-                      key: ValueKey('loginButton'),
-                      padding: EdgeInsets.all(20),
-                      decoration: BoxDecoration(
+                      key: const ValueKey('loginButton'),
+                      padding: const EdgeInsets.all(20),
+                      decoration: const BoxDecoration(
                           color: Colors.black,
                           borderRadius: BorderRadius.all(Radius.circular(12))),
-                      child: Center(
+                      child: const Center(
                           child: Text(
                         'Login',
                         style: TextStyle(
@@ -136,7 +132,7 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                   ),
                 ),
-                SizedBox(height: 25),
+                const SizedBox(height: 25),
 
                 //create account button
                 Padding(
@@ -144,9 +140,9 @@ class _LoginPageState extends State<LoginPage> {
                   child: GestureDetector(
                     onTap: () {
                       Navigator.of(context).push(MaterialPageRoute(
-                          builder: (_) => CadastroPassageiroForm()));
+                          builder: (_) => const CadastroPassageiroForm()));
                     },
-                    child: Text(
+                    child: const Text(
                       'Criar Conta',
                       style: TextStyle(
                           color: Colors.blue,
