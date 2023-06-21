@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:connect_bus/model/parada.dart';
 
 class ParadasRepository extends ChangeNotifier {
+  List<Parada> get paradas => _paradas;
+
   final List<Parada> _paradas = [
     Parada(
         id: 'parada_test_nvmundo1',
@@ -10,7 +12,7 @@ class ParadasRepository extends ChangeNotifier {
         longitude: -47.671992198992314),
     Parada(
         id: 'parada_test_nvmundo2',
-        bairro: 'Novo Mundo',
+        bairro: 'Novo Mundo Teste',
         latitude: -23.2625092,
         longitude: -47.6716789),
 
