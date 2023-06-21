@@ -1,9 +1,7 @@
 import 'package:connect_bus/screens/paradas_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 
 import 'package:connect_bus/cadastro_passageiro.dart';
-import 'package:connect_bus/passageiro.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -102,7 +100,7 @@ class _LoginPageState extends State<LoginPage> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => MapSample(),
+                          builder: (context) => const ParadasScreen(),
                           settings: RouteSettings(
                             arguments: ScreenArguments(email, nomePassageiro),
                           ),
