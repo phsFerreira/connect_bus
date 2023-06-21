@@ -145,14 +145,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.0.5"
-  dio:
-    dependency: "direct main"
-    description:
-      name: dio
-      sha256: a9d76e72985d7087eb7c5e7903224ae52b337131518d127c554b9405936752b8
-      url: "https://pub.dev"
-    source: hosted
-    version: "5.2.1+1"
   fake_async:
     dependency: transitive
     description:
@@ -254,6 +246,14 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
+  flutter_config:
+    dependency: "direct main"
+    description:
+      name: flutter_config
+      sha256: "8e2be2d560a52e06d2ef53a31913a11fc80ef708a442571c96194fd32e29fb1a"
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.0.0"
   flutter_driver:
     dependency: transitive
     description: flutter
@@ -283,22 +283,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.0.15"
-  flutter_polyline_points:
-    dependency: "direct main"
-    description:
-      name: flutter_polyline_points
-      sha256: "02699e69142f51a248d784b6e3eec524194467fca5f7c4da19699ce2368b6980"
-      url: "https://pub.dev"
-    source: hosted
-    version: "1.0.0"
-  flutter_rating_bar:
-    dependency: "direct main"
-    description:
-      name: flutter_rating_bar
-      sha256: d2af03469eac832c591a1eba47c91ecc871fe5708e69967073c043b2d775ed93
-      url: "https://pub.dev"
-    source: hosted
-    version: "4.0.1"
   flutter_test:
     dependency: "direct dev"
     description: flutter
@@ -451,7 +435,7 @@ packages:
     source: hosted
     version: "0.15.4"
   http:
-    dependency: "direct main"
+    dependency: transitive
     description:
       name: http
       sha256: "5895291c13fa8a3bd82e76d5627f69e0d85ca6a30dcac95c4ea19a5d555879c2"
