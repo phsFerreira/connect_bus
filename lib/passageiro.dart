@@ -63,7 +63,7 @@ class Passageiro {
   }
 
   void registrarPassageiro() {
-    var db=FirebaseFirestore.instance;
+    var db = FirebaseFirestore.instance;
 
     Map<String, String> passageiros = {
       'nomeCompleto': nomeCompleto,
@@ -76,91 +76,88 @@ class Passageiro {
     db.collection('Usuarios').doc(email).set(passageiros);
   }
 
-  static Passageiro fromJson(Map<String, dynamic> json)=>Passageiro(
-    nomeCompleto: json['nomeCompleto'], 
-    cpf: json['cpf'], 
-    telefone: json['telefone'], 
-    email: json['email'], 
-    senha: json['cpf']);
+  static Passageiro fromJson(Map<String, dynamic> json) => Passageiro(
+      nomeCompleto: json['nomeCompleto'],
+      cpf: json['cpf'],
+      telefone: json['telefone'],
+      email: json['email'],
+      senha: json['cpf']);
+}
+
+Future<String> buscaNomePassageiro(String email) async {
+  String emailBusca = email;
+  String nome = "";
+
+  var collection = FirebaseFirestore.instance.collection('Usuarios');
+  var docSnapshot = await collection.doc(emailBusca).get();
+
+  if (docSnapshot.exists) {
+    Map<String, dynamic>? data = docSnapshot.data();
+    nome = data?['nomeCompleto'];
+  }
+  return nome;
+}
+
+Future<Passageiro> buscaPassageiro(String email) async {
+  String emailBusca = email;
+  Passageiro passageiroBusca =
+      Passageiro(nomeCompleto: "", cpf: "", telefone: "", email: "", senha: "");
+
+  var collection = FirebaseFirestore.instance.collection('Usuarios');
+  var docSnapshot = await collection.doc(emailBusca).get();
+
+  if (docSnapshot.exists) {
+    Map<String, dynamic>? data = docSnapshot.data();
+    passageiroBusca.nomeCompleto = data?['nomeCompleto'];
+    passageiroBusca.cpf = data?['cpf'];
+    passageiroBusca.telefone = data?['telefone'];
+    passageiroBusca.email = data?['email'];
+    passageiroBusca.senha = data?['senha'];
   }
 
-  Future<String> buscaNomePassageiro(String email) async{
-    String emailBusca=email;
-    String nome="";
+  return passageiroBusca;
+}
 
-    var collection=FirebaseFirestore.instance.collection('Usuarios');
-    var docSnapshot=await collection.doc(emailBusca).get();
+Future<bool> loginPassageiro(String email, String senha) async {
+  String emailBusca = email;
 
-    if(docSnapshot.exists){
-      Map<String, dynamic>? data=docSnapshot.data();
-      nome=data?['nomeCompleto'];
-    }
-    return nome;
-  }
+  var collection = FirebaseFirestore.instance.collection('Usuarios');
+  var docSnapshot = await collection.doc(emailBusca).get();
 
-  Future<Passageiro> buscaPassageiro(String email) async{
-    String emailBusca=email;
-    Passageiro passageiroBusca=Passageiro(nomeCompleto: "", cpf: "", telefone: "", email: "", senha: "");
+  if (docSnapshot.exists) {
+    Map<String, dynamic>? data = docSnapshot.data();
+    String emailLogin = data?['email'];
+    String senhaLogin = data?['senha'];
 
-    var collection=FirebaseFirestore.instance.collection('Usuarios');
-    var docSnapshot=await collection.doc(emailBusca).get();
-
-    if(docSnapshot.exists){
-      Map<String, dynamic>? data=docSnapshot.data();
-      passageiroBusca.nomeCompleto=data?['nomeCompleto'];
-      passageiroBusca.cpf=data?['cpf'];
-      passageiroBusca.telefone=data?['telefone'];
-      passageiroBusca.email=data?['email'];
-      passageiroBusca.senha=data?['senha'];
-    }
-    
-    return passageiroBusca;
-  }
-
-  Future<bool> loginPassageiro(String email, String senha) async{
-    String emailBusca=email;
-
-    var collection=FirebaseFirestore.instance.collection('Usuarios');
-    var docSnapshot=await collection.doc(emailBusca).get();
-    
-    if(docSnapshot.exists){
-      Map<String, dynamic>? data=docSnapshot.data();
-      String emailLogin=data?['email'];
-      String senhaLogin=data?['senha'];
-      
-      if(emailLogin==email && senhaLogin==senha){
-        Fluttertoast.showToast(msg:"logado com sucesso.", toastLength: Toast.LENGTH_LONG);
-        return true;
-      }else{
-        Fluttertoast.showToast(msg:"Email ou senha incorretos.", toastLength: Toast.LENGTH_LONG);
-        return false;
-      }
-    }
-    else{
+    if (emailLogin == email && senhaLogin == senha) {
       Fluttertoast.showToast(
-      msg: "Usuário não cadastrado.",
-      toastLength: Toast.LENGTH_LONG);
+          msg: "logado com sucesso.", toastLength: Toast.LENGTH_LONG);
+      return true;
+    } else {
+      Fluttertoast.showToast(
+          msg: "Email ou senha incorretos.", toastLength: Toast.LENGTH_LONG);
       return false;
-    } 
-  }
-
-  Future<Passageiro> updatePassageiro(Passageiro passageiro) async{
-    Passageiro passageiroUpdate=passageiro;
-    String emailBusca=passageiroUpdate.email;
-
-    var collection=FirebaseFirestore.instance.collection('Usuarios');
-    var docSnapshot=await collection.doc(emailBusca).get();
-
-    if(docSnapshot.exists){
-      Map<String, dynamic>? data=docSnapshot.data();
-      String emailUpdate=data?['email'];
-
-      if(emailUpdate==emailBusca){
-        
-      }
     }
+  } else {
+    Fluttertoast.showToast(
+        msg: "Usuário não cadastrado.", toastLength: Toast.LENGTH_LONG);
+    return false;
+  }
+}
 
-    return passageiro;
+Future<Passageiro> updatePassageiro(Passageiro passageiro) async {
+  Passageiro passageiroUpdate = passageiro;
+  String emailBusca = passageiroUpdate.email;
+
+  var collection = FirebaseFirestore.instance.collection('Usuarios');
+  var docSnapshot = await collection.doc(emailBusca).get();
+
+  if (docSnapshot.exists) {
+    Map<String, dynamic>? data = docSnapshot.data();
+    String emailUpdate = data?['email'];
+
+    if (emailUpdate == emailBusca) {}
   }
 
-
+  return passageiro;
+}
