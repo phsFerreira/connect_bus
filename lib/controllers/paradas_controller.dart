@@ -1,3 +1,4 @@
+import 'package:connect_bus/model/parada.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -7,7 +8,7 @@ import '../screens/paradas_detalhes.dart';
 import '../screens/paradas_screen.dart';
 
 // //
-// // Controller baseado no video https://www.youtube.com/watch?v=N5MsMDbz6_w&t=1133s
+// // Controller baseado no video https://www.youtube.com/watch?v=l_nLqPK7K6Q
 // //
 
 // ChangeNotifier significa que pode notificar os outros sobre suas mudanças. O
@@ -34,7 +35,7 @@ class ParadasController extends ChangeNotifier {
       Position posicao = await posicaoAtual();
       latitude = posicao.latitude;
       longitude = posicao.longitude;
-      print('latitude: $latitude, longitude: $longitude');
+      // print('latitude: $latitude, longitude: $longitude');
 
       // Movendo a camera do google maps para a localizaçaõ do usuario
       _mapsController.animateCamera(
@@ -101,48 +102,37 @@ class ParadasController extends ChangeNotifier {
   }
 
   loadParadas() async {
-    final paradas = ParadasRepository().paradas;
-    for (var parada in paradas) {
-      markers.add(
-        Marker(
-          markerId: MarkerId(parada.id),
-          position: LatLng(parada.latitude, parada.longitude),
-          icon: await BitmapDescriptor.fromAssetImage(
-            const ImageConfiguration(),
-            'assets/images/bus-stop.png',
-          ),
-          onTap: () => {
-            // showModalBottomSheet(
-            //   context: paradaScreenContextKey.currentState!.context,
-            //   builder: (context) => ParadaDetalhes(parada: parada),
-            // )
-            Navigator.push(
-              paradaScreenContextKey.currentState!.context,
-              MaterialPageRoute(
-                builder: (context) => ParadaDetalhes(parada: parada),
-              ),
-            )
-          },
-        ),
-      );
+    var paradaRepository = ParadasRepository();
+    var paradaMarkers = await paradaRepository.getParadas();
+    print(paradaMarkers);
+    for (var parada in paradaMarkers) {
+      addMarker(parada);
+      print(parada);
     }
-
-    // Parada parada;
-    // FirebaseFirestore db = FirebaseFirestore.instance;
-    // try {
-    //   final bairros = await db.collection('Bairros').get();
-    //   for (var bairro in bairros.docs) {
-    //     {
-    //       parada.bairro = bairro.get('nomeBairro');
-    //       paradas = bairro.get('parada');
-    //     }
-    //   }
-    // } catch (e) {
-    //   // todo: Tratar o erro
-    //   printError(info: e.toString());
-    // }
 
     // (método de ChangeNotifier) usado para notificar qualquer um que esteja assistindo ParadasController
     notifyListeners();
+  }
+
+  addMarker(Parada parada) async {
+    var latitude = parada.latitude;
+    var longitude = parada.longitude;
+    markers.add(
+      Marker(
+        markerId: MarkerId(parada.id!),
+        position: LatLng(parada.latitude!, parada.longitude!),
+        infoWindow: InfoWindow(title: parada.bairro),
+        icon: await BitmapDescriptor.fromAssetImage(
+            const ImageConfiguration(), 'assets/images/bus-stop.png'),
+        onTap: () => {
+          Navigator.push(
+            paradaScreenContextKey.currentState!.context,
+            MaterialPageRoute(
+              builder: (context) => ParadaDetalhes(parada: parada),
+            ),
+          )
+        },
+      ),
+    );
   }
 }
