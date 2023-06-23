@@ -1,7 +1,7 @@
-// ignore_for_file: prefer_const_constructors
-
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:connect_bus/screens/paradas_screen.dart';
 import 'package:flutter/material.dart';
+
+import 'package:connect_bus/cadastro_passageiro.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -14,14 +14,9 @@ class _LoginPageState extends State<LoginPage> {
   //text controllers
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
+  String email = "", senha = "", nomePassageiro = "";
 
   //methods
-  Future signIn() async {
-    await FirebaseAuth.instance.signInWithEmailAndPassword(
-      email: emailController.text.trim(),
-      password: passwordController.text.trim(),
-    );
-  }
 
   @override
   void dispose() {
@@ -41,24 +36,25 @@ class _LoginPageState extends State<LoginPage> {
               mainAxisAlignment: MainAxisAlignment.center,
               //login text
               children: [
-                Icon(
+                const Icon(
                   Icons.bus_alert,
                   size: 40,
                 ),
-                Text(
+                const Text(
                   'Login',
                   style: TextStyle(fontWeight: FontWeight.bold, fontSize: 50),
                 ),
-                SizedBox(height: 50),
+                const SizedBox(height: 50),
 
                 //email textfield
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 30),
                   child: Container(
-                    decoration: BoxDecoration(color: Colors.white),
+                    decoration: const BoxDecoration(color: Colors.white),
                     child: TextField(
+                      key: const ValueKey('emailField'),
                       controller: emailController,
-                      decoration: InputDecoration(
+                      decoration: const InputDecoration(
                           border: OutlineInputBorder(
                               borderRadius:
                                   BorderRadius.all(Radius.circular(12)),
@@ -69,17 +65,18 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                   ),
                 ),
-                SizedBox(height: 20),
+                const SizedBox(height: 20),
 
                 //password textfield
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 30),
                   child: Container(
-                    decoration: BoxDecoration(color: Colors.white),
+                    decoration: const BoxDecoration(color: Colors.white),
                     child: TextField(
+                      key: const ValueKey('passwordField'),
                       controller: passwordController,
                       obscureText: true,
-                      decoration: InputDecoration(
+                      decoration: const InputDecoration(
                           border: OutlineInputBorder(
                               borderRadius:
                                   BorderRadius.all(Radius.circular(12)),
@@ -90,19 +87,39 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                   ),
                 ),
-                SizedBox(height: 20),
+                const SizedBox(height: 20),
 
                 //login button
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 30.0),
                   child: GestureDetector(
-                    onTap: signIn,
+                    onTap: () async {
+                      email = emailController.text;
+                      senha = passwordController.text;
+
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const ParadasScreen(),
+                          settings: RouteSettings(
+                            arguments: ScreenArguments(email, nomePassageiro),
+                          ),
+                        ),
+                      );
+
+                      // if (await loginPassageiro(email, senha)) {
+                      //   nomePassageiro = await buscaNomePassageiro(email);
+                      // } else {
+                      //   Fluttertoast.showToast(msg: "error");
+                      // }
+                    },
                     child: Container(
-                      padding: EdgeInsets.all(20),
-                      decoration: BoxDecoration(
+                      key: const ValueKey('loginButton'),
+                      padding: const EdgeInsets.all(20),
+                      decoration: const BoxDecoration(
                           color: Colors.black,
                           borderRadius: BorderRadius.all(Radius.circular(12))),
-                      child: Center(
+                      child: const Center(
                           child: Text(
                         'Login',
                         style: TextStyle(
@@ -113,15 +130,24 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                   ),
                 ),
-                SizedBox(height: 25),
+                const SizedBox(height: 25),
 
                 //create account button
-                Text(
-                  'Criar Conta',
-                  style: TextStyle(
-                      color: Colors.blue,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 16),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 30.0),
+                  child: GestureDetector(
+                    onTap: () {
+                      Navigator.of(context).push(MaterialPageRoute(
+                          builder: (_) => const CadastroPassageiroForm()));
+                    },
+                    child: const Text(
+                      'Criar Conta',
+                      style: TextStyle(
+                          color: Colors.blue,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 16),
+                    ),
+                  ),
                 ),
               ],
             ),
@@ -130,4 +156,11 @@ class _LoginPageState extends State<LoginPage> {
       ),
     );
   }
+}
+
+class ScreenArguments {
+  final String email;
+  final String nome;
+
+  ScreenArguments(this.email, this.nome);
 }

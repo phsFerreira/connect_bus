@@ -1,13 +1,14 @@
 {
   "project_info": {
     "project_number": "128399003759",
+    "firebase_url": "https://connectbus-7d8d9-default-rtdb.firebaseio.com",
     "project_id": "connectbus-7d8d9",
     "storage_bucket": "connectbus-7d8d9.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:128399003759:android:96ba3bb76dbf2aa1c73d9a",
+        "mobilesdk_app_id": "1:128399003759:android:fd28c5a334577394c73d9a",
         "android_client_info": {
           "package_name": "com.example.connect_bus"
         }
