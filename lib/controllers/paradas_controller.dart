@@ -1,72 +1,70 @@
+import 'package:connect_bus/model/parada.dart';
+import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
-import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
-//
-// Controller baseado no video https://www.youtube.com/watch?v=N5MsMDbz6_w&t=1133s
-//
+import '../repositories/paradas_repository.dart';
+import '../screens/paradas_detalhes.dart';
+import '../screens/paradas_screen.dart';
 
-// PENDENCIAS: Precisa
+// //
+// // Controller baseado no video https://www.youtube.com/watch?v=l_nLqPK7K6Q
+// //
 
-class ParadasController extends GetxController {
-  // "obs" de observável
-  final latitude = 0.0.obs;
-  final longitude = 0.0.obs;
+// ChangeNotifier significa que pode notificar os outros sobre suas mudanças. O
+// estado é criado e fornecido para todo o aplicativo usando um ChangeNotifierProvider
+// (consulte o código acima em MyApp). Isso permite que qualquer widget no aplicativo
+// obtenha o estado.
+class ParadasController extends ChangeNotifier {
+  double latitude = 0.0;
+  double longitude = 0.0;
+  String erroMessage = '';
+  Set<Marker> markers = <Marker>{};
 
-  late GoogleMapController _mapController;
+  // Responsavel por movimentar o mapa, adicionar e remover marcadores e assim por diante...
+  late GoogleMapController _mapsController;
 
-  // Variavel estática que retorna a instancia de ParadasController para ser utilizada
-  // em outros arquivos
-  static ParadasController get to => Get.find<ParadasController>();
+  // getter do atributo _mapsController
+  get mapsController => _mapsController;
 
-  // getter do atributo mapController
-  get mapsController => _mapController;
+  getPosicaoAtualUsuario(GoogleMapController controller) async {
+    _mapsController = controller;
 
-  final Set<Marker> mapMarkers = {
-    // Marker(
-    //     markerId: const MarkerId('parada_test_nvmundo1'),
-    //     position: LatLng(-23.261009142007083, -47.671992198992314)),
-    // Marker(
-    //     markerId: const MarkerId('parada_test_centro'),
-    //     position: LatLng(-23.2860909, -47.6741624)),
-    // Marker(
-    //     markerId: const MarkerId('parada_test_grupao'),
-    //     position: LatLng(-23.2821963, -47.6723522)),
-    // Marker(
-    //     markerId: const MarkerId('parada_test_grupao'),
-    //     position: LatLng(-23.2777673, -47.6731613)),
-    // Marker(
-    //     markerId: const MarkerId('parada_test_nvmundo2'),
-    //     position: LatLng(-23.2625092, -47.6716789)),
-    // Marker(
-    //     markerId: const MarkerId('parada_test_nvmundo3'),
-    //     position: LatLng(-23.2644994, -47.6712476)),
-    // Marker(
-    //     markerId: const MarkerId('parada_test_nvmundo4'),
-    //     position: LatLng(-23.2661207, -47.6709187)),
-    // Marker(
-    //     markerId: const MarkerId('parada_test_nvmundo5'),
-    //     position: LatLng(-23.2668392, -47.6702893)),
-  };
+    print('BUSCANDO POSIÇÃO ATUAL DO USUARIO...');
+    try {
+      Position posicao = await posicaoAtual();
+      latitude = posicao.latitude;
+      longitude = posicao.longitude;
+      // print('latitude: $latitude, longitude: $longitude');
 
-  // Quando o mapa for criado pegue a posição atual do usuário
-  onMapCreated(GoogleMapController mapController) async {
-    _mapController = mapController;
-    getPosicaoAtualUsuario();
-    loadParadas();
+      // Movendo a camera do google maps para a localizaçaõ do usuario
+      _mapsController.animateCamera(
+        CameraUpdate.newCameraPosition(
+          CameraPosition(target: LatLng(latitude, longitude), zoom: 16),
+        ),
+      );
+    } catch (e) {
+      erroMessage = e.toString();
+    }
+    // (método de ChangeNotifier) usado para notificar qualquer um que esteja assistindo ParadasController
+    notifyListeners();
   }
 
-  Future<Position> _posicaoAtual() async {
+  Future<Position> posicaoAtual() async {
     // #region: Verifica se o serviço de GPS do usuário esta ativo
-    bool ativado;
     LocationPermission permissao;
 
     // Checando se o serviço de localização esta ativado no celular.
-    ativado = await Geolocator.isLocationServiceEnabled();
+    bool ativado = await Geolocator.isLocationServiceEnabled();
 
     // Se o serviço de localização não estiver ativo retorne um erro.
     if (!ativado) {
-      return Future.error('Por favor, habilite a localização do smartphone.');
+      ScaffoldMessenger.of(paradaScreenContextKey.currentState!.context)
+          .showSnackBar(const SnackBar(
+        content: Text('Por favor, habilite a localização do smartphone.'),
+        behavior: SnackBarBehavior.floating,
+        backgroundColor: Color.fromARGB(200, 202, 2, 2),
+      ));
     }
 
     permissao = await Geolocator.checkPermission();
@@ -77,14 +75,24 @@ class ParadasController extends GetxController {
 
       // Se mesmo solicitando o acesso o usuário negar, então mostre mensagem de erro.
       if (permissao == LocationPermission.denied) {
-        return Future.error("Voce precisa autorizar o acesso a localização");
+        ScaffoldMessenger.of(paradaScreenContextKey.currentState!.context)
+            .showSnackBar(const SnackBar(
+          content: Text("Voce precisa autorizar o acesso a localização"),
+          behavior: SnackBarBehavior.floating,
+          backgroundColor: Color.fromARGB(200, 202, 2, 2),
+        ));
       }
     }
 
     // Se o usuário tem a permissão de localização permanentemente desabilitada, então precisa orientá-lo
     // a ativar pelas configurações
     if (permissao == LocationPermission.deniedForever) {
-      return Future.error('Autorize o acesso à localização nas configurações.');
+      ScaffoldMessenger.of(paradaScreenContextKey.currentState!.context)
+          .showSnackBar(const SnackBar(
+        content: Text('Autorize o acesso à localização nas configurações.'),
+        behavior: SnackBarBehavior.floating,
+        backgroundColor: Color.fromARGB(200, 202, 2, 2),
+      ));
     }
     // #endregion
 
@@ -93,65 +101,38 @@ class ParadasController extends GetxController {
     return posicaoAtual;
   }
 
-  getPosicaoAtualUsuario() async {
-    try {
-      final posicaoAtual = await _posicaoAtual();
-      latitude.value = posicaoAtual.latitude;
-      longitude.value = posicaoAtual.longitude;
-
-      // Movendo a camera do google maps para a localizaçaõ do usuario
-      _mapController.animateCamera(
-        CameraUpdate.newCameraPosition(
-          CameraPosition(
-              target: LatLng(latitude.value, longitude.value), zoom: 16),
-        ),
-      );
-    } catch (e) {
-      // todo: Tratar o erro
-      printError(info: e.toString());
-    }
-  }
-
   loadParadas() async {
-    // FirebaseFirestore db = DB.get();
-    // try {
-    //   final bairros = await db.collection('Bairros').get();
-    //   for (var bairro in bairros.docs) {
-    //     {
-    //       nomeBairro = bairro.get('nomeBairro');
-    //       paradas = bairro.get('parada');
-    //     }
-    //   }
-    // } catch (e) {
-    //   // todo: Tratar o erro
-    //   printError(info: e.toString());
-    // }
+    var paradaRepository = ParadasRepository();
+    var paradaMarkers = await paradaRepository.getParadas();
+    print(paradaMarkers);
+    for (var parada in paradaMarkers) {
+      addMarker(parada);
+      print(parada);
+    }
+
+    // (método de ChangeNotifier) usado para notificar qualquer um que esteja assistindo ParadasController
+    notifyListeners();
   }
 
-  // generateMarkers(bairro) {
-  //   List paradas = bairro.get('parada');
-  //   paradas.forEach((parada) async {
-  //     var paradaId = parada['id'];
-  //     var position = parada['position'];
-  //     GeoPoint point = position['geopoint'];
-
-  //     mapMarkers.add(
-  //       Marker(
-  //         markerId: MarkerId(paradaId.toString()),
-  //         position: LatLng(point.latitude, point.longitude),
-  //         infoWindow: InfoWindow(title: bairro.get('nomeBairro')),
-  //         icon: await BitmapDescriptor.fromAssetImage(
-  //             const ImageConfiguration(), 'assets/images/bus-stop.png'),
-  //         onTap: () => {
-  //            Navigator.push(
-  //               context,
-  //               MaterialPageRoute(
-  //                   builder: (context) =>
-  //                       const BusStopDetails(neighborhood: 'Novo Mundo')));
-  //         },
-  //       ),
-  //     );
-  //     update();
-  //   });
-  // }
+  addMarker(Parada parada) async {
+    var latitude = parada.latitude;
+    var longitude = parada.longitude;
+    markers.add(
+      Marker(
+        markerId: MarkerId(parada.id!),
+        position: LatLng(parada.latitude!, parada.longitude!),
+        infoWindow: InfoWindow(title: parada.bairro),
+        icon: await BitmapDescriptor.fromAssetImage(
+            const ImageConfiguration(), 'assets/images/bus-stop.png'),
+        onTap: () => {
+          Navigator.push(
+            paradaScreenContextKey.currentState!.context,
+            MaterialPageRoute(
+              builder: (context) => ParadaDetalhes(parada: parada),
+            ),
+          )
+        },
+      ),
+    );
+  }
 }

@@ -1,18 +1,50 @@
 import 'package:flutter/material.dart';
 import 'package:connect_bus/model/parada.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class ParadasRepository extends ChangeNotifier {
-  final List<Parada> _paradas = [
-    Parada(
-        id: 'parada_test_nvmundo1',
-        bairro: 'Novo Mundo',
-        latitude: -23.261009142007083,
-        longitude: -47.671992198992314),
-    Parada(
-        id: 'parada_test_nvmundo2',
-        bairro: 'Novo Mundo',
-        latitude: -23.2625092,
-        longitude: -47.6716789),
+  List<Parada> get listParadas => _listParadas;
+
+  FirebaseFirestore db = FirebaseFirestore.instance;
+
+  Future<List<Parada>> getParadas() async {
+    try {
+      var bairroCollection = await db.collection("Bairros").get();
+
+      for (var bairroDoc in bairroCollection.docs) {
+        var paradaCollection =
+            await db.collection("Bairros/${bairroDoc.id}/Paradas").get();
+
+        for (var paradaDoc in paradaCollection.docs) {
+          print('PARADADOC ${paradaDoc.id} ===> ${paradaDoc.data()}');
+          var parada = Parada(
+            bairro: bairroDoc.get('nome'),
+            id: paradaDoc.get('id'),
+            latitude: paradaDoc.get('latitude'),
+            longitude: paradaDoc.get('longitude'),
+          );
+
+          _listParadas.add(parada);
+        }
+      }
+      return _listParadas;
+    } catch (e) {
+      print(e.toString());
+      return [];
+    }
+  }
+
+  final List<Parada> _listParadas = [
+    // Parada(
+    //     id: 'parada_test_nvmundo1',
+    //     bairro: 'Novo Mundo',
+    //     latitude: -23.261009142007083,
+    //     longitude: -47.671992198992314),
+    // Parada(
+    //     id: 'parada_test_nvmundo2',
+    //     bairro: 'Novo Mundo Teste',
+    //     latitude: -23.2625092,
+    //     longitude: -47.6716789),
 
     // Marker(
     //     markerId: const MarkerId('parada_test_nvmundo1'),

@@ -44,14 +44,23 @@ dependencies:
   firebase_auth: ^4.2.5
   firebase_core: ^2.4.1
   fluttertoast: ^8.0.8
+
+  # Plugin responsável por carregar o google maps no Android e iOS.
   google_maps_flutter: ^2.2.3
-  flutter_polyline_points: ^1.0.0
-  dio: ^5.2.1+1
+  # flutter_polyline_points: ^1.0.0
+  # dio: ^5.2.1+1
   flutter_phone_direct_caller: ^2.1.1
-  flutter_rating_bar: ^4.0.1
+  # flutter_rating_bar: ^4.0.1
   provider: ^6.0.5
-  http: ^0.13.5
+  # http: ^0.13.5
+
+  # Permite que acessemos a localização do usuário em tempo real
   geolocator: ^9.0.2
+  # get: ^4.6.5
+  # geoflutterfire2: ^2.3.14
+
+  # Plugin usado para permitir que usemos variaveis de ambiente 'env' 
+  flutter_config: ^2.0.0
 
   
 dev_dependencies:
