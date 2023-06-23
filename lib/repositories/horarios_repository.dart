@@ -7,7 +7,9 @@ class HorariosRepository extends ChangeNotifier {
 
   // /Horarios/H5jBlkPni50C8r8WyCDY/BairrosHorarios/U2iGMFbrKCMVIrg6HFDj
 
-  ///
+  /// Método resposável por consultar o nome do bairro da parada
+  /// de onibus quando clicada pelo usuario. Através do nome do bairro
+  /// será possível trazer os horarios.
   findByBairroName(String nome) async {
     try {
       print('bairro da parada ==> $nome');
