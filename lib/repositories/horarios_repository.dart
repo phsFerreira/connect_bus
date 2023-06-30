@@ -1,28 +1,36 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/material.dart';
 import 'package:connect_bus/model/horario.dart';
 
-class HorariosRepository extends ChangeNotifier {
+class HorariosRepository {
   FirebaseFirestore db = FirebaseFirestore.instance;
+  final List<Horario> _listHorarios = [];
 
   // /Horarios/H5jBlkPni50C8r8WyCDY/BairrosHorarios/U2iGMFbrKCMVIrg6HFDj
 
   /// Método resposável por consultar o nome do bairro da parada
   /// de onibus quando clicada pelo usuario. Através do nome do bairro
   /// será possível trazer os horarios.
-  findByBairroName(String nome) async {
+  Future<List<Horario>> findByBairroName(String nomeBairro) async {
     try {
-      print('bairro da parada ==> $nome');
-      var horarioCollection = await db.collection("Horarios").get();
-      for (var horarioDoc in horarioCollection.docs) {
+      print('bairro da parada ==> $nomeBairro');
+
+      // 'Horarios' Collection
+      var horarioCollectionDocs = await getHorariosCollection();
+
+      // Iterando documents de 'Horarios' Collection
+      for (var horarioDoc in horarioCollectionDocs) {
+        // Parada cada documents de Horarios Collection, pegue a Subcollection 'BairrosHorarios'
         var bairrosHorariosCollection =
             db.collection("Horarios/${horarioDoc.id}/BairrosHorarios");
 
-        var bairroFound =
-            bairrosHorariosCollection.where("bairros", arrayContains: nome);
-        print('bairro encontrado ${bairroFound.get()}');
-        var bairroDoc = await bairroFound.get();
-        for (var doc in bairroDoc.docs) {
+        // Procurando na Subcollection 'BairrosHorarios' em seu array 'bairros' se contém o nomeBairro
+        var bairroFoundDocs = await bairrosHorariosCollection
+            .where("bairros", arrayContains: nomeBairro)
+            .get();
+        print('bairro encontrado $bairroFoundDocs');
+
+        // Iterando documents da Subcollection 'BairrosHorarios' que possuem no array 'bairros' o nomeBairro
+        for (var doc in bairroFoundDocs.docs) {
           print('${doc.id} ===> ${doc.data()}');
 
           var horario = Horario(
@@ -32,11 +40,25 @@ class HorariosRepository extends ChangeNotifier {
             horaPartidaBairro: doc.get('horaPartidaBairro'),
             horaPartidaRodoviaria: doc.get('horaPartidaRodoviaria'),
           );
+          _listHorarios.add(horario);
           print('Objeto Horario ${horario.linha}');
         }
       }
+      return _listHorarios;
     } catch (e) {
       print(e.toString());
+      return [];
+    }
+  }
+
+  Future<List<QueryDocumentSnapshot<Map<String, dynamic>>>>
+      getHorariosCollection() async {
+    try {
+      var horarioCollection = await db.collection("Horarios").get();
+      return horarioCollection.docs;
+    } catch (e) {
+      print(e.toString());
+      return [];
     }
   }
 }
