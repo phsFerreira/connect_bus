@@ -1,8 +1,7 @@
-import 'package:flutter/material.dart';
 import 'package:connect_bus/model/parada.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-class ParadasRepository extends ChangeNotifier {
+class ParadasRepository {
   List<Parada> get listParadas => _listParadas;
 
   FirebaseFirestore db = FirebaseFirestore.instance;

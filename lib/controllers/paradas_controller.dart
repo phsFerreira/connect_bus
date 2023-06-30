@@ -1,10 +1,12 @@
+import 'dart:async';
+
 import 'package:connect_bus/model/parada.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 import '../repositories/paradas_repository.dart';
-import '../screens/paradas_detalhes.dart';
+import '../screens/paradas_detalhes_screen.dart';
 import '../screens/paradas_screen.dart';
 
 // //
@@ -27,8 +29,8 @@ class ParadasController extends ChangeNotifier {
   // getter do atributo _mapsController
   get mapsController => _mapsController;
 
-  getPosicaoAtualUsuario(GoogleMapController controller) async {
-    _mapsController = controller;
+  getPosicaoAtualUsuario(Completer<GoogleMapController> controller) async {
+    _mapsController = await controller.future;
 
     print('BUSCANDO POSIÇÃO ATUAL DO USUARIO...');
     try {
@@ -38,7 +40,7 @@ class ParadasController extends ChangeNotifier {
       // print('latitude: $latitude, longitude: $longitude');
 
       // Movendo a camera do google maps para a localizaçaõ do usuario
-      _mapsController.animateCamera(
+      await _mapsController.animateCamera(
         CameraUpdate.newCameraPosition(
           CameraPosition(target: LatLng(latitude, longitude), zoom: 16),
         ),
@@ -119,8 +121,8 @@ class ParadasController extends ChangeNotifier {
     var longitude = parada.longitude;
     markers.add(
       Marker(
-        markerId: MarkerId(parada.id!),
-        position: LatLng(parada.latitude!, parada.longitude!),
+        markerId: MarkerId(parada.id),
+        position: LatLng(parada.latitude, parada.longitude),
         infoWindow: InfoWindow(title: parada.bairro),
         icon: await BitmapDescriptor.fromAssetImage(
             const ImageConfiguration(), 'assets/images/bus-stop.png'),
@@ -128,11 +130,13 @@ class ParadasController extends ChangeNotifier {
           Navigator.push(
             paradaScreenContextKey.currentState!.context,
             MaterialPageRoute(
-              builder: (context) => ParadaDetalhes(parada: parada),
+              builder: (context) => ParadaDetalhesScreen(parada: parada),
             ),
           )
         },
       ),
     );
+    // (método de ChangeNotifier) usado para notificar qualquer um que esteja assistindo ParadasController
+    notifyListeners();
   }
 }

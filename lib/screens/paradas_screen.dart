@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
@@ -5,17 +7,21 @@ import 'package:provider/provider.dart';
 import 'package:connect_bus/controllers/paradas_controller.dart';
 import 'package:connect_bus/widgets/menu_drawer.dart';
 
+/// Mapa com as paradas de Onibus da cidade
+
 final paradaScreenContextKey = GlobalKey();
 
 class ParadasScreen extends StatefulWidget {
   const ParadasScreen({Key? key}) : super(key: key);
 
   @override
-  State<ParadasScreen> createState() => _ParadasScreenState();
+  State<ParadasScreen> createState() => ParadasScreenState();
 }
 
-class _ParadasScreenState extends State<ParadasScreen> {
-  late GoogleMapController googleMapController;
+class ParadasScreenState extends State<ParadasScreen> {
+  // late GoogleMapController googleMapController;
+  final Completer<GoogleMapController> googleMapController =
+      Completer<GoogleMapController>();
 
   /// Ponto inicial da camera do google maps caso a localização do usuario esteja
   /// desativada.
@@ -50,7 +56,7 @@ class _ParadasScreenState extends State<ParadasScreen> {
             mapType: MapType.normal,
             myLocationEnabled: true,
             onMapCreated: (GoogleMapController controller) {
-              googleMapController = controller;
+              googleMapController.complete(controller);
 
               // Quando o mapa for criado pegue a posição atual do usuário
               paradaController.getPosicaoAtualUsuario(googleMapController);
@@ -64,11 +70,10 @@ class _ParadasScreenState extends State<ParadasScreen> {
       // Minha localização atual
       floatingActionButton: ChangeNotifierProvider<ParadasController>(
         create: (context) => ParadasController(),
-        child: Builder(
-          builder: (context) {
-            final paradaController = context.watch<ParadasController>();
+        child: Builder(builder: (context) {
+          final paradaController = context.watch<ParadasController>();
 
-            return FloatingActionButton.extended(
+          return FloatingActionButton.extended(
               label: const Text('Minha localização atual'),
               icon: const Icon(Icons.location_history),
               onPressed: () {
@@ -86,10 +91,8 @@ class _ParadasScreenState extends State<ParadasScreen> {
                     backgroundColor: const Color.fromARGB(200, 202, 2, 2),
                   ));
                 }
-              },
-            );
-          },
-        ),
+              });
+        }),
       ),
     );
   }
