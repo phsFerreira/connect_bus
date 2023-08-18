@@ -18,7 +18,7 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 version: 1.0.0+1
 
 environment:
-  sdk: ">=2.17.6 <3.0.0"
+  sdk: '>=3.0.6 <4.0.0'
 
 # Dependencies specify other packages that your package needs in order to work.
 # To automatically upgrade your package dependencies to the latest versions
@@ -39,6 +39,10 @@ dependencies:
   cupertino_icons: ^1.0.2
   google_fonts:
 
+  location: ^5.0.3
+  permission_handler: ^10.3.0
+
+
   # Firebase
   firebase_database: ^10.0.9
   firebase_auth: ^4.2.5
@@ -46,7 +50,7 @@ dependencies:
   fluttertoast: ^8.0.8
 
   # Plugin responsável por carregar o google maps no Android e iOS.
-  google_maps_flutter: ^2.2.3
+  google_maps_flutter: ^2.2.1
   # flutter_polyline_points: ^1.0.0
   # dio: ^5.2.1+1
   flutter_phone_direct_caller: ^2.1.1
@@ -55,7 +59,7 @@ dependencies:
   # http: ^0.13.5
 
   # Permite que acessemos a localização do usuário em tempo real
-  geolocator: ^9.0.2
+  geolocator: ^10.0.0
   # get: ^4.6.5
   # geoflutterfire2: ^2.3.14
 
@@ -90,7 +94,7 @@ flutter:
 
   # To add assets to your application, add an assets section, like this:
   assets:
-    - assets/
+    - assets/images/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
