@@ -12,8 +12,9 @@ no armazenamento externo-->
     <!-- Permite que aplicativos abram soquetes de rede. -->
     <uses-permission android:name="android.permission.INTERNET" />
 
-    <!-- Permite que um aplicativo comum use `Service.startForeground`. -->
-    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <!-- Permite que um aplicativo comum use `Service.startForeground` para a localizaçao. -->
+    <!-- <uses-permission android:name="android.permission.FOREGROUND_SERVICE" /> -->
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_LOCATION" />
 
     <!-- Acessando a localização mesmo se o usuário deixar o app em segundo plano  -->
     <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />
