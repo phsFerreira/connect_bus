@@ -1,8 +1,10 @@
 import 'package:connect_bus/login_motorista.dart';
-import 'package:flutter/material.dart';
-import 'login_passageiro.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_config/flutter_config.dart';
+
+import 'package:connect_bus/login_passageiro.dart';
 
 Future main() async {
   // Garantir que nao tenha o erro de inicialização.
@@ -12,6 +14,15 @@ Future main() async {
   await FlutterConfig.loadEnvVariables();
 
   await Firebase.initializeApp();
+
+// Bloqueando a tela para ser exibida apenas no modo retrato,
+// ou seja, verticalmente (para cima ou para baixo),
+// mesmo que o telefone seja girado no modo paisagem.
+  SystemChrome.setPreferredOrientations([
+    DeviceOrientation.portraitUp,
+    DeviceOrientation.portraitDown,
+  ]).then((value) => runApp(const MyApp()));
+
   runApp(const MyApp());
 }
 
