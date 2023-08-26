@@ -5,9 +5,10 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
 
 import 'package:connect_bus/controllers/paradas_controller.dart';
+import 'package:connect_bus/screens/onibus_localizacao.dart';
 import 'package:connect_bus/widgets/menu_drawer.dart';
 
-/// Mapa com as paradas de Onibus da cidade
+/// Mapa com as paradas de ônibus da cidade
 
 final paradaScreenContextKey = GlobalKey();
 
@@ -19,7 +20,6 @@ class ParadasScreen extends StatefulWidget {
 }
 
 class ParadasScreenState extends State<ParadasScreen> {
-  // late GoogleMapController googleMapController;
   final Completer<GoogleMapController> googleMapController =
       Completer<GoogleMapController>();
 
@@ -50,24 +50,35 @@ class ParadasScreenState extends State<ParadasScreen> {
         create: (context) => ParadasController(),
         child: Builder(builder: (context) {
           final paradaController = context.watch<ParadasController>();
-          return GoogleMap(
-            initialCameraPosition: _rodoviariaLocalizacao,
-            zoomControlsEnabled: true,
-            mapType: MapType.normal,
-            myLocationEnabled: true,
-            onMapCreated: (GoogleMapController controller) {
-              googleMapController.complete(controller);
+          return Stack(
+            children: [
+              SizedBox(
+                height: MediaQuery.of(context).size.height,
+                width: MediaQuery.of(context).size.width,
+                child: GoogleMap(
+                  initialCameraPosition: _rodoviariaLocalizacao,
+                  mapType: MapType.normal,
+                  zoomControlsEnabled: false,
+                  myLocationEnabled: true,
+                  onMapCreated: (GoogleMapController controller) {
+                    googleMapController.complete(controller);
 
-              // Quando o mapa for criado pegue a posição atual do usuário
-              paradaController.getPosicaoAtualUsuario(googleMapController);
-              paradaController.loadParadas();
-            },
-            markers: paradaController.markers,
+                    // Quando o mapa for criado pegue a posição atual do usuário
+                    paradaController
+                        .getPosicaoAtualUsuario(googleMapController);
+                    paradaController.loadParadas();
+                    paradaController.loadOnibus();
+                  },
+                  markers: paradaController.markers,
+                ),
+              ),
+              _listCardsHorizontal(),
+            ],
           );
         }),
       ),
 
-      // Minha localização atual
+      // Botão 'Minha localização atual'
       floatingActionButton: ChangeNotifierProvider<ParadasController>(
         create: (context) => ParadasController(),
         child: Builder(builder: (context) {
@@ -93,6 +104,54 @@ class ParadasScreenState extends State<ParadasScreen> {
                 }
               });
         }),
+      ),
+    );
+  }
+
+  _listCardsHorizontal() {
+    return Align(
+      alignment: Alignment.bottomLeft,
+      child: Container(
+        margin: const EdgeInsets.symmetric(vertical: 60.0),
+        height: 110.0,
+        child: ListView(
+          scrollDirection: Axis.horizontal,
+          children: <Widget>[
+            const SizedBox(width: 10.0),
+            _lineBusCard('Linha 001 Azul', Colors.blue[400]!),
+            const SizedBox(width: 10.0),
+            _lineBusCard('Linha 002(A) Laranja', Colors.orange[400]!),
+          ],
+        ),
+      ),
+    );
+  }
+
+  _lineBusCard(String nomeLinha, Color corCard) {
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: GestureDetector(
+        onTap: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) =>
+                  const OnibusLocalizacao(nomeDalinha: 'user1'),
+            ),
+          );
+        },
+        child: Container(
+          width: 200,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(24),
+            color: corCard,
+          ),
+          child: Center(
+              child: Text(
+            nomeLinha,
+            style: const TextStyle(fontSize: 18, color: Colors.white),
+          )),
+        ),
       ),
     );
   }
