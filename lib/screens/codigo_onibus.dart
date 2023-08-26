@@ -95,8 +95,12 @@ class _CodigoOnibusPageState extends State<CodigoOnibusPage> {
   _findBusCode(String codigoOnibus) async {
     onibusRepository.findByCodigoOnibus(codigoOnibus).then((onibusExist) {
       if (onibusExist.isNotEmpty) {
-        Navigator.push(context,
-            MaterialPageRoute(builder: (context) => const MotoristaPage()));
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => MotoristaPage(
+                      codigoOnibus: codigoOnibus,
+                    )));
       }
       if (onibusExist.isEmpty) {
         Fluttertoast.showToast(
