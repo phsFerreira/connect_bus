@@ -1,3 +1,4 @@
+import 'package:connect_bus/screens/motorista/linha.dart';
 import 'package:flutter/material.dart';
 import 'package:location/location.dart';
 
@@ -64,19 +65,24 @@ class _MotoristaPageState extends State<MotoristaPage> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
-              //onibus button
-              _generateGreySquareButton(
+              _getGreySquareButton(
                   Icons.bus_alert, "Ônibus", const StatusPage()),
-
-              //perfil button
-              _generateGreySquareButton(
+              _getGreySquareButton(
                   Icons.person, "Perfil", const InfoMotorista()),
             ],
           ),
           const SizedBox(height: 40),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 100),
-            child: _generateGreySquareButton(Icons.alarm, "Emergência", null),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              _getGreySquareButton(Icons.alarm, "Emergência", null),
+              _getGreySquareButton(
+                  Icons.route,
+                  "Linha",
+                  LinhaPage(
+                    codigoOnibus: widget.codigoOnibus,
+                  )),
+            ],
           ),
           const SizedBox(height: 30),
           _getButtonEnableTracking(),
@@ -109,7 +115,7 @@ class _MotoristaPageState extends State<MotoristaPage> {
 
   /// Widget que gera um botão quadrado cinza
 
-  _generateGreySquareButton(IconData icon, String text, Widget? pageRedirect) {
+  _getGreySquareButton(IconData icon, String text, Widget? pageRedirect) {
     return SizedBox(
       width: 150,
       height: 130,
