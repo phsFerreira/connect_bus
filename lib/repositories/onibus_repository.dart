@@ -19,12 +19,6 @@ class OnibusRepository extends ChangeNotifier {
   }
 
   updateLatLgn(String codigoOnibus, double latitude, double longitude) async {
-    // FirebaseFirestore.instance.collection('location').doc('user1').set({
-    //   'latitude': newLocation.latitude,
-    //   'longitude': newLocation.longitude,
-    //   'name': 'john'
-    // }, SetOptions(merge: true));
-
     try {
       List onibusExist = await findByCodigoOnibus(codigoOnibus);
       if (onibusExist.isNotEmpty) {
@@ -35,6 +29,25 @@ class OnibusRepository extends ChangeNotifier {
               .update({'latitude': latitude, 'longitude': longitude}).then(
                   (value) => print("DocumentSnapshot successfully updated!"),
                   onError: (e) => print("Error updating document $e"));
+        }
+      }
+    } catch (e) {
+      print(e.toString());
+    }
+  }
+
+  updateLinhaOnibus(String codigoOnibus, String nomeLinha) async {
+    try {
+      List onibusExist = await findByCodigoOnibus(codigoOnibus);
+
+      if (onibusExist.isNotEmpty) {
+        for (var onibus in onibusExist) {
+          db
+              .collection('Onibus')
+              .doc(onibus.id)
+              .update({'linha': nomeLinha}).then(
+                  (value) => print("Linha atualizada no Firebase"),
+                  onError: (e) => print("Erro ao atualizar campo 'linha': $e"));
         }
       }
     } catch (e) {
