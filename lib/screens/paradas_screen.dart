@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:connect_bus/screens/passageiro/onibus_linha.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
@@ -117,17 +118,62 @@ class ParadasScreenState extends State<ParadasScreen> {
         child: ListView(
           scrollDirection: Axis.horizontal,
           children: <Widget>[
-            const SizedBox(width: 10.0),
-            _lineBusCard('Linha 001 Azul', Colors.blue[400]!),
-            const SizedBox(width: 10.0),
-            _lineBusCard('Linha 002(A) Laranja', Colors.orange[400]!),
+            _getCard(
+              'Linha 001 Azul',
+              const Color.fromARGB(255, 3, 110, 197),
+            ),
+            _getCard(
+              'Linha 002 (A) Laranja',
+              const Color.fromRGBO(247, 124, 0, 1),
+            ),
+            _getCard(
+              'Linha 002 (B) Laranja',
+              const Color.fromRGBO(247, 124, 0, 1),
+            ),
+            _getCard(
+              'Linha 003 Verde',
+              const Color.fromRGBO(0, 176, 80, 1),
+            ),
+            _getCard('Linha 004 Vermelha', Colors.red),
+            _getCard(
+              'Linha 005 Coral',
+              const Color.fromRGBO(255, 51, 153, 1),
+            ),
+            _getCard(
+              'Linha 006 Lilas',
+              const Color.fromRGBO(239, 25, 208, 1),
+            ),
+            _getCard(
+              'Linha 007 (A) Expressa',
+              const Color.fromARGB(255, 3, 110, 197),
+            ),
+            _getCard(
+              'Linha 007 (B) Expressa',
+              const Color.fromARGB(255, 3, 110, 197),
+            ),
+            _getCard(
+              'Linha 008 Perimetral',
+              const Color.fromRGBO(51, 51, 51, 1),
+            ),
+            _getCard(
+              'Linha 009 Bronze',
+              const Color.fromRGBO(217, 108, 31, 1),
+            ),
+            _getCard(
+              'Linha 010 Prata',
+              const Color.fromRGBO(95, 95, 95, 1),
+            ),
+            _getCard(
+              'Linha 011 Turistica',
+              const Color.fromRGBO(116, 85, 189, 1),
+            ),
           ],
         ),
       ),
     );
   }
 
-  _lineBusCard(String nomeLinha, Color corCard) {
+  _getCard(String nomeLinha, Color corCard) {
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: GestureDetector(
@@ -135,8 +181,7 @@ class ParadasScreenState extends State<ParadasScreen> {
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) =>
-                  const OnibusLocalizacao(nomeDalinha: 'user1'),
+              builder: (context) => OnibusLinhaPage(nomeLinha: nomeLinha),
             ),
           );
         },
@@ -149,7 +194,8 @@ class ParadasScreenState extends State<ParadasScreen> {
           child: Center(
               child: Text(
             nomeLinha,
-            style: const TextStyle(fontSize: 18, color: Colors.white),
+            style: const TextStyle(
+                fontSize: 20, color: Colors.white, fontFamily: 'Roboto'),
           )),
         ),
       ),
