@@ -8,15 +8,15 @@ import 'package:connect_bus/profile_widget.dart';
 import 'package:connect_bus/repositories/onibus_repository.dart';
 import 'package:connect_bus/status_page.dart';
 
-class MotoristaPage extends StatefulWidget {
+class HomeMotoristaPage extends StatefulWidget {
   final String? codigoOnibus;
-  const MotoristaPage({super.key, this.codigoOnibus});
+  const HomeMotoristaPage({super.key, this.codigoOnibus});
 
   @override
-  State<MotoristaPage> createState() => _MotoristaPageState();
+  State<HomeMotoristaPage> createState() => _MotoristaPageState();
 }
 
-class _MotoristaPageState extends State<MotoristaPage> {
+class _MotoristaPageState extends State<HomeMotoristaPage> {
   Location? _location;
   OnibusRepository? onibusRepository;
 
@@ -155,7 +155,7 @@ class _MotoristaPageState extends State<MotoristaPage> {
                   side: BorderSide(width: 1, color: Colors.red))),
           onPressed: () {
             Navigator.push(context,
-                MaterialPageRoute(builder: (context) => const MyApp()));
+                MaterialPageRoute(builder: (context) => const MainPage()));
           },
           child: const Text(
             'SAIR',
