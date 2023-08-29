@@ -1,15 +1,16 @@
-import 'package:connect_bus/profile_motorista.dart';
-import 'package:connect_bus/profile_widget.dart';
 import 'package:flutter/material.dart';
 
-class InfoMotorista extends StatefulWidget {
-  const InfoMotorista({super.key});
+import 'package:connect_bus/home_motorista.dart';
+import 'package:connect_bus/profile_widget.dart';
+
+class ProfileMotorista extends StatefulWidget {
+  const ProfileMotorista({super.key});
 
   @override
-  State<InfoMotorista> createState() => _InfoMotoristaState();
+  State<ProfileMotorista> createState() => _ProfileMotoristaState();
 }
 
-class _InfoMotoristaState extends State<InfoMotorista> {
+class _ProfileMotoristaState extends State<ProfileMotorista> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -18,29 +19,11 @@ class _InfoMotoristaState extends State<InfoMotorista> {
         child: Column(
           children: <Widget>[
             const SizedBox(height: 40),
-            const Text(
-              "Seu Perfil!",
-              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 30),
-            ),
+            _getText(),
             const SizedBox(height: 30),
-
-            //imagem do motorista
-            const ProfileWidget(
-                imagePath:
-                    "https://i.pinimg.com/736x/8b/16/7a/8b167af653c2399dd93b952a48740620.jpg"),
-            const SizedBox(
-              height: 40,
-            ),
-
-            //texto reputacao
-            const SizedBox(
-              width: 300,
-              height: 30,
-              child: Text(
-                "Reputação:",
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
-              ),
-            ),
+            _getPhoto(),
+            const SizedBox(height: 40),
+            _getTextReputation(),
 
             //campo das estrelas
             // RatingBar.builder(
@@ -60,41 +43,72 @@ class _InfoMotoristaState extends State<InfoMotorista> {
                   "Nº de registro:",
                   style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
                 )),
-            const SizedBox(
-              width: 300,
-              height: 30,
-              child: Text(
-                "5948298591831",
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 30),
-              ),
-            ),
+            _getRegistrationNumber(),
             const SizedBox(height: 300),
-
-            SizedBox(
-              width: 320,
-              height: 50,
-              child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                      primary: Colors.black,
-                      shape: const RoundedRectangleBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(12)))),
-                  onPressed: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => const MotoristaPage()));
-                  },
-                  child: const Text(
-                    "Voltar",
-                    style: TextStyle(
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 20),
-                  )),
-            )
+            _getButtonVoltar(),
           ],
         ),
       )),
+    );
+  }
+
+  _getText() {
+    return const Text(
+      "Seu Perfil!",
+      style: TextStyle(fontWeight: FontWeight.bold, fontSize: 30),
+    );
+  }
+
+  _getPhoto() {
+    return const ProfileWidget(
+      imagePath:
+          "https://i.pinimg.com/736x/8b/16/7a/8b167af653c2399dd93b952a48740620.jpg",
+    );
+  }
+
+  _getTextReputation() {
+    return const SizedBox(
+      width: 300,
+      height: 30,
+      child: Text(
+        "Reputação:",
+        style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+      ),
+    );
+  }
+
+  _getRegistrationNumber() {
+    return const SizedBox(
+      width: 300,
+      height: 30,
+      child: Text(
+        "5948298591831",
+        style: TextStyle(fontWeight: FontWeight.bold, fontSize: 30),
+      ),
+    );
+  }
+
+  _getButtonVoltar() {
+    return SizedBox(
+      width: 320,
+      height: 50,
+      child: ElevatedButton(
+        style: ElevatedButton.styleFrom(
+            backgroundColor: Colors.black,
+            shape: const RoundedRectangleBorder(
+                borderRadius: BorderRadius.all(Radius.circular(12)))),
+        onPressed: () {
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => const HomeMotoristaPage()));
+        },
+        child: const Text(
+          "Voltar",
+          style: TextStyle(
+              color: Colors.white, fontWeight: FontWeight.bold, fontSize: 20),
+        ),
+      ),
     );
   }
 }

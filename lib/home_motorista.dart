@@ -68,7 +68,7 @@ class _HomeMotoristaPage extends State<HomeMotoristaPage> {
               _getGreySquareButton(
                   Icons.bus_alert, "Ônibus", const BusStatusPage()),
               _getGreySquareButton(
-                  Icons.person, "Perfil", const InfoMotorista()),
+                  Icons.person, "Perfil", const ProfileMotorista()),
             ],
           ),
           const SizedBox(height: 40),
