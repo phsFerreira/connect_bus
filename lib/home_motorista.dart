@@ -6,7 +6,7 @@ import 'package:connect_bus/infos_motorista.dart';
 import 'package:connect_bus/main.dart';
 import 'package:connect_bus/profile_widget.dart';
 import 'package:connect_bus/repositories/onibus_repository.dart';
-import 'package:connect_bus/status_page.dart';
+import 'package:connect_bus/bus_status_page.dart';
 
 class HomeMotoristaPage extends StatefulWidget {
   final String? codigoOnibus;
