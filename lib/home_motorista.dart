@@ -2,7 +2,7 @@ import 'package:connect_bus/screens/motorista/linha.dart';
 import 'package:flutter/material.dart';
 import 'package:location/location.dart';
 
-import 'package:connect_bus/infos_motorista.dart';
+import 'package:connect_bus/profile_motorista.dart';
 import 'package:connect_bus/main.dart';
 import 'package:connect_bus/profile_widget.dart';
 import 'package:connect_bus/repositories/onibus_repository.dart';
