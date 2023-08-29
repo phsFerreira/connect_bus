@@ -13,10 +13,10 @@ class HomeMotoristaPage extends StatefulWidget {
   const HomeMotoristaPage({super.key, this.codigoOnibus});
 
   @override
-  State<HomeMotoristaPage> createState() => _MotoristaPageState();
+  State<HomeMotoristaPage> createState() => _HomeMotoristaPage();
 }
 
-class _MotoristaPageState extends State<HomeMotoristaPage> {
+class _HomeMotoristaPage extends State<HomeMotoristaPage> {
   Location? _location;
   OnibusRepository? onibusRepository;
 
@@ -66,7 +66,7 @@ class _MotoristaPageState extends State<HomeMotoristaPage> {
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
               _getGreySquareButton(
-                  Icons.bus_alert, "Ônibus", const StatusPage()),
+                  Icons.bus_alert, "Ônibus", const BusStatusPage()),
               _getGreySquareButton(
                   Icons.person, "Perfil", const InfoMotorista()),
             ],
