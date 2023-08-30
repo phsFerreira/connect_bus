@@ -1,4 +1,5 @@
 import 'package:connect_bus/screens/motorista/linha.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:location/location.dart';
 
@@ -17,6 +18,7 @@ class HomeMotoristaPage extends StatefulWidget {
 }
 
 class _HomeMotoristaPage extends State<HomeMotoristaPage> {
+  final FirebaseAuth auth = FirebaseAuth.instance;
   Location? _location;
   OnibusRepository? onibusRepository;
 
@@ -24,7 +26,6 @@ class _HomeMotoristaPage extends State<HomeMotoristaPage> {
   void initState() {
     _init();
     print('Código de onibus de rastreio ====> ${widget.codigoOnibus}');
-
     super.initState();
   }
 
@@ -58,8 +59,11 @@ class _HomeMotoristaPage extends State<HomeMotoristaPage> {
       body: ListView(
         physics: const BouncingScrollPhysics(),
         children: [
+          /// TODO: DIzer 'Ola, Fulano', onde 'Fulano' é o nome do motorista.
           _getGreeting(),
           const SizedBox(height: 40),
+
+          /// TODO: Foto do motorista tem que ser obtida do banco
           _getPhoto(),
           const SizedBox(height: 40),
           Row(
@@ -75,7 +79,9 @@ class _HomeMotoristaPage extends State<HomeMotoristaPage> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
-              _getGreySquareButton(Icons.alarm, "Emergência", null),
+              /// TODO: Botão emergencia nao faz nada
+              _getGreySquareButton(
+                  Icons.alarm, "Emergência", const Placeholder()),
               _getGreySquareButton(
                   Icons.route,
                   "Linha",
@@ -87,7 +93,7 @@ class _HomeMotoristaPage extends State<HomeMotoristaPage> {
           const SizedBox(height: 30),
           _getButtonEnableTracking(),
           const SizedBox(height: 30),
-          _getButtonLogOut(),
+          _getButtonLogOut(context),
         ],
       ),
     );
@@ -114,7 +120,6 @@ class _HomeMotoristaPage extends State<HomeMotoristaPage> {
   }
 
   /// Widget que gera um botão quadrado cinza
-
   _getGreySquareButton(IconData icon, String text, Widget? pageRedirect) {
     return SizedBox(
       width: 150,
@@ -139,7 +144,8 @@ class _HomeMotoristaPage extends State<HomeMotoristaPage> {
     );
   }
 
-  _getButtonLogOut() {
+  /// TODO: Botão sair nao esta funcionando como deveria, ou seja, ao sair fazer signout do firebase e direcionar para [MainPage]
+  _getButtonLogOut(BuildContext context) {
     return SizedBox(
       width: 150,
       height: 50,
@@ -153,10 +159,7 @@ class _HomeMotoristaPage extends State<HomeMotoristaPage> {
               shape: const RoundedRectangleBorder(
                   borderRadius: BorderRadius.all(Radius.circular(12)),
                   side: BorderSide(width: 1, color: Colors.red))),
-          onPressed: () {
-            Navigator.push(context,
-                MaterialPageRoute(builder: (context) => const MainPage()));
-          },
+          onPressed: signOut(context),
           child: const Text(
             'SAIR',
             style: TextStyle(
@@ -165,6 +168,15 @@ class _HomeMotoristaPage extends State<HomeMotoristaPage> {
         ),
       ),
     );
+  }
+
+  //signout function
+  signOut(BuildContext context) async {
+    await auth.signOut();
+    if (context.mounted) {
+      Navigator.pushReplacement(
+          context, MaterialPageRoute(builder: (context) => const MainPage()));
+    }
   }
 
   _getButtonEnableTracking() {
