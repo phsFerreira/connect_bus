@@ -13,7 +13,7 @@ no armazenamento externo-->
     <uses-permission android:name="android.permission.INTERNET" />
 
     <!-- Permite que um aplicativo comum use `Service.startForeground` para a localizaçao. -->
-    <!-- <uses-permission android:name="android.permission.FOREGROUND_SERVICE" /> -->
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE_LOCATION" />
 
     <!-- Acessando a localização mesmo se o usuário deixar o app em segundo plano  -->
