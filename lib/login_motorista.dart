@@ -1,8 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 
-import 'package:connect_bus/screens/codigo_onibus.dart';
+import 'package:connect_bus/widgets/button.dart';
 
 class LoginMotoristaPage extends StatefulWidget {
   const LoginMotoristaPage({Key? key}) : super(key: key);
@@ -12,6 +11,8 @@ class LoginMotoristaPage extends StatefulWidget {
 }
 
 class _LoginMotoristaPageState extends State<LoginMotoristaPage> {
+  final _formKey = GlobalKey<FormState>();
+  bool isLoading = false;
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
 
@@ -26,21 +27,27 @@ class _LoginMotoristaPageState extends State<LoginMotoristaPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.grey[100],
-      body: SafeArea(
-        child: Center(
-          child: SingleChildScrollView(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
+      body: _getForm(),
+    );
+  }
+
+  _getForm() {
+    return SafeArea(
+      child: Center(
+        child: Padding(
+          padding: const EdgeInsets.all(20.0),
+          child: Form(
+            key: _formKey,
+            child: OverflowBar(
+              overflowSpacing: 20,
               children: [
-                _getIcon(),
+                // _getIcon(),
                 _getTextLogin(),
-                const SizedBox(height: 50),
-                _getTextField(emailController, 'Email', false),
-                const SizedBox(height: 20),
-                _getTextField(passwordController, 'Senha', true),
-                const SizedBox(height: 20),
+                _getTextFormField(
+                    emailController, 'Email', 'Email vazio', false),
+                _getTextFormField(
+                    passwordController, 'Senha', 'Senha vazia', true),
                 _getButtonLogin(),
-                const SizedBox(height: 25),
               ],
             ),
           ),
@@ -63,62 +70,75 @@ class _LoginMotoristaPageState extends State<LoginMotoristaPage> {
     );
   }
 
-  _getTextField(
-      TextEditingController? controller, String hintText, bool obscureText) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 30),
-      child: Container(
-        decoration: const BoxDecoration(color: Colors.white),
-        child: TextField(
-          controller: controller,
-          obscureText: obscureText,
-          decoration: InputDecoration(
-              border: const OutlineInputBorder(
-                  borderRadius: BorderRadius.all(Radius.circular(12)),
-                  borderSide: BorderSide(color: Colors.black, width: 1)),
-              hintText: hintText,
-              contentPadding: const EdgeInsets.all(20.0)),
+  _getTextFormField(TextEditingController? controller, String labelText,
+      String textIfFieldEmpty, bool obscureText) {
+    return TextFormField(
+      controller: controller,
+      obscureText: obscureText,
+      validator: (text) {
+        if (text == null || text.isEmpty) {
+          return textIfFieldEmpty;
+        }
+        return null;
+      },
+      decoration: InputDecoration(
+        labelText: labelText,
+        enabledBorder: const OutlineInputBorder(
+          borderSide: BorderSide(
+              color: Colors.black, width: 2, style: BorderStyle.solid),
+        ),
+        focusedBorder: const OutlineInputBorder(
+          borderSide: BorderSide(
+              color: Colors.black, width: 2, style: BorderStyle.solid),
         ),
       ),
     );
   }
 
-  Future signIn() async {
-    if (emailController.text.isEmpty | passwordController.text.isEmpty) {
-      Fluttertoast.showToast(
-          msg: 'Preencha todos os campos.',
-          toastLength: Toast.LENGTH_SHORT,
-          gravity: ToastGravity.BOTTOM,
-          backgroundColor: Colors.grey,
-          textColor: Colors.black);
-    } else {
-      FirebaseAuth.instance.signInWithEmailAndPassword(
-        email: emailController.text.trim(),
-        password: passwordController.text.trim(),
+  signInWithEmailAndPassword() async {
+    try {
+      setState(() {
+        isLoading = true;
+      });
+      await FirebaseAuth.instance.signInWithEmailAndPassword(
+        email: emailController.text,
+        password: passwordController.text,
       );
-      Navigator.push(context,
-          MaterialPageRoute(builder: (context) => const CodigoOnibusPage()));
+      setState(() {
+        isLoading = false;
+      });
+    } on FirebaseAuthException catch (e) {
+      setState(() {
+        isLoading = false;
+      });
+      if (e.code == 'user-not-found') {
+        return ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Email não cadastrado.'),
+          ),
+        );
+      } else if (e.code == 'wrong-password') {
+        return ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Senha incorreta.'),
+          ),
+        );
+      }
     }
   }
 
   _getButtonLogin() {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 30.0),
-      child: GestureDetector(
-        onTap: signIn,
-        child: Container(
-          padding: const EdgeInsets.all(20),
-          decoration: const BoxDecoration(
-              color: Colors.black,
-              borderRadius: BorderRadius.all(Radius.circular(12))),
-          child: const Center(
-              child: Text(
-            'Login',
-            style: TextStyle(
-                color: Colors.white, fontWeight: FontWeight.bold, fontSize: 18),
-          )),
-        ),
-      ),
+    return ButtonWidget(
+      textButton: 'LOGIN',
+      colorTextButton: Colors.white,
+      widthButton: double.infinity,
+      borderButton: Colors.black,
+      backgroundButton: Colors.black,
+      onPressed: () {
+        if (_formKey.currentState!.validate()) {
+          signInWithEmailAndPassword();
+        }
+      },
     );
   }
 }
