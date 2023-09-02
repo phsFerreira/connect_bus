@@ -23,11 +23,16 @@ class CampoForm extends StatelessWidget {
         inputFormatters: inputFormatters,
         validator: validator,
         decoration: InputDecoration(
-            border: OutlineInputBorder(
-                borderRadius: BorderRadius.all(Radius.circular(12)),
-                borderSide: BorderSide(color: Colors.black, width: 1)),
-            hintText: hintText,
-            contentPadding: EdgeInsets.all(20.0)),
+          labelText: hintText,
+          enabledBorder: const OutlineInputBorder(
+            borderSide: BorderSide(
+                color: Colors.black, width: 2, style: BorderStyle.solid),
+          ),
+          focusedBorder: const OutlineInputBorder(
+            borderSide: BorderSide(
+                color: Colors.black, width: 2, style: BorderStyle.solid),
+          ),
+        ),
       ),
     );
   }
