@@ -70,7 +70,7 @@ class MainPage extends StatelessWidget {
   Container getButtons() {
     return Container(
       padding: const EdgeInsets.all(25.0),
-      child: const Center(
+      child: Center(
         child:
             Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
           ButtonWidget(
@@ -79,7 +79,12 @@ class MainPage extends StatelessWidget {
             widthButton: 167.0,
             borderButton: Colors.black,
             backgroundButton: Colors.white,
-            pageRedirect: LoginPassageiroPage(),
+            onPressed: () {
+              Navigator.push(
+                  mainPageContextKey.currentState!.context,
+                  MaterialPageRoute(
+                      builder: (context) => const LoginPassageiroPage()));
+            },
           ),
           ButtonWidget(
             textButton: 'MOTORISTA',
@@ -87,7 +92,10 @@ class MainPage extends StatelessWidget {
             widthButton: 167.0,
             borderButton: Colors.black,
             backgroundButton: Colors.black,
-            pageRedirect: AuthPage(),
+            onPressed: () {
+              Navigator.push(mainPageContextKey.currentState!.context,
+                  MaterialPageRoute(builder: (context) => const AuthPage()));
+            },
           ),
         ]),
       ),

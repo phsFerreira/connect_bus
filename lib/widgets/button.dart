@@ -1,21 +1,21 @@
 import 'package:flutter/material.dart';
 
 class ButtonWidget extends StatelessWidget {
-  const ButtonWidget(
-      {Key? key,
-      required this.textButton,
-      required this.colorTextButton,
-      required this.widthButton,
-      required this.borderButton,
-      required this.backgroundButton,
-      required this.pageRedirect})
-      : super(key: key);
+  const ButtonWidget({
+    Key? key,
+    required this.textButton,
+    required this.colorTextButton,
+    required this.widthButton,
+    required this.borderButton,
+    required this.backgroundButton,
+    required this.onPressed,
+  }) : super(key: key);
   final String textButton;
   final Color colorTextButton;
   final double widthButton;
   final Color borderButton;
   final Color backgroundButton;
-  final Widget pageRedirect;
+  final void Function()? onPressed;
 
   @override
   Widget build(BuildContext context) {
@@ -32,10 +32,7 @@ class ButtonWidget extends StatelessWidget {
     );
     return ElevatedButton(
       style: elevatedButtonStyle,
-      onPressed: () {
-        Navigator.push(
-            context, MaterialPageRoute(builder: (context) => pageRedirect));
-      },
+      onPressed: onPressed,
       child: Text(
         textButton,
         style: TextStyle(
