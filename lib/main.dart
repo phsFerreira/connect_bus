@@ -1,13 +1,11 @@
-import 'package:connect_bus/home_motorista.dart';
-import 'package:connect_bus/screens/auth_page.dart';
-import 'package:connect_bus/widgets/button.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_config/flutter_config.dart';
 
-import 'package:connect_bus/login_motorista.dart';
 import 'package:connect_bus/login_passageiro.dart';
+import 'package:connect_bus/screens/auth_page.dart';
+import 'package:connect_bus/widgets/button.dart';
 
 final mainPageContextKey = GlobalKey();
 
