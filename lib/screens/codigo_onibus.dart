@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
-import 'package:connect_bus/profile_motorista.dart';
+import 'package:connect_bus/home_motorista.dart';
 import 'package:connect_bus/repositories/onibus_repository.dart';
+import 'package:connect_bus/widgets/button.dart';
 
 /// Página que recebe o código do onibus que o motorista esta
 /// e consulta no banco para saber se o onibus existe ou não.
@@ -40,25 +41,22 @@ class _CodigoOnibusPageState extends State<CodigoOnibusPage> {
   }
 
   _getPageCodeBus() {
-    return Padding(
-      padding: const EdgeInsets.all(40.0),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          _getImageBus(),
-          const SizedBox(
-            height: 30,
+    return SafeArea(
+      child: Center(
+        child: Padding(
+          padding: const EdgeInsets.all(40.0),
+          child: OverflowBar(
+            overflowAlignment: OverflowBarAlignment.center,
+            overflowSpacing: 10,
+            children: [
+              _getImageBus(),
+              _getText(),
+              _getInputTextCode(),
+              _getButtonConfirm(),
+              _getButtonBack(),
+            ],
           ),
-          _getText(),
-          const SizedBox(
-            height: 30,
-          ),
-          _getInputTextCode(),
-          const SizedBox(
-            height: 20,
-          ),
-          _getButtonConfirm(),
-        ],
+        ),
       ),
     );
   }
@@ -75,18 +73,17 @@ class _CodigoOnibusPageState extends State<CodigoOnibusPage> {
   }
 
   _getInputTextCode() {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 30),
-      child: Container(
-        decoration: const BoxDecoration(color: Colors.white),
-        child: TextField(
-          controller: _codeBusController,
-          decoration: const InputDecoration(
-              border: OutlineInputBorder(
-                  borderRadius: BorderRadius.all(Radius.circular(12)),
-                  borderSide: BorderSide(color: Colors.black, width: 1)),
-              hintText: 'Codigo',
-              contentPadding: EdgeInsets.all(20.0)),
+    return TextField(
+      controller: _codeBusController,
+      decoration: const InputDecoration(
+        labelText: 'Codigo',
+        enabledBorder: OutlineInputBorder(
+          borderSide: BorderSide(
+              color: Colors.black, width: 2, style: BorderStyle.solid),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderSide: BorderSide(
+              color: Colors.black, width: 2, style: BorderStyle.solid),
         ),
       ),
     );
@@ -98,7 +95,7 @@ class _CodigoOnibusPageState extends State<CodigoOnibusPage> {
         Navigator.push(
             context,
             MaterialPageRoute(
-                builder: (context) => MotoristaPage(
+                builder: (context) => HomeMotoristaPage(
                       codigoOnibus: codigoOnibus,
                     )));
       }
@@ -114,17 +111,13 @@ class _CodigoOnibusPageState extends State<CodigoOnibusPage> {
   }
 
   _getButtonConfirm() {
-    return ElevatedButton(
-      style: ElevatedButton.styleFrom(
-        foregroundColor: Colors.black87,
-        backgroundColor: const Color.fromARGB(255, 66, 190, 240),
-        minimumSize: const Size(150, 50),
-        padding: const EdgeInsets.symmetric(horizontal: 16),
-        shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.all(Radius.circular(2)),
-        ),
-      ),
-      onPressed: () async {
+    return ButtonWidget(
+      textButton: 'CONFIRMAR',
+      colorTextButton: Colors.white,
+      widthButton: double.infinity,
+      borderButton: Colors.black,
+      backgroundButton: Colors.black,
+      onPressed: () {
         if (_codeBusController.text.isEmpty) {
           Fluttertoast.showToast(
               msg: 'Preencha o campo.',
@@ -136,8 +129,19 @@ class _CodigoOnibusPageState extends State<CodigoOnibusPage> {
 
         _findBusCode(_codeBusController.text);
       },
-      child: const Text('CONFIRMAR',
-          style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold)),
+    );
+  }
+
+  _getButtonBack() {
+    return ButtonWidget(
+      textButton: 'VOLTAR',
+      colorTextButton: Colors.black,
+      widthButton: double.infinity,
+      borderButton: Colors.black,
+      backgroundButton: Colors.white,
+      onPressed: () {
+        Navigator.pop(context);
+      },
     );
   }
 }
