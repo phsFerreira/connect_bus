@@ -21,7 +21,10 @@ class OnibusLinhaPage extends StatelessWidget {
         centerTitle: true,
       ),
       body: StreamBuilder<QuerySnapshot>(
-        stream: FirebaseFirestore.instance.collection('Onibus').snapshots(),
+        stream: FirebaseFirestore.instance
+            .collection('Onibus')
+            .where('linha', isEqualTo: nomeLinha)
+            .snapshots(),
         builder: (context, snapshot) {
           if (!snapshot.hasData) {
             return const Center(
