@@ -63,6 +63,8 @@ class _ProfileMotoristaState extends State<ProfileMotorista> {
     return const ProfileWidget(
       imagePath:
           "https://i.pinimg.com/736x/8b/16/7a/8b167af653c2399dd93b952a48740620.jpg",
+      width: 90,
+      height: 90,
     );
   }
 
