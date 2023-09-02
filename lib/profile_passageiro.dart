@@ -47,8 +47,11 @@ class _PassageiroPageState extends State<PassageiroPage> {
             ),
             SizedBox(height: 30),
             ProfileWidget(
-                imagePath:
-                    "https://i.pinimg.com/736x/8b/16/7a/8b167af653c2399dd93b952a48740620.jpg"),
+              imagePath:
+                  "https://i.pinimg.com/736x/8b/16/7a/8b167af653c2399dd93b952a48740620.jpg",
+              width: 90,
+              height: 90,
+            ),
             SizedBox(height: 40),
 
             //nome completo
