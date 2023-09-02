@@ -27,7 +27,7 @@ class _ParadaDetalhesScreenState extends State<ParadaDetalhesScreen> {
     horariosRepository = HorariosRepository();
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      getHorarios(widget.parada.bairro);
+      getHorarios(widget.parada.bairro!);
     });
   }
 
@@ -57,8 +57,14 @@ class _ParadaDetalhesScreenState extends State<ParadaDetalhesScreen> {
 
       // Lista de Horários
       body: SingleChildScrollView(
-        // Coluna de ExpansionTiles
         child: Column(children: [
+          // Nome do Bairro
+          Padding(
+            padding: const EdgeInsets.only(top: 20),
+            child: Text(widget.parada.bairro!,
+                style: const TextStyle(fontSize: 25)),
+          ),
+          // Coluna de ExpansionTiles
           for (var linha in listLinhas)
             ExpansionTile(
                 title: Text(linha.linha!),
