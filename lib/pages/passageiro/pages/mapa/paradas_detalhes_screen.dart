@@ -17,12 +17,22 @@ class ParadaDetalhesScreen extends StatefulWidget {
 
 class _ParadaDetalhesScreenState extends State<ParadaDetalhesScreen> {
   List<Horario> listLinhas = [];
+  late HorariosRepository horariosRepository;
+
+  // Método responsável para inicialização dos dados
+  // que serão exibidos na tela.
+  @override
+  void initState() {
+    super.initState();
+    horariosRepository = HorariosRepository();
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      getHorarios(widget.parada.bairro!);
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
-    // Obtendo os horários a partir do nome do bairro.
-    getHorarios(widget.parada.bairro);
-
     // SE a lista de horarios estiver vazia, retorne uma tela
     // mostrando mensagem "Sem horarios".
     if (listLinhas.isEmpty) {
@@ -47,8 +57,14 @@ class _ParadaDetalhesScreenState extends State<ParadaDetalhesScreen> {
 
       // Lista de Horários
       body: SingleChildScrollView(
-        // Coluna de ExpansionTiles
         child: Column(children: [
+          // Nome do Bairro
+          Padding(
+            padding: const EdgeInsets.only(top: 20),
+            child: Text(widget.parada.bairro!,
+                style: const TextStyle(fontSize: 25)),
+          ),
+          // Coluna de ExpansionTiles
           for (var linha in listLinhas)
             ExpansionTile(
                 title: Text(linha.linha!),
@@ -84,17 +100,12 @@ class _ParadaDetalhesScreenState extends State<ParadaDetalhesScreen> {
     );
   }
 
-  void getHorarios(String nomeBairro) async {
-    var horariosRepository = HorariosRepository();
+  ///  Obtendo os horários a partir do nome do bairro.
+  getHorarios(String nomeBairro) async {
     List<Horario> listLinhasHorarios =
         await horariosRepository.findByBairroName(nomeBairro);
-
-    // `mounted` se Widget já estiver "montado" na tela, então
-    // setState() reconstrói a tela com `listLinhas` recebendo um novo valor.
-    if (mounted) {
-      setState(() {
-        listLinhas = listLinhasHorarios;
-      });
-    }
+    setState(() {
+      listLinhas = listLinhasHorarios;
+    });
   }
 }

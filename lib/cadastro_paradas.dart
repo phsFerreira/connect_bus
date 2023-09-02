@@ -1,7 +1,7 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'package:connect_bus/campo_form.dart';
-import 'package:connect_bus/login_passageiro.dart';
+import 'package:connect_bus/pages/passageiro/login_passageiro.dart';
 import 'package:flutter/material.dart';
 import 'parada.dart';
 
@@ -64,8 +64,8 @@ class _CadastroParadaFormState extends State<CadastroParadaForm> {
                               endereco: endereco, complemento: complemento);
 
                           parada.registrarParada();
-                          Navigator.of(context).push(
-                              MaterialPageRoute(builder: (_) => LoginPage()));
+                          Navigator.of(context).push(MaterialPageRoute(
+                              builder: (_) => LoginPassageiroPage()));
                         }
                       },
                       child: Text(

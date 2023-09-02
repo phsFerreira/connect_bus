@@ -130,8 +130,8 @@ Future<bool> loginPassageiro(String email, String senha) async {
     String senhaLogin = data?['senha'];
 
     if (emailLogin == email && senhaLogin == senha) {
-      Fluttertoast.showToast(
-          msg: "logado com sucesso.", toastLength: Toast.LENGTH_LONG);
+      // Fluttertoast.showToast(
+      //     msg: "logado com sucesso.", toastLength: Toast.LENGTH_LONG);
       return true;
     } else {
       Fluttertoast.showToast(

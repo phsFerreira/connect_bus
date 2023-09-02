@@ -1,9 +1,20 @@
 <!-- atributo android:installLocation="preferExternal" é para evitar o erro INSTALL_FAILED_INSUFFICIENT_STORAGE forçando o app ser instalado
 no armazenamento externo-->
 <manifest xmlns:android="http://schemas.android.com/apk/res/android" package="com.example.connect_bus" android:installLocation="preferExternal">
-    <!-- Permissões para acessar a localização -->
+    
+    <!-- Permissões para acessar a localização de forma precisa -->
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+
+    <!-- Permite o uso de PowerManager WakeLocks para evitar que o processador durma ou a tela escureça. -->
+    <!-- <uses-permission android:name="android.permission.WAKE_LOCK" /> -->
+
+    <!-- Permite que aplicativos abram soquetes de rede. -->
+    <uses-permission android:name="android.permission.INTERNET" />
+
+    <!-- Permite que um aplicativo comum use `Service.startForeground` para a localizaçao. -->
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_LOCATION" />
 
     <!-- Acessando a localização mesmo se o usuário deixar o app em segundo plano  -->
     <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />

@@ -21,6 +21,7 @@ class ParadasRepository {
             id: paradaDoc.get('id'),
             latitude: paradaDoc.get('latitude'),
             longitude: paradaDoc.get('longitude'),
+            onibus: bairroDoc.get('onibus'),
           );
 
           _listParadas.add(parada);

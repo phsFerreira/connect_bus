@@ -1,13 +1,14 @@
 import 'dart:async';
 
 import 'package:connect_bus/model/parada.dart';
+import 'package:connect_bus/repositories/onibus_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 import '../repositories/paradas_repository.dart';
-import '../screens/paradas_detalhes_screen.dart';
-import '../screens/paradas_screen.dart';
+import '../pages/passageiro/pages/mapa/paradas_detalhes_screen.dart';
+import '../pages/passageiro/pages/mapa/paradas_screen.dart';
 
 // //
 // // Controller baseado no video https://www.youtube.com/watch?v=l_nLqPK7K6Q
@@ -106,7 +107,6 @@ class ParadasController extends ChangeNotifier {
   loadParadas() async {
     var paradaRepository = ParadasRepository();
     var paradaMarkers = await paradaRepository.getParadas();
-    print(paradaMarkers);
     for (var parada in paradaMarkers) {
       addMarker(parada);
       print(parada);
@@ -116,16 +116,25 @@ class ParadasController extends ChangeNotifier {
     notifyListeners();
   }
 
+  loadOnibus() async {
+    var onibusRepository = OnibusRepository();
+    // onibusRepository.getLocalizationsOnibus();
+
+    // (método de ChangeNotifier) usado para notificar qualquer um que esteja assistindo ParadasController
+    notifyListeners();
+  }
+
   addMarker(Parada parada) async {
     var latitude = parada.latitude;
     var longitude = parada.longitude;
+
     markers.add(
       Marker(
-        markerId: MarkerId(parada.id),
-        position: LatLng(parada.latitude, parada.longitude),
+        markerId: MarkerId(parada.id!),
+        position: LatLng(parada.latitude!, parada.longitude!),
         infoWindow: InfoWindow(title: parada.bairro),
         icon: await BitmapDescriptor.fromAssetImage(
-            const ImageConfiguration(), 'assets/images/bus-stop.png'),
+            const ImageConfiguration(), 'assets/images/bus-stop_64_green.png'),
         onTap: () => {
           Navigator.push(
             paradaScreenContextKey.currentState!.context,
