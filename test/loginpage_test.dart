@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 Widget createLoginScreen() => const MaterialApp(
-      home: LoginPage(),
+      home: LoginPassageiroPage(),
     );
 
 void main() {

@@ -25,8 +25,10 @@ class _HomePageState extends State<HomePage> {
             MaterialButton(
               onPressed: () {
                 FirebaseAuth.instance.signOut();
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => const LoginPage()));
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const LoginPassageiroPage()));
               },
               color: Colors.black,
               child: Text(

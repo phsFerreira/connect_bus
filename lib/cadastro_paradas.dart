@@ -64,8 +64,8 @@ class _CadastroParadaFormState extends State<CadastroParadaForm> {
                               endereco: endereco, complemento: complemento);
 
                           parada.registrarParada();
-                          Navigator.of(context).push(
-                              MaterialPageRoute(builder: (_) => LoginPage()));
+                          Navigator.of(context).push(MaterialPageRoute(
+                              builder: (_) => LoginPassageiroPage()));
                         }
                       },
                       child: Text(
