@@ -41,7 +41,7 @@ class OnibusLinhaPage extends StatelessWidget {
                   },
                   child: Card(
                     child: ListTile(
-                      title: Text(doc.get('codigo')),
+                      title: Text('Ônibus ${doc.get('codigo')}'),
                     ),
                   ),
                 );
