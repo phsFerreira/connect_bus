@@ -1,4 +1,4 @@
-import 'package:connect_bus/login_passageiro.dart';
+import 'package:connect_bus/pages/passageiro/login_passageiro.dart';
 import 'package:connect_bus/main.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';

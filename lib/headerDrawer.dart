@@ -1,10 +1,9 @@
 // ignore_for_file: prefer_const_constructors, must_be_immutable
 
-import 'package:connect_bus/login_passageiro.dart';
+import 'package:connect_bus/pages/passageiro/login_passageiro.dart';
 import 'package:flutter/material.dart';
 
 class HeaderDrawer extends StatefulWidget {
-
   String email;
   String nome;
 
@@ -15,14 +14,12 @@ class HeaderDrawer extends StatefulWidget {
 }
 
 class _HeaderDrawerState extends State<HeaderDrawer> {
-
   @override
   Widget build(BuildContext context) {
+    final args = ModalRoute.of(context)!.settings.arguments as ScreenArguments;
 
-    final args=ModalRoute.of(context)!.settings.arguments as ScreenArguments;
-
-    String nomePassageiro=args.nome;
-    String emailPassageiro=args.email;
+    String nomePassageiro = args.nome;
+    String emailPassageiro = args.email;
 
     return Container(
       color: Colors.grey[700],

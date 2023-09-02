@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_config/flutter_config.dart';
 
-import 'package:connect_bus/login_passageiro.dart';
-import 'package:connect_bus/screens/auth_page.dart';
+import 'package:connect_bus/pages/passageiro/login_passageiro.dart';
+import 'package:connect_bus/pages/motorista/auth_page.dart';
 import 'package:connect_bus/widgets/button.dart';
 
 final mainPageContextKey = GlobalKey();

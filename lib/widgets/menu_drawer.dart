@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_phone_direct_caller/flutter_phone_direct_caller.dart';
 
-import 'package:connect_bus/login_passageiro.dart';
-import 'package:connect_bus/profile_passageiro.dart';
+import 'package:connect_bus/pages/passageiro/login_passageiro.dart';
+import 'package:connect_bus/pages/passageiro/pages/menu/profile_passageiro.dart';
 
 /// Menu lateral
 class MenuDrawer extends StatefulWidget {

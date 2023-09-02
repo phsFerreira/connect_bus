@@ -1,6 +1,6 @@
 // ignore_for_file: prefer_const_constructors, prefer_interpolation_to_compose_strings
 
-import 'package:connect_bus/login_passageiro.dart';
+import 'package:connect_bus/pages/passageiro/login_passageiro.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 

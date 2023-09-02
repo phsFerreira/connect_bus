@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'package:connect_bus/home_motorista.dart';
+import 'package:connect_bus/pages/motorista/pages/home_motorista.dart';
 import 'package:connect_bus/repositories/onibus_repository.dart';
 
 class BusStatusPage extends StatefulWidget {

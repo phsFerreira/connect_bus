@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 
 import 'package:connect_bus/campo_form.dart';
 import 'package:connect_bus/extensoes.dart';
-import 'package:connect_bus/login_passageiro.dart';
-import 'package:connect_bus/passageiro.dart';
+import 'package:connect_bus/pages/passageiro/login_passageiro.dart';
+import 'package:connect_bus/model/passageiro.dart';
 import 'package:connect_bus/widgets/button.dart';
 
 class CadastroPassageiroPage extends StatefulWidget {

@@ -5,7 +5,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
 
 import 'package:connect_bus/controllers/paradas_controller.dart';
-import 'package:connect_bus/screens/passageiro/onibus_linha.dart';
+import 'package:connect_bus/pages/passageiro/pages/mapa/onibus_linha.dart';
 import 'package:connect_bus/widgets/menu_drawer.dart';
 
 /// Mapa com as paradas de ônibus da cidade

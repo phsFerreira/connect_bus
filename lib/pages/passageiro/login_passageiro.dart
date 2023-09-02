@@ -3,9 +3,9 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
-import 'package:connect_bus/cadastro_passageiro.dart';
-import 'package:connect_bus/passageiro.dart';
-import 'package:connect_bus/screens/paradas_screen.dart';
+import 'package:connect_bus/pages/passageiro/cadastro_passageiro.dart';
+import 'package:connect_bus/model/passageiro.dart';
+import 'package:connect_bus/pages/passageiro/pages/mapa/paradas_screen.dart';
 import 'package:connect_bus/widgets/button.dart';
 
 class LoginPassageiroPage extends StatefulWidget {

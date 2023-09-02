@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
-import 'package:connect_bus/screens/onibus_localizacao.dart';
+import 'package:connect_bus/pages/passageiro/pages/mapa/onibus_localizacao.dart';
 
 /// Pagina responsavel por mostrar todos os onibus da respectiva linha
 /// que Usuario clicou na tela [ParadasScreen]

@@ -1,8 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
-import 'package:connect_bus/login_motorista.dart';
-import 'package:connect_bus/screens/codigo_onibus.dart';
+import 'package:connect_bus/pages/motorista/login_motorista.dart';
+import 'package:connect_bus/pages/motorista/pages/codigo_onibus.dart';
 
 /// Controlador de Login, responsável por deixar o motorista logado no app,
 /// (funcionalidade fornecida pelo [FirebaseAuth]).

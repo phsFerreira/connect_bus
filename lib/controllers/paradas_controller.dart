@@ -7,8 +7,8 @@ import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 import '../repositories/paradas_repository.dart';
-import '../screens/paradas_detalhes_screen.dart';
-import '../screens/paradas_screen.dart';
+import '../pages/passageiro/pages/mapa/paradas_detalhes_screen.dart';
+import '../pages/passageiro/pages/mapa/paradas_screen.dart';
 
 // //
 // // Controller baseado no video https://www.youtube.com/watch?v=l_nLqPK7K6Q

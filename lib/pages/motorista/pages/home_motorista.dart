@@ -3,13 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_phone_direct_caller/flutter_phone_direct_caller.dart';
 import 'package:location/location.dart';
 
-import 'package:connect_bus/bus_status_page.dart';
-import 'package:connect_bus/login_motorista.dart';
+import 'package:connect_bus/pages/motorista/pages/bus_status_page.dart';
+import 'package:connect_bus/pages/motorista/login_motorista.dart';
 import 'package:connect_bus/main.dart';
-import 'package:connect_bus/profile_motorista.dart';
+import 'package:connect_bus/pages/motorista/pages/profile_motorista.dart';
 import 'package:connect_bus/profile_widget.dart';
 import 'package:connect_bus/repositories/onibus_repository.dart';
-import 'package:connect_bus/screens/motorista/linha.dart';
+import 'package:connect_bus/pages/motorista/pages/linha.dart';
 import 'package:connect_bus/widgets/button.dart';
 
 class HomeMotoristaPage extends StatefulWidget {
