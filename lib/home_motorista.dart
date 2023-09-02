@@ -1,13 +1,15 @@
-import 'package:connect_bus/screens/motorista/linha.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:location/location.dart';
 
-import 'package:connect_bus/profile_motorista.dart';
+import 'package:connect_bus/bus_status_page.dart';
+import 'package:connect_bus/login_motorista.dart';
 import 'package:connect_bus/main.dart';
+import 'package:connect_bus/profile_motorista.dart';
 import 'package:connect_bus/profile_widget.dart';
 import 'package:connect_bus/repositories/onibus_repository.dart';
-import 'package:connect_bus/bus_status_page.dart';
+import 'package:connect_bus/screens/motorista/linha.dart';
+import 'package:connect_bus/widgets/button.dart';
 
 class HomeMotoristaPage extends StatefulWidget {
   final String? codigoOnibus;
@@ -42,61 +44,62 @@ class _HomeMotoristaPage extends State<HomeMotoristaPage> {
     _location!.enableBackgroundMode(enable: true);
   }
 
-  /// Função responsável por ouvir o movimento da posição do celular do Motorista.
-  void _listenLocation() {
-    _location?.onLocationChanged.listen((newLocation) async {
-      print('NOVA POSICAO ${newLocation.latitude}, ${newLocation.longitude}');
-
-      // Alterando a posição do onibus no Firebase.
-      onibusRepository!.updateLatLgn(
-          widget.codigoOnibus!, newLocation.latitude!, newLocation.longitude!);
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: ListView(
-        physics: const BouncingScrollPhysics(),
-        children: [
-          /// TODO: DIzer 'Ola, Fulano', onde 'Fulano' é o nome do motorista.
-          _getGreeting(),
-          const SizedBox(height: 40),
+      body: _getHomePage(),
+    );
+  }
 
-          /// TODO: Foto do motorista tem que ser obtida do banco
-          _getPhoto(),
-          const SizedBox(height: 40),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
+  _getHomePage() {
+    return SafeArea(
+      child: Center(
+        child: Padding(
+          padding: const EdgeInsets.all(20.0),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              _getGreySquareButton(
-                  Icons.bus_alert, "Ônibus", const BusStatusPage()),
-              _getGreySquareButton(
-                  Icons.person, "Perfil", const ProfileMotorista()),
+              _getGreeting(),
+
+              /// TODO: Foto do motorista tem que ser obtida do banco
+              _getPhoto(),
+              const SizedBox(height: 40),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  _getGreySquareButton(
+                      Icons.bus_alert, "Ônibus", const BusStatusPage()),
+                  _getGreySquareButton(
+                      Icons.person, "Perfil", const ProfileMotorista()),
+                ],
+              ),
+              const SizedBox(height: 40),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  /// TODO: Botão emergencia nao faz nada
+                  _getGreySquareButton(
+                      Icons.policy, "Emergência", const Placeholder()),
+                  _getGreySquareButton(
+                      Icons.route,
+                      "Linha",
+                      LinhaPage(
+                        codigoOnibus: widget.codigoOnibus,
+                      )),
+                ],
+              ),
+              const SizedBox(height: 30),
+              _getButtonEnableTracking(),
+              _getButtonLogOut(context),
             ],
           ),
-          const SizedBox(height: 40),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              /// TODO: Botão emergencia nao faz nada
-              _getGreySquareButton(
-                  Icons.alarm, "Emergência", const Placeholder()),
-              _getGreySquareButton(
-                  Icons.route,
-                  "Linha",
-                  LinhaPage(
-                    codigoOnibus: widget.codigoOnibus,
-                  )),
-            ],
-          ),
-          const SizedBox(height: 30),
-          _getButtonEnableTracking(),
-          const SizedBox(height: 30),
-          _getButtonLogOut(context),
-        ],
+        ),
       ),
     );
+  }
+
+  _signOut() async {
+    await FirebaseAuth.instance.signOut();
   }
 
   /// Widget que mostra mensagem 'Ola, Motorista'.
@@ -121,52 +124,46 @@ class _HomeMotoristaPage extends State<HomeMotoristaPage> {
 
   /// Widget que gera um botão quadrado cinza
   _getGreySquareButton(IconData icon, String text, Widget? pageRedirect) {
-    return SizedBox(
-      width: 150,
-      height: 130,
-      child: ElevatedButton.icon(
-        style: ElevatedButton.styleFrom(backgroundColor: Colors.grey),
-        onPressed: () {
-          Navigator.push(
-              context, MaterialPageRoute(builder: (context) => pageRedirect!));
-        },
-        icon: Icon(
-          icon,
-          color: Colors.black,
-          size: 24.0,
-        ),
-        label: Text(
-          text,
-          style: const TextStyle(
-              color: Colors.black, fontWeight: FontWeight.bold, fontSize: 16),
+    return GestureDetector(
+      onTap: () {
+        Navigator.push(
+            context, MaterialPageRoute(builder: (context) => pageRedirect!));
+      },
+      child: Container(
+        width: 150,
+        height: 130,
+        color: Colors.grey.shade300,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(
+              icon,
+              size: 60,
+            ),
+            Text(text, style: TextStyle(fontSize: 16)),
+          ],
         ),
       ),
     );
   }
 
-  /// TODO: Botão sair nao esta funcionando como deveria, ou seja, ao sair fazer signout do firebase e direcionar para [MainPage]
   _getButtonLogOut(BuildContext context) {
-    return SizedBox(
-      width: 150,
-      height: 50,
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 30),
-        child: ElevatedButton(
-          style: ElevatedButton.styleFrom(
-              foregroundColor: const Color.fromARGB(255, 82, 9, 9),
-              backgroundColor: Colors.red,
-              padding: const EdgeInsets.symmetric(horizontal: 30),
-              shape: const RoundedRectangleBorder(
-                  borderRadius: BorderRadius.all(Radius.circular(12)),
-                  side: BorderSide(width: 1, color: Colors.red))),
-          onPressed: signOut(context),
-          child: const Text(
-            'SAIR',
-            style: TextStyle(
-                color: Colors.black, fontWeight: FontWeight.bold, fontSize: 16),
+    return ButtonWidget(
+      textButton: 'SAIR',
+      colorTextButton: Colors.white,
+      widthButton: double.infinity,
+      borderButton: Colors.red.shade900,
+      backgroundButton: Colors.red.shade900,
+      onPressed: () {
+        _signOut();
+        Navigator.pushAndRemoveUntil(
+          context,
+          MaterialPageRoute(
+            builder: (context) => const LoginMotoristaPage(),
           ),
-        ),
-      ),
+          (route) => false,
+        );
+      },
     );
   }
 
@@ -179,30 +176,27 @@ class _HomeMotoristaPage extends State<HomeMotoristaPage> {
     }
   }
 
+  /// Função responsável por ouvir o movimento da posição do celular do Motorista.
+  void _listenLocation() {
+    _location?.onLocationChanged.listen((newLocation) async {
+      print('NOVA POSICAO ${newLocation.latitude}, ${newLocation.longitude}');
+
+      // Alterando a posição do onibus no Firebase.
+      onibusRepository!.updateLatLgn(
+          widget.codigoOnibus!, newLocation.latitude!, newLocation.longitude!);
+    });
+  }
+
   _getButtonEnableTracking() {
-    return SizedBox(
-      width: 150,
-      height: 50,
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 30),
-        child: ElevatedButton(
-            style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.green[500],
-                padding: const EdgeInsets.symmetric(horizontal: 30),
-                shape: const RoundedRectangleBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(12)),
-                    side: BorderSide(width: 1, color: Colors.green))),
-            onPressed: () {
-              _listenLocation();
-            },
-            child: const Text(
-              'Ativar Rastreio',
-              style: TextStyle(
-                  color: Colors.black,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 20),
-            )),
-      ),
+    return ButtonWidget(
+      textButton: 'ATIVAR RASTREIO',
+      colorTextButton: Colors.white,
+      widthButton: double.infinity,
+      borderButton: Colors.green.shade900,
+      backgroundButton: Colors.green.shade900,
+      onPressed: () {
+        _listenLocation();
+      },
     );
   }
 }
