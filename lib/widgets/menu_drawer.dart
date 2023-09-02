@@ -53,7 +53,11 @@ class _MenuDrawerState extends State<MenuDrawer> {
   _getDrawerHeader() {
     return DrawerHeader(
       decoration: const BoxDecoration(
-        color: Colors.black,
+        image: DecorationImage(
+            image: AssetImage(
+              'assets/images/bus_home.png',
+            ),
+            fit: BoxFit.cover),
       ),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -64,7 +68,7 @@ class _MenuDrawerState extends State<MenuDrawer> {
           ),
           Text(
             emailPassageiro,
-            style: TextStyle(color: Colors.grey[200], fontSize: 14),
+            style: const TextStyle(color: Colors.white, fontSize: 14),
           )
         ],
       ),
