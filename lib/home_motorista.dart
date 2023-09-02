@@ -168,13 +168,10 @@ class _HomeMotoristaPage extends State<HomeMotoristaPage> {
       backgroundButton: Colors.red.shade900,
       onPressed: () {
         _signOut();
-        Navigator.pushAndRemoveUntil(
-          context,
-          MaterialPageRoute(
-            builder: (context) => const LoginMotoristaPage(),
-          ),
-          (route) => false,
-        );
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => const LoginMotoristaPage()));
       },
     );
   }
