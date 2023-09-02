@@ -56,24 +56,34 @@ class _HomeMotoristaPage extends State<HomeMotoristaPage> {
       child: Center(
         child: Padding(
           padding: const EdgeInsets.all(20.0),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          child: OverflowBar(
+            overflowSpacing: 30,
+            overflowAlignment: OverflowBarAlignment.center,
             children: [
               _getGreeting(),
 
               /// TODO: Foto do motorista tem que ser obtida do banco
-              _getPhoto(),
-              const SizedBox(height: 40),
+              ClipOval(
+                child: Material(
+                  child: Ink.image(
+                    image: const NetworkImage(
+                        "https://i.pinimg.com/736x/8b/16/7a/8b167af653c2399dd93b952a48740620.jpg"),
+                    fit: BoxFit.cover,
+                    width: 90,
+                    height: 90,
+                  ),
+                ),
+              ),
+
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
-                  _getGreySquareButton(
-                      Icons.bus_alert, "Ônibus", const BusStatusPage()),
+                  _getGreySquareButton(Icons.bus_alert, "Ônibus",
+                      BusStatusPage(codigoOnibus: widget.codigoOnibus)),
                   _getGreySquareButton(
                       Icons.person, "Perfil", const ProfileMotorista()),
                 ],
               ),
-              const SizedBox(height: 40),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
@@ -104,22 +114,20 @@ class _HomeMotoristaPage extends State<HomeMotoristaPage> {
 
   /// Widget que mostra mensagem 'Ola, Motorista'.
   _getGreeting() {
-    return const Padding(
-      padding: EdgeInsets.only(top: 20.0),
-      child: Center(
-        child: Text(
-          "Olá, motorista!",
-          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 30),
-        ),
-      ),
+    return const Text(
+      "Olá, motorista!",
+      style: TextStyle(fontWeight: FontWeight.bold, fontSize: 30),
     );
   }
 
   /// Widget que mostra foto do motorista
   _getPhoto() {
     return const ProfileWidget(
-        imagePath:
-            "https://i.pinimg.com/736x/8b/16/7a/8b167af653c2399dd93b952a48740620.jpg");
+      imagePath:
+          "https://i.pinimg.com/736x/8b/16/7a/8b167af653c2399dd93b952a48740620.jpg",
+      width: 10,
+      height: 10,
+    );
   }
 
   /// Widget que gera um botão quadrado cinza
@@ -140,7 +148,7 @@ class _HomeMotoristaPage extends State<HomeMotoristaPage> {
               icon,
               size: 60,
             ),
-            Text(text, style: TextStyle(fontSize: 16)),
+            Text(text, style: const TextStyle(fontSize: 16)),
           ],
         ),
       ),

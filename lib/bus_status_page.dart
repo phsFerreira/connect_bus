@@ -1,35 +1,47 @@
-import 'package:connect_bus/home_motorista.dart';
 import 'package:flutter/material.dart';
 
+import 'package:connect_bus/home_motorista.dart';
+import 'package:connect_bus/repositories/onibus_repository.dart';
+
 class BusStatusPage extends StatefulWidget {
-  const BusStatusPage({super.key});
+  const BusStatusPage({super.key, this.codigoOnibus});
+  final String? codigoOnibus;
 
   @override
   State<BusStatusPage> createState() => _BusStatusPage();
 }
 
 class _BusStatusPage extends State<BusStatusPage> {
+  OnibusRepository onibusRepository = OnibusRepository();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SafeArea(
-          child: Center(
-              child: Column(
-        children: <Widget>[
-          const SizedBox(height: 50),
-          _getText(),
-          const SizedBox(height: 60),
-          _getButton(
-              "Ônibus quebrou", const Color(0xffE85BC0).withOpacity(0.75)),
-          const SizedBox(height: 40),
-          _getButton("Acidente", const Color(0xffFA1B1B).withOpacity(0.75)),
-          const SizedBox(height: 40),
-          _getButton(
-              "Congestionamento", const Color(0xffFCB937).withOpacity(0.75)),
-          const SizedBox(height: 200),
-          _getButtonVoltar(),
-        ],
-      ))),
+      body: _getStatusBus(),
+    );
+  }
+
+  _getStatusBus() {
+    return SafeArea(
+      child: Center(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 30.0),
+          child: OverflowBar(
+            overflowAlignment: OverflowBarAlignment.center,
+            overflowSpacing: 40,
+            children: <Widget>[
+              _getText(),
+              _getButton(
+                  "Ônibus quebrou", const Color(0xffE85BC0).withOpacity(0.75)),
+              _getButton("Acidente", const Color(0xffFA1B1B).withOpacity(0.75)),
+              _getButton("Congestionamento",
+                  const Color(0xffFCB937).withOpacity(0.75)),
+              const SizedBox(height: 20),
+              _getButtonVoltar(),
+            ],
+          ),
+        ),
+      ),
     );
   }
 
@@ -45,7 +57,9 @@ class _BusStatusPage extends State<BusStatusPage> {
       width: 300,
       height: 60,
       child: ElevatedButton(
-        onPressed: () {},
+        onPressed: () {
+          onibusRepository.updateEstadoOnibus(widget.codigoOnibus!, texto);
+        },
         style: ElevatedButton.styleFrom(
             backgroundColor: colorButton,
             shape: const RoundedRectangleBorder(
