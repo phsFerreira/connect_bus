@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_phone_direct_caller/flutter_phone_direct_caller.dart';
 import 'package:location/location.dart';
 
 import 'package:connect_bus/bus_status_page.dart';
@@ -87,9 +88,7 @@ class _HomeMotoristaPage extends State<HomeMotoristaPage> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
-                  /// TODO: Botão emergencia nao faz nada
-                  _getGreySquareButton(
-                      Icons.policy, "Emergência", const Placeholder()),
+                  _getGreySquareButton(Icons.policy, "Emergência", null),
                   _getGreySquareButton(
                       Icons.route,
                       "Linha",
@@ -134,8 +133,13 @@ class _HomeMotoristaPage extends State<HomeMotoristaPage> {
   _getGreySquareButton(IconData icon, String text, Widget? pageRedirect) {
     return GestureDetector(
       onTap: () {
-        Navigator.push(
-            context, MaterialPageRoute(builder: (context) => pageRedirect!));
+        if (pageRedirect != null) {
+          Navigator.push(
+              context, MaterialPageRoute(builder: (context) => pageRedirect));
+        } else {
+          const number = '+55190';
+          FlutterPhoneDirectCaller.callNumber(number);
+        }
       },
       child: Container(
         width: 150,
