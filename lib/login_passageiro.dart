@@ -1,7 +1,10 @@
-import 'package:connect_bus/screens/paradas_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 import 'package:connect_bus/cadastro_passageiro.dart';
+import 'package:connect_bus/passageiro.dart';
+import 'package:connect_bus/screens/paradas_screen.dart';
+import 'package:connect_bus/widgets/button.dart';
 
 class LoginPassageiroPage extends StatefulWidget {
   const LoginPassageiroPage({Key? key}) : super(key: key);
@@ -11,6 +14,7 @@ class LoginPassageiroPage extends StatefulWidget {
 }
 
 class _LoginPassageiroPageState extends State<LoginPassageiroPage> {
+  final _formKey = GlobalKey<FormState>();
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
   String email = "", senha = "", nomePassageiro = "";
@@ -26,21 +30,27 @@ class _LoginPassageiroPageState extends State<LoginPassageiroPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.grey[100],
-      body: SafeArea(
-        child: Center(
-          child: SingleChildScrollView(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
+      body: _getForm(),
+    );
+  }
+
+  _getForm() {
+    return SafeArea(
+      child: Center(
+        child: Padding(
+          padding: const EdgeInsets.all(20.0),
+          child: Form(
+            key: _formKey,
+            child: OverflowBar(
+              overflowSpacing: 20,
               children: [
-                _getIcon(),
+                // _getIcon(),
                 _getTextLogin(),
-                const SizedBox(height: 50),
-                _getTextField(emailController, 'Email', false),
-                const SizedBox(height: 20),
-                _getTextField(passwordController, 'Senha', true),
-                const SizedBox(height: 20),
+                _getTextFormField(
+                    emailController, 'Email', 'Email vazio', false),
+                _getTextFormField(
+                    passwordController, 'Senha', 'Senha vazia', true),
                 _getButtonLogin(),
-                const SizedBox(height: 25),
                 _getButtonCreateAccount(),
               ],
             ),
@@ -64,47 +74,43 @@ class _LoginPassageiroPageState extends State<LoginPassageiroPage> {
     );
   }
 
-  _getTextField(
-      TextEditingController? controller, String hintText, bool obscureText) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 30),
-      child: Container(
-        decoration: const BoxDecoration(color: Colors.white),
-        child: TextField(
-          controller: controller,
-          obscureText: obscureText,
-          decoration: InputDecoration(
-              border: const OutlineInputBorder(
-                  borderRadius: BorderRadius.all(Radius.circular(12)),
-                  borderSide: BorderSide(color: Colors.black, width: 1)),
-              hintText: hintText,
-              contentPadding: const EdgeInsets.all(20.0)),
+  _getTextFormField(TextEditingController? controller, String labelText,
+      String textIfFieldEmpty, bool obscureText) {
+    return TextFormField(
+      controller: controller,
+      obscureText: obscureText,
+      validator: (text) {
+        if (text == null || text.isEmpty) {
+          return textIfFieldEmpty;
+        }
+        return null;
+      },
+      decoration: InputDecoration(
+        labelText: labelText,
+        enabledBorder: const OutlineInputBorder(
+          borderSide: BorderSide(
+              color: Colors.black, width: 2, style: BorderStyle.solid),
+        ),
+        focusedBorder: const OutlineInputBorder(
+          borderSide: BorderSide(
+              color: Colors.black, width: 2, style: BorderStyle.solid),
         ),
       ),
     );
   }
 
   _getButtonLogin() {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 30.0),
-      child: GestureDetector(
-        onTap: signIn,
-        child: Container(
-          padding: const EdgeInsets.all(20),
-          decoration: const BoxDecoration(
-              color: Colors.black,
-              borderRadius: BorderRadius.all(Radius.circular(12))),
-          child: const Center(
-            child: Text(
-              'Login',
-              style: TextStyle(
-                  color: Colors.white,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 18),
-            ),
-          ),
-        ),
-      ),
+    return ButtonWidget(
+      textButton: 'LOGIN',
+      colorTextButton: Colors.white,
+      widthButton: double.infinity,
+      borderButton: Colors.black,
+      backgroundButton: Colors.black,
+      onPressed: () {
+        if (_formKey.currentState!.validate()) {
+          signIn();
+        }
+      },
     );
   }
 
@@ -112,35 +118,40 @@ class _LoginPassageiroPageState extends State<LoginPassageiroPage> {
     email = emailController.text;
     senha = passwordController.text;
 
+    try {
+      var loginSuccess = await loginPassageiro(email, senha);
+      print('Login deu sucesso? ===> $loginSuccess');
+
+      if (loginSuccess) {
+        nomePassageiro = await buscaNomePassageiro(email);
+        _pageRedirect();
+      }
+    } catch (e) {
+      Fluttertoast.showToast(msg: "error ==> $e");
+    }
+  }
+
+  _getButtonCreateAccount() {
+    return ButtonWidget(
+      textButton: 'CRIAR CONTA',
+      colorTextButton: Colors.black,
+      widthButton: double.infinity,
+      borderButton: Colors.black,
+      backgroundButton: Colors.white,
+      onPressed: () {
+        Navigator.of(context).push(
+            MaterialPageRoute(builder: (_) => const CadastroPassageiroPage()));
+      },
+    );
+  }
+
+  void _pageRedirect() {
     Navigator.push(
       context,
       MaterialPageRoute(
         builder: (context) => const ParadasScreen(),
         settings: RouteSettings(
           arguments: ScreenArguments(email, nomePassageiro),
-        ),
-      ),
-    );
-
-    // if (await loginPassageiro(email, senha)) {
-    //   nomePassageiro = await buscaNomePassageiro(email);
-    // } else {
-    //   Fluttertoast.showToast(msg: "error");
-    // }
-  }
-
-  _getButtonCreateAccount() {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 30.0),
-      child: GestureDetector(
-        onTap: () {
-          Navigator.of(context).push(MaterialPageRoute(
-              builder: (_) => const CadastroPassageiroPage()));
-        },
-        child: const Text(
-          'Criar Conta',
-          style: TextStyle(
-              color: Colors.blue, fontWeight: FontWeight.bold, fontSize: 16),
         ),
       ),
     );
