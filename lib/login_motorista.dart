@@ -33,25 +33,39 @@ class _LoginMotoristaPageState extends State<LoginMotoristaPage> {
 
   _getForm() {
     return SafeArea(
-      child: Center(
-        child: Padding(
-          padding: const EdgeInsets.all(20.0),
-          child: Form(
-            key: _formKey,
-            child: OverflowBar(
-              overflowSpacing: 20,
-              children: [
-                // _getIcon(),
-                _getTextLogin(),
-                _getTextFormField(
-                    emailController, 'Email', 'Email vazio', false),
-                _getTextFormField(
-                    passwordController, 'Senha', 'Senha vazia', true),
-                _getButtonLogin(),
-              ],
+      child: Stack(
+        children: [
+          Container(
+            decoration: const BoxDecoration(
+              image: DecorationImage(
+                image: AssetImage('assets/images/driver_bus_background.jpg'),
+                fit: BoxFit.cover,
+              ),
             ),
           ),
-        ),
+          Align(
+            alignment: Alignment.bottomCenter,
+            child: Container(
+              color: const Color.fromRGBO(255, 255, 255, 0.7),
+              padding: const EdgeInsets.all(20.0),
+              child: Form(
+                key: _formKey,
+                child: OverflowBar(
+                  overflowSpacing: 20,
+                  children: [
+                    // _getIcon(),
+                    _getTextLogin(),
+                    _getTextFormField(
+                        emailController, 'Email', 'Email vazio', false),
+                    _getTextFormField(
+                        passwordController, 'Senha', 'Senha vazia', true),
+                    _getButtonLogin(),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }
