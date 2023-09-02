@@ -165,10 +165,8 @@ class _LoginPassageiroPageState extends State<LoginPassageiroPage> {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => const ParadasScreen(),
-        settings: RouteSettings(
-          arguments: ScreenArguments(email, nomePassageiro),
-        ),
+        builder: (context) => ParadasScreen(
+            emailPassageiro: email, nomePassageiro: nomePassageiro),
       ),
     );
   }
