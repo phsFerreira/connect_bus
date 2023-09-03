@@ -22,23 +22,31 @@ class _BusStatusPage extends State<BusStatusPage> {
   }
 
   _getStatusBus() {
-    return SafeArea(
-      child: Center(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 30.0),
-          child: OverflowBar(
-            overflowAlignment: OverflowBarAlignment.center,
-            overflowSpacing: 40,
-            children: <Widget>[
-              _getText(),
-              _getButton(
-                  "Ônibus quebrou", const Color(0xffE85BC0).withOpacity(0.75)),
-              _getButton("Acidente", const Color(0xffFA1B1B).withOpacity(0.75)),
-              _getButton("Congestionamento",
-                  const Color(0xffFCB937).withOpacity(0.75)),
-              const SizedBox(height: 20),
-              _getButtonVoltar(),
-            ],
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.grey[700],
+        title: const Text('Estado do Onibus'),
+      ),
+      body: SafeArea(
+        child: Center(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 30.0),
+            child: OverflowBar(
+              overflowAlignment: OverflowBarAlignment.center,
+              overflowSpacing: 40,
+              children: <Widget>[
+                _getText(),
+                _getButton("Normal",
+                    Color.fromARGB(255, 52, 189, 59).withOpacity(0.75)),
+                _getButton("Ônibus quebrou",
+                    const Color(0xffE85BC0).withOpacity(0.75)),
+                _getButton(
+                    "Acidente", const Color(0xffFA1B1B).withOpacity(0.75)),
+                _getButton("Congestionamento",
+                    const Color(0xffFCB937).withOpacity(0.75)),
+                const SizedBox(height: 20),
+              ],
+            ),
           ),
         ),
       ),
@@ -68,30 +76,6 @@ class _BusStatusPage extends State<BusStatusPage> {
           texto,
           style: const TextStyle(
               color: Colors.black, fontWeight: FontWeight.bold, fontSize: 20),
-        ),
-      ),
-    );
-  }
-
-  _getButtonVoltar() {
-    return SizedBox(
-      width: 320,
-      height: 50,
-      child: ElevatedButton(
-        style: ElevatedButton.styleFrom(
-            backgroundColor: Colors.black,
-            shape: const RoundedRectangleBorder(
-                borderRadius: BorderRadius.all(Radius.circular(12)))),
-        onPressed: () {
-          Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => const HomeMotoristaPage()));
-        },
-        child: const Text(
-          "Voltar",
-          style: TextStyle(
-              color: Colors.white, fontWeight: FontWeight.bold, fontSize: 20),
         ),
       ),
     );
