@@ -18,6 +18,7 @@ class _LinhaPageState extends State<LinhaPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: Colors.grey[700],
         title: const Text('Linhas'),
       ),
       body: _getLines(),

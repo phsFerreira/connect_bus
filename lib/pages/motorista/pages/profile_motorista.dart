@@ -14,6 +14,10 @@ class _ProfileMotoristaState extends State<ProfileMotorista> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.grey[700],
+        title: const Text('Perfil'),
+      ),
       body: SafeArea(
           child: Center(
         child: Column(
@@ -45,7 +49,6 @@ class _ProfileMotoristaState extends State<ProfileMotorista> {
                 )),
             _getRegistrationNumber(),
             const SizedBox(height: 300),
-            _getButtonVoltar(),
           ],
         ),
       )),
@@ -86,30 +89,6 @@ class _ProfileMotoristaState extends State<ProfileMotorista> {
       child: Text(
         "5948298591831",
         style: TextStyle(fontWeight: FontWeight.bold, fontSize: 30),
-      ),
-    );
-  }
-
-  _getButtonVoltar() {
-    return SizedBox(
-      width: 320,
-      height: 50,
-      child: ElevatedButton(
-        style: ElevatedButton.styleFrom(
-            backgroundColor: Colors.black,
-            shape: const RoundedRectangleBorder(
-                borderRadius: BorderRadius.all(Radius.circular(12)))),
-        onPressed: () {
-          Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => const HomeMotoristaPage()));
-        },
-        child: const Text(
-          "Voltar",
-          style: TextStyle(
-              color: Colors.white, fontWeight: FontWeight.bold, fontSize: 20),
-        ),
       ),
     );
   }
