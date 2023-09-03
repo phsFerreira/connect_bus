@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_phone_direct_caller/flutter_phone_direct_caller.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:location/location.dart';
 
 import 'package:connect_bus/pages/motorista/pages/bus_status_page.dart';
@@ -204,6 +205,7 @@ class _HomeMotoristaPage extends State<HomeMotoristaPage> {
       borderButton: Colors.green.shade900,
       backgroundButton: Colors.green.shade900,
       onPressed: () {
+        Fluttertoast.showToast(msg: "Rastreio ligado com sucesso.");
         _listenLocation();
       },
     );
