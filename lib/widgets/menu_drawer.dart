@@ -1,7 +1,7 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_phone_direct_caller/flutter_phone_direct_caller.dart';
 
-import 'package:connect_bus/pages/passageiro/login_passageiro.dart';
 import 'package:connect_bus/pages/passageiro/pages/menu/profile_passageiro.dart';
 
 /// Menu lateral
@@ -112,22 +112,25 @@ class _MenuDrawerState extends State<MenuDrawer> {
   }
 
   _getButtonLogOut() {
-    return ElevatedButton(
-      style: ElevatedButton.styleFrom(
-        backgroundColor: Colors.red,
-        foregroundColor: const Color.fromARGB(255, 82, 9, 9),
-        padding: const EdgeInsets.symmetric(horizontal: 30),
-      ),
-      onPressed: () {
-        Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) => const LoginPassageiroPage()));
+    return OutlinedButton(
+      style: OutlinedButton.styleFrom(
+          // backgroundColor: Colors.red,
+          // foregroundColor: const Color.fromARGB(255, 82, 9, 9),
+          padding: const EdgeInsets.symmetric(horizontal: 30),
+          side: BorderSide(color: Colors.red, width: 2)),
+      onPressed: () async {
+        try {
+          await FirebaseAuth.instance.signOut();
+          // Navigate to the login screen or home screen
+          Navigator.of(context).pushReplacementNamed('/main');
+        } catch (e) {
+          print('Error during logout: $e');
+        }
       },
       child: const Text(
         'SAIR',
         style: TextStyle(
-            color: Colors.white, fontWeight: FontWeight.bold, fontSize: 16),
+            color: Colors.red, fontWeight: FontWeight.bold, fontSize: 16),
       ),
     );
   }

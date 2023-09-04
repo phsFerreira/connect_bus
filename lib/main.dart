@@ -7,8 +7,6 @@ import 'package:connect_bus/pages/passageiro/login_passageiro.dart';
 import 'package:connect_bus/pages/motorista/auth_page.dart';
 import 'package:connect_bus/widgets/button.dart';
 
-final mainPageContextKey = GlobalKey();
-
 Future main() async {
   // Garantir que nao tenha o erro de inicialização.
   WidgetsFlutterBinding.ensureInitialized();
@@ -39,8 +37,12 @@ class MainPage extends StatelessWidget {
       title: 'Connect Bus', // Nome do aplicativo nos recentes
       theme: ThemeData(fontFamily: 'Comfortaa'),
       darkTheme: ThemeData(brightness: Brightness.dark),
+      // initialRoute: '/main', // Specify your initial route here
+      routes: {
+        '/main': (context) => this,
+        // Other routes...
+      },
       home: Scaffold(
-        key: mainPageContextKey,
         body: _getMainPage(),
       ),
     );
@@ -67,39 +69,41 @@ class MainPage extends StatelessWidget {
     );
   }
 
-  Container getButtons() {
-    return Container(
-      padding: const EdgeInsets.all(25.0),
-      child: Center(
-        child:
-            Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-          ButtonWidget(
-            textButton: 'PASSAGEIRO',
-            colorTextButton: Colors.black,
-            widthButton: 167.0,
-            borderButton: Colors.black,
-            backgroundButton: Colors.white,
-            onPressed: () {
-              Navigator.push(
-                  mainPageContextKey.currentState!.context,
-                  MaterialPageRoute(
-                      builder: (context) => const LoginPassageiroPage()));
-            },
-          ),
-          ButtonWidget(
-            textButton: 'MOTORISTA',
-            colorTextButton: Colors.white,
-            widthButton: 167.0,
-            borderButton: Colors.black,
-            backgroundButton: Colors.black,
-            onPressed: () {
-              Navigator.push(mainPageContextKey.currentState!.context,
-                  MaterialPageRoute(builder: (context) => const AuthPage()));
-            },
-          ),
-        ]),
-      ),
-    );
+  getButtons() {
+    return Builder(builder: (context) {
+      return Container(
+        padding: const EdgeInsets.all(25.0),
+        child: Center(
+          child:
+              Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+            ButtonWidget(
+              textButton: 'PASSAGEIRO',
+              colorTextButton: Colors.black,
+              widthButton: 167.0,
+              borderButton: Colors.black,
+              backgroundButton: Colors.white,
+              onPressed: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const LoginPassageiroPage()));
+              },
+            ),
+            ButtonWidget(
+              textButton: 'MOTORISTA',
+              colorTextButton: Colors.white,
+              widthButton: 167.0,
+              borderButton: Colors.black,
+              backgroundButton: Colors.black,
+              onPressed: () {
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => const AuthPage()));
+              },
+            ),
+          ]),
+        ),
+      );
+    });
   }
 
   _getImage() {

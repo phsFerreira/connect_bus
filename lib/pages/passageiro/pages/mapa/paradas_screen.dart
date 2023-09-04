@@ -10,7 +10,7 @@ import 'package:connect_bus/widgets/menu_drawer.dart';
 
 /// Mapa com as paradas de ônibus da cidade
 
-final paradaScreenContextKey = GlobalKey();
+GlobalKey<State<StatefulWidget>> paradaScreenContextKey = GlobalKey();
 
 class ParadasScreen extends StatefulWidget {
   const ParadasScreen({
