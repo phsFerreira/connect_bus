@@ -4,8 +4,8 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:connect_bus/repositories/onibus_repository.dart';
 
 class LinhaPage extends StatefulWidget {
-  final String? codigoOnibus;
   const LinhaPage({super.key, this.codigoOnibus});
+  final String? codigoOnibus;
 
   @override
   State<LinhaPage> createState() => _LinhaPageState();
@@ -18,6 +18,7 @@ class _LinhaPageState extends State<LinhaPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: Colors.grey[700],
         title: const Text('Linhas'),
       ),
       body: _getLines(),
@@ -122,11 +123,6 @@ class _LinhaPageState extends State<LinhaPage> {
         fontSize: 19,
         gravity: ToastGravity.CENTER);
 
-    updateLinhaOnibus(nomeLinha);
-  }
-
-  /// Função responsável por instanciar o respository e atualizar a linha no Firebase.
-  void updateLinhaOnibus(String nomeLinha) {
     onibusRepository.updateLinhaOnibus(widget.codigoOnibus!, nomeLinha);
   }
 }
