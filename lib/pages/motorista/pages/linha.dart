@@ -33,6 +33,23 @@ class _LinhaPageState extends State<LinhaPage> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
+              Card(
+                color: Colors.white,
+                child: SizedBox(
+                  height: 100,
+                  child: Center(
+                    child: Text(
+                      'Selecione a linha que irá percorrer:',
+                      style: const TextStyle(
+                        fontSize: 22,
+                        color: Colors.black,
+                        fontWeight: FontWeight.w200,
+                        fontFamily: 'Roboto',
+                      ),
+                    ),
+                  ),
+                ),
+              ),
               _getCard(
                 'Linha 001 Azul',
                 const Color.fromARGB(255, 3, 110, 197),
