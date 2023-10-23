@@ -1,5 +1,3 @@
-import 'dart:ui';
-
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
@@ -135,15 +133,14 @@ class _LoginPassageiroPageState extends State<LoginPassageiroPage> {
     senha = passwordController.text;
 
     try {
-      var loginSuccess = await loginPassageiro(email, senha);
-      print('Login deu sucesso? ===> $loginSuccess');
-
-      if (loginSuccess) {
-        nomePassageiro = await buscaNomePassageiro(email);
-        _pageRedirect();
+      var passageiroExist = await loginPassageiro(email, senha);
+      if (passageiroExist != null) {
+        print('Login deu sucesso? ===> ${passageiroExist.email}');
+        // nomePassageiro = await buscaNomePassageiro(email);
+        _pageRedirect(passageiroExist);
       }
     } catch (e) {
-      Fluttertoast.showToast(msg: "error ==> $e");
+      Fluttertoast.showToast(msg: "Erro ao fazer login ==> $e");
     }
   }
 
@@ -161,12 +158,13 @@ class _LoginPassageiroPageState extends State<LoginPassageiroPage> {
     );
   }
 
-  void _pageRedirect() {
+  void _pageRedirect(Passageiro passageiro) {
     Navigator.push(
       context,
       MaterialPageRoute(
         builder: (context) => ParadasScreen(
-            emailPassageiro: email, nomePassageiro: nomePassageiro),
+          passageiro: passageiro,
+        ),
       ),
     );
   }

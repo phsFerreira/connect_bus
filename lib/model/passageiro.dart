@@ -1,12 +1,5 @@
-//import 'package:cloud_firestore/cloud_firestore.dart';
-// ignore_for_file: unused_import
-
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_database/firebase_database.dart';
-import 'package:flutter/widgets.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:http/http.dart';
 
 class Passageiro {
   String nomeCompleto = "";
@@ -14,13 +7,16 @@ class Passageiro {
   String telefone = "";
   String email = "";
   String senha = "";
+  String? docID = "";
 
-  Passageiro(
-      {required this.nomeCompleto,
-      required this.cpf,
-      required this.telefone,
-      required this.email,
-      required this.senha});
+  Passageiro({
+    required this.nomeCompleto,
+    required this.cpf,
+    required this.telefone,
+    required this.email,
+    required this.senha,
+    this.docID,
+  });
 
   set setNomeCompleto(String nomeCompleto) {
     this.nomeCompleto = nomeCompleto;
@@ -81,7 +77,7 @@ class Passageiro {
       cpf: json['cpf'],
       telefone: json['telefone'],
       email: json['email'],
-      senha: json['cpf']);
+      senha: json['senha']);
 }
 
 Future<String> buscaNomePassageiro(String email) async {
@@ -118,30 +114,42 @@ Future<Passageiro> buscaPassageiro(String email) async {
   return passageiroBusca;
 }
 
-Future<bool> loginPassageiro(String email, String senha) async {
-  String emailBusca = email;
+loginPassageiro(String email, String senha) async {
+  try {
+    var usuariosCollectionRef =
+        FirebaseFirestore.instance.collection('Usuarios');
 
-  var collection = FirebaseFirestore.instance.collection('Usuarios');
-  var docSnapshot = await collection.doc(emailBusca).get();
+    var usuarioFoundDocs =
+        await usuariosCollectionRef.where("email", isEqualTo: email).get();
 
-  if (docSnapshot.exists) {
-    Map<String, dynamic>? data = docSnapshot.data();
-    String emailLogin = data?['email'];
-    String senhaLogin = data?['senha'];
+    if (usuarioFoundDocs.docs.isNotEmpty) {
+      for (var docUsuario in usuarioFoundDocs.docs) {
+        print('${docUsuario.id} ===> ${docUsuario.data()}');
 
-    if (emailLogin == email && senhaLogin == senha) {
-      // Fluttertoast.showToast(
-      //     msg: "logado com sucesso.", toastLength: Toast.LENGTH_LONG);
-      return true;
+        if (docUsuario.data()['senha'] == senha) {
+          var passageiroExist = Passageiro(
+              nomeCompleto: docUsuario.data()['nomeCompleto'],
+              cpf: docUsuario.data()['cpf'],
+              telefone: docUsuario.data()['telefone'],
+              email: docUsuario.data()['email'],
+              senha: docUsuario.data()['senha'],
+              docID: docUsuario.id);
+          return passageiroExist;
+        } else {
+          Fluttertoast.showToast(
+              msg: "Senha incorreta.", toastLength: Toast.LENGTH_LONG);
+          return null;
+        }
+      }
     } else {
       Fluttertoast.showToast(
-          msg: "Email ou senha incorretos.", toastLength: Toast.LENGTH_LONG);
-      return false;
+          msg: "Email não cadastrado ou incorreto.",
+          toastLength: Toast.LENGTH_LONG);
+      return null;
     }
-  } else {
-    Fluttertoast.showToast(
-        msg: "Usuário não cadastrado.", toastLength: Toast.LENGTH_LONG);
-    return false;
+  } catch (e) {
+    Fluttertoast.showToast(msg: 'Erro ao consultar usuario ${e.toString()}.');
+    return null;
   }
 }
 
