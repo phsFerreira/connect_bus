@@ -67,7 +67,7 @@ class _CodigoOnibusPageState extends State<CodigoOnibusPage> {
 
   _getText() {
     return const Text(
-      'Informe o código do onibus:',
+      'Informe o código do onibus para rastrearmos:',
       style: TextStyle(fontSize: 20),
     );
   }
