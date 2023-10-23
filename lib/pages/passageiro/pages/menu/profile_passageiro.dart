@@ -1,6 +1,6 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
 
-import 'package:connect_bus/passageiro.dart';
+import 'package:connect_bus/model/passageiro.dart';
 import 'package:flutter/material.dart';
 import 'package:connect_bus/profile_widget.dart';
 import 'package:connect_bus/campo_form.dart';
@@ -47,8 +47,11 @@ class _PassageiroPageState extends State<PassageiroPage> {
             ),
             SizedBox(height: 30),
             ProfileWidget(
-                imagePath:
-                    "https://i.pinimg.com/736x/8b/16/7a/8b167af653c2399dd93b952a48740620.jpg"),
+              imagePath:
+                  "https://i.pinimg.com/736x/8b/16/7a/8b167af653c2399dd93b952a48740620.jpg",
+              width: 90,
+              height: 90,
+            ),
             SizedBox(height: 40),
 
             //nome completo

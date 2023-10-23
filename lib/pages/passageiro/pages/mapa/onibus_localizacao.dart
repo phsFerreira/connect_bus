@@ -8,9 +8,9 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 /// em tempo real.
 
 class OnibusLocalizacao extends StatefulWidget {
-  const OnibusLocalizacao({Key? key, required this.nomeDalinha})
+  const OnibusLocalizacao({Key? key, required this.codigoOnibus})
       : super(key: key);
-  final String nomeDalinha;
+  final String codigoOnibus;
 
   @override
   OnibusLocalizacaoState createState() => OnibusLocalizacaoState();
@@ -38,10 +38,10 @@ class OnibusLocalizacaoState extends State<OnibusLocalizacao> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.nomeDalinha.toString()),
+        title: Text(widget.codigoOnibus.toString()),
       ),
       body: StreamBuilder(
-        stream: FirebaseFirestore.instance.collection('location').snapshots(),
+        stream: FirebaseFirestore.instance.collection('Onibus').snapshots(),
         builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
           if (_added) {
             newCameraPosition(snapshot);
@@ -55,9 +55,11 @@ class OnibusLocalizacaoState extends State<OnibusLocalizacao> {
               Marker(
                   position: LatLng(
                     snapshot.data!.docs.singleWhere((element) =>
-                        element.id == widget.nomeDalinha)['latitude'],
+                        element.get('codigo').toString() ==
+                        widget.codigoOnibus)['latitude'],
                     snapshot.data!.docs.singleWhere((element) =>
-                        element.id == widget.nomeDalinha)['longitude'],
+                        element.get('codigo').toString() ==
+                        widget.codigoOnibus)['longitude'],
                   ),
                   markerId: const MarkerId('id'),
                   icon: myIcon),
@@ -65,11 +67,13 @@ class OnibusLocalizacaoState extends State<OnibusLocalizacao> {
             initialCameraPosition: CameraPosition(
                 target: LatLng(
                   snapshot.data!.docs.singleWhere((element) =>
-                      element.id == widget.nomeDalinha)['latitude'],
+                      element.get('codigo').toString() ==
+                      widget.codigoOnibus)['latitude'],
                   snapshot.data!.docs.singleWhere((element) =>
-                      element.id == widget.nomeDalinha)['longitude'],
+                      element.get('codigo').toString() ==
+                      widget.codigoOnibus)['longitude'],
                 ),
-                zoom: 10),
+                zoom: 16),
             onMapCreated: (GoogleMapController controller) async {
               setState(() {
                 googleMapController.complete(controller);
@@ -88,10 +92,12 @@ class OnibusLocalizacaoState extends State<OnibusLocalizacao> {
     await mapsController
         .animateCamera(CameraUpdate.newCameraPosition(CameraPosition(
             target: LatLng(
-              snapshot.data!.docs.singleWhere(
-                  (element) => element.id == widget.nomeDalinha)['latitude'],
-              snapshot.data!.docs.singleWhere(
-                  (element) => element.id == widget.nomeDalinha)['longitude'],
+              snapshot.data!.docs.singleWhere((element) =>
+                  element.get('codigo').toString() ==
+                  widget.codigoOnibus)['latitude'],
+              snapshot.data!.docs.singleWhere((element) =>
+                  element.get('codigo').toString() ==
+                  widget.codigoOnibus)['longitude'],
             ),
             zoom: 16)));
   }

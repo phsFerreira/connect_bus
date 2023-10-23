@@ -1,13 +1,38 @@
-import 'package:connect_bus/profile_passageiro.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_phone_direct_caller/flutter_phone_direct_caller.dart';
 
+import 'package:connect_bus/pages/passageiro/pages/menu/profile_passageiro.dart';
+
 /// Menu lateral
-class MenuDrawer extends StatelessWidget {
-  const MenuDrawer({Key? key}) : super(key: key);
+class MenuDrawer extends StatefulWidget {
+  const MenuDrawer(
+      {Key? key, required this.emailPassageiro, required this.nomePassageiro})
+      : super(key: key);
+  final String emailPassageiro;
+  final String nomePassageiro;
+
+  @override
+  State<MenuDrawer> createState() => _MenuDrawerState();
+}
+
+class _MenuDrawerState extends State<MenuDrawer> {
+  var emailPassageiro;
+  var nomePassageiro;
 
   @override
   Widget build(BuildContext context) {
+    return Builder(builder: (context) {
+      if (widget.emailPassageiro.isNotEmpty &&
+          widget.nomePassageiro.isNotEmpty) {
+        emailPassageiro = widget.emailPassageiro;
+        nomePassageiro = widget.nomePassageiro;
+      }
+      return _getDrawer();
+    });
+  }
+
+  _getDrawer() {
     return Drawer(
       // Add a ListView to the drawer. This ensures the user can scroll
       // through the options in the drawer if there isn't enough vertical
@@ -15,117 +40,98 @@ class MenuDrawer extends StatelessWidget {
       child: ListView(
         // Important: Remove any padding from the ListView.
         padding: EdgeInsets.zero,
-        children: const [
+        children: [
           // Cabeçalho do menu lateral que ficará informações da conta do usuario
-          DrawerHeader(
-            decoration: BoxDecoration(
-              color: Colors.blue,
-            ),
-            child: Text('Drawer Header'),
-          ),
+          _getDrawerHeader(),
           // Opções do menu lateral
-          MenuItems(),
+          _menuItems(),
         ],
       ),
     );
   }
-}
 
-/// Opções do menu lateral
-class MenuItems extends StatelessWidget {
-  const MenuItems({super.key});
+  _getDrawerHeader() {
+    return DrawerHeader(
+      decoration: const BoxDecoration(
+        image: DecorationImage(
+            image: AssetImage(
+              'assets/images/bus_home.png',
+            ),
+            fit: BoxFit.cover),
+      ),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Text(
+            nomePassageiro,
+            style: const TextStyle(color: Colors.white, fontSize: 20),
+          ),
+          Text(
+            emailPassageiro,
+            style: const TextStyle(color: Colors.white, fontSize: 14),
+          )
+        ],
+      ),
+    );
+  }
 
-  @override
-  Widget build(BuildContext context) {
+  _menuItems() {
     return Column(
       children: [
-        // TODO: Refatorar ListTile, codigo esta repetitivo
-
-        // Menu Home
-        ListTile(
-          leading: const Icon(
-            Icons.home,
-            size: 25,
-            color: Colors.black,
-          ),
-          title: const Text(
-            "Home",
-            style: TextStyle(color: Colors.black, fontSize: 16),
-          ),
-          onTap: () {
-            Navigator.pop(context);
-          },
-        ),
-        // Menu Perfil
-        ListTile(
-          leading: const Icon(
+        _getListTile(Icons.home, 'Home', () => Navigator.pop(context)),
+        _getListTile(
             Icons.person,
-            size: 25,
-            color: Colors.black,
-          ),
-          title: const Text(
-            "Perfil",
-            style: TextStyle(color: Colors.black, fontSize: 16),
-          ),
-          onTap: () {
-            Navigator.push(
+            'Perfil',
+            () => Navigator.push(
                 context,
                 MaterialPageRoute(
-                    builder: (context) => const PassageiroPage()));
-          },
-        ),
-        // Menu Polícia
-        ListTile(
-          leading: const Icon(
-            Icons.local_police,
-            size: 25,
-            color: Colors.black,
-          ),
-          title: const Text(
-            "Polícia",
-            style: TextStyle(color: Colors.black, fontSize: 16),
-          ),
-          onTap: () {
-            const number = '+55190';
-            FlutterPhoneDirectCaller.callNumber(number);
-          },
-        ),
-        // Menu Ajuda
-        ListTile(
-          leading: const Icon(
-            Icons.help,
-            size: 25,
-            color: Colors.black,
-          ),
-          title: const Text(
-            "Ajuda",
-            style: TextStyle(color: Colors.black, fontSize: 16),
-          ),
-          onTap: () {
-            // Navigator.push(
-            //     context,
-            //     MaterialPageRoute(
-            //         builder: (context) => const PassageiroPage()));
-          },
-        ),
-        // Botão sair
-        ElevatedButton(
-          style: ElevatedButton.styleFrom(
-            backgroundColor: Colors.red,
-            foregroundColor: const Color.fromARGB(255, 82, 9, 9),
-            padding: const EdgeInsets.symmetric(horizontal: 30),
-          ),
-          onPressed: () {
-            // Navigator.push(context,
-            //     MaterialPageRoute(builder: (context) => const MyApp()));
-          },
-          child: const Text(
-            'sair',
-            style: TextStyle(
-                color: Colors.white, fontWeight: FontWeight.bold, fontSize: 16),
-          ),
-        ),
+                    builder: (context) => const PassageiroPage()))),
+        _getListTile(Icons.local_police, 'Polícia', () {
+          const number = '+55190';
+          FlutterPhoneDirectCaller.callNumber(number);
+        }),
+        _getListTile(Icons.help, 'Ajuda', () => null),
+        _getButtonLogOut(),
       ],
+    );
+  }
+
+  _getListTile(IconData? icon, String texto, Function()? onTap) {
+    return ListTile(
+      leading: Icon(
+        icon,
+        size: 25,
+        color: Colors.black,
+      ),
+      title: Text(
+        texto,
+        style: const TextStyle(color: Colors.black, fontSize: 16),
+      ),
+      onTap: onTap,
+    );
+  }
+
+  _getButtonLogOut() {
+    return OutlinedButton(
+      style: OutlinedButton.styleFrom(
+          // backgroundColor: Colors.red,
+          // foregroundColor: const Color.fromARGB(255, 82, 9, 9),
+          padding: const EdgeInsets.symmetric(horizontal: 30),
+          side: BorderSide(color: Colors.red, width: 2)),
+      onPressed: () async {
+        try {
+          await FirebaseAuth.instance.signOut();
+          // Navigate to the login screen or home screen
+          Navigator.of(context).pushReplacementNamed('/main');
+        } catch (e) {
+          print('Error during logout: $e');
+        }
+      },
+      child: const Text(
+        'SAIR',
+        style: TextStyle(
+            color: Colors.red, fontWeight: FontWeight.bold, fontSize: 16),
+      ),
     );
   }
 }
