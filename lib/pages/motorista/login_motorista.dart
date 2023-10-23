@@ -125,7 +125,7 @@ class _LoginMotoristaPageState extends State<LoginMotoristaPage> {
       setState(() {
         isLoading = false;
       });
-      if (e.code == 'user-not-found') {
+      if (e.code == 'user-not-found' || e.code == 'invalid-email') {
         return ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
             content: Text('Email não cadastrado.'),
