@@ -52,8 +52,10 @@ class _PassageiroPageState extends State<PassageiroPage> {
 
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.grey[700],
-        title: const Text('Seu Perfil'),
+        backgroundColor: const Color.fromARGB(255, 13, 106, 212),
+        title: const Text('Seu Perfil',
+            style: TextStyle(fontWeight: FontWeight.w900)),
+        centerTitle: true,
       ),
       // resizeToAvoidBottomInset: false,
       body: SafeArea(

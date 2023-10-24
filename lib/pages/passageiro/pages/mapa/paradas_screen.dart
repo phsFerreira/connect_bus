@@ -46,8 +46,10 @@ class ParadasScreenState extends State<ParadasScreen> {
 
       // Barra superior
       appBar: AppBar(
-        backgroundColor: Colors.grey[700],
-        title: const Text('Connect Bus'),
+        backgroundColor: const Color.fromARGB(255, 13, 106, 212),
+        title: const Text('CONNECT BUS',
+            style: TextStyle(fontWeight: FontWeight.w900)),
+        centerTitle: true,
       ),
 
       // Menu lateral
