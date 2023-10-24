@@ -1,14 +1,13 @@
-import 'dart:convert';
-
 import 'package:brasil_fields/brasil_fields.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 import 'package:connect_bus/campo_form.dart';
 import 'package:connect_bus/extensoes.dart';
-import 'package:connect_bus/pages/passageiro/login_passageiro.dart';
 import 'package:connect_bus/model/passageiro.dart';
+import 'package:connect_bus/pages/passageiro/pages/mapa/paradas_screen.dart';
 import 'package:connect_bus/widgets/button.dart';
-import 'package:flutter/services.dart';
 
 class CadastroPassageiroPage extends StatefulWidget {
   const CadastroPassageiroPage({Key? key}) : super(key: key);
@@ -173,24 +172,57 @@ class _CadastroPassageiroPageState extends State<CadastroPassageiroPage> {
       widthButton: double.infinity,
       borderButton: Colors.black,
       backgroundButton: Colors.black,
-      onPressed: () {
+      onPressed: () async {
         if (_formKey.currentState!.validate()) {
-          Passageiro passageiro = Passageiro(
-              nomeCompleto: nameController.text,
-              cpf: cpfController.text,
-              telefone: phoneController.text,
-              email: emailController.text,
-              senha: passwordController.text);
-
-          print(passageiro.cpf);
-
-          // passageiro.registrarPassageiro();
-
-          // Navigator.of(context).push(
-          //     MaterialPageRoute(builder: (_) => const LoginPassageiroPage()));
+          await insertPassageiro();
         }
       },
     );
+  }
+
+  Future<void> insertPassageiro() async {
+    Passageiro passageiro = Passageiro(
+        nomeCompleto: nameController.text,
+        cpf: cpfController.text,
+        telefone: phoneController.text,
+        email: emailController.text,
+        senha: passwordController.text);
+
+    bool cpfDuplicated = await cpfDuplicado(passageiro.cpf);
+
+    bool emailDuplicated = await emailDuplicado(passageiro.email);
+
+    if (cpfDuplicated == false && emailDuplicated == false) {
+      var docPassageiro = await passageiro.registrarPassageiro();
+      passageiro.docID = docPassageiro.id;
+      print(passageiro.docID);
+
+      Fluttertoast.showToast(
+          msg: "Cadastro realizado com sucesso.",
+          toastLength: Toast.LENGTH_LONG,
+          fontSize: 19,
+          backgroundColor: Colors.green.shade900,
+          gravity: ToastGravity.CENTER);
+
+      Navigator.of(context).push(MaterialPageRoute(
+          builder: (_) => ParadasScreen(
+                passageiro: passageiro,
+              )));
+    } else if (cpfDuplicated == true) {
+      Fluttertoast.showToast(
+          msg: "CPF já cadastrado.",
+          toastLength: Toast.LENGTH_LONG,
+          fontSize: 19,
+          backgroundColor: Colors.black,
+          gravity: ToastGravity.CENTER);
+    } else if (emailDuplicated == true) {
+      Fluttertoast.showToast(
+          msg: "Email já cadastrado.",
+          toastLength: Toast.LENGTH_LONG,
+          fontSize: 19,
+          backgroundColor: Colors.black,
+          gravity: ToastGravity.CENTER);
+    }
   }
 
   _getButtonBack() {

@@ -58,10 +58,9 @@ class Passageiro {
     return senha;
   }
 
-  void registrarPassageiro() {
+  Future<DocumentReference<Map<String, dynamic>>> registrarPassageiro() async {
     var db = FirebaseFirestore.instance;
-
-    Map<String, String> passageiros = {
+    final data = {
       'nomeCompleto': nomeCompleto,
       'cpf': cpf,
       'telefone': telefone,
@@ -69,7 +68,8 @@ class Passageiro {
       'senha': senha,
     };
 
-    db.collection('Usuarios').doc(email).set(passageiros);
+    var docSnapshot = await db.collection('Usuarios').add(data);
+    return docSnapshot;
   }
 
   static Passageiro fromJson(Map<String, dynamic> json) => Passageiro(
@@ -112,6 +112,46 @@ Future<Passageiro> buscaPassageiro(String email) async {
   }
 
   return passageiroBusca;
+}
+
+Future<bool> emailDuplicado(String email) async {
+  try {
+    bool duplicated = true;
+    var usuariosCollectionRef =
+        FirebaseFirestore.instance.collection('Usuarios');
+
+    var usuarioEmailFoundDocs =
+        await usuariosCollectionRef.where("email", isEqualTo: email).get();
+
+    if (usuarioEmailFoundDocs.docs.isEmpty) {
+      duplicated = false;
+    }
+    return duplicated;
+  } catch (e) {
+    Fluttertoast.showToast(
+        msg: 'Erro ao consultar email do usuario ${e.toString()}.');
+    return true;
+  }
+}
+
+Future<bool> cpfDuplicado(String cpf) async {
+  try {
+    bool duplicated = true;
+    var usuariosCollectionRef =
+        FirebaseFirestore.instance.collection('Usuarios');
+
+    var usuarioCPFFoundDocs =
+        await usuariosCollectionRef.where("cpf", isEqualTo: cpf).get();
+
+    if (usuarioCPFFoundDocs.docs.isEmpty) {
+      duplicated = false;
+    }
+    return duplicated;
+  } catch (e) {
+    Fluttertoast.showToast(
+        msg: 'Erro ao consultar cpf do usuario ${e.toString()}.');
+    return true;
+  }
 }
 
 loginPassageiro(String email, String senha) async {
