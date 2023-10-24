@@ -186,10 +186,12 @@ class _PassageiroPageState extends State<PassageiroPage> {
                     widthButton: 200,
                     borderButton: Color.fromARGB(255, 180, 18, 18),
                     backgroundButton: Color.fromARGB(255, 180, 18, 18),
-                    onPressed: () {
-                      Fluttertoast.showToast(
-                          msg: "Preencha todos os campos.",
-                          toastLength: Toast.LENGTH_LONG);
+                    onPressed: () async {
+                      bool deleteSuccess =
+                          await deletePassageiro(widget.passageiro.docID!);
+                      if (deleteSuccess) {
+                        Navigator.of(context).pushReplacementNamed('/main');
+                      }
                     }),
               ],
             ),

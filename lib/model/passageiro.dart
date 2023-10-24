@@ -153,17 +153,19 @@ loginPassageiro(String email, String senha) async {
   }
 }
 
-Future<Passageiro> updatePassageiro(Passageiro passageiro) async {
-  // var collection = FirebaseFirestore.instance.collection('Usuarios');
-  // var docSnapshot = await collection.doc(passageiro.docID).get();
+Future<bool> deletePassageiro(String docID) {
+  Future<bool> deleteSuccess = FirebaseFirestore.instance
+      .collection("Usuarios")
+      .doc(docID)
+      .delete()
+      .then(
+        (doc) => true,
+        onError: (e) => Fluttertoast.showToast(msg: "Erro ao deletar conta $e"),
+      );
+  return deleteSuccess;
+}
 
-  // if (docSnapshot.exists) {
-  //   Map<String, dynamic>? data = docSnapshot.data();
-  //   String emailUpdate = data?['email'];
-
-  //   if (emailUpdate == emailBusca) {}
-  // }
-
+updatePassageiro(Passageiro passageiro) async {
   final docPassageiroRef =
       FirebaseFirestore.instance.collection("Usuarios").doc(passageiro.docID);
 
@@ -182,6 +184,4 @@ Future<Passageiro> updatePassageiro(Passageiro passageiro) async {
         onError: (e) => Fluttertoast.showToast(
             msg: 'Erro ao atualizar usuario ${e.toString()}.'));
   }
-
-  return passageiro;
 }
