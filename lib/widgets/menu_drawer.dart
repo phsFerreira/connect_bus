@@ -1,3 +1,4 @@
+import 'package:connect_bus/model/passageiro.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_phone_direct_caller/flutter_phone_direct_caller.dart';
@@ -6,30 +7,17 @@ import 'package:connect_bus/pages/passageiro/pages/menu/profile_passageiro.dart'
 
 /// Menu lateral
 class MenuDrawer extends StatefulWidget {
-  const MenuDrawer(
-      {Key? key, required this.emailPassageiro, required this.nomePassageiro})
-      : super(key: key);
-  final String emailPassageiro;
-  final String nomePassageiro;
+  const MenuDrawer({Key? key, required this.passageiro}) : super(key: key);
+  final Passageiro passageiro;
 
   @override
   State<MenuDrawer> createState() => _MenuDrawerState();
 }
 
 class _MenuDrawerState extends State<MenuDrawer> {
-  var emailPassageiro;
-  var nomePassageiro;
-
   @override
   Widget build(BuildContext context) {
-    return Builder(builder: (context) {
-      if (widget.emailPassageiro.isNotEmpty &&
-          widget.nomePassageiro.isNotEmpty) {
-        emailPassageiro = widget.emailPassageiro;
-        nomePassageiro = widget.nomePassageiro;
-      }
-      return _getDrawer();
-    });
+    return _getDrawer();
   }
 
   _getDrawer() {
@@ -63,11 +51,11 @@ class _MenuDrawerState extends State<MenuDrawer> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Text(
-            nomePassageiro,
+            widget.passageiro.nomeCompleto,
             style: const TextStyle(color: Colors.white, fontSize: 20),
           ),
           Text(
-            emailPassageiro,
+            widget.passageiro.email,
             style: const TextStyle(color: Colors.white, fontSize: 14),
           )
         ],
@@ -85,7 +73,9 @@ class _MenuDrawerState extends State<MenuDrawer> {
             () => Navigator.push(
                 context,
                 MaterialPageRoute(
-                    builder: (context) => const PassageiroPage()))),
+                    builder: (context) => PassageiroPage(
+                          passageiro: widget.passageiro,
+                        )))),
         _getListTile(Icons.local_police, 'Polícia', () {
           const number = '+55190';
           FlutterPhoneDirectCaller.callNumber(number);

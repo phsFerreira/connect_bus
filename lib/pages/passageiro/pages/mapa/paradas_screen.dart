@@ -51,9 +51,7 @@ class ParadasScreenState extends State<ParadasScreen> {
       ),
 
       // Menu lateral
-      drawer: MenuDrawer(
-          emailPassageiro: widget.passageiro.email,
-          nomePassageiro: widget.passageiro.nomeCompleto),
+      drawer: MenuDrawer(passageiro: widget.passageiro),
 
       // Mapa com as paradas de onibus
       body: ChangeNotifierProvider<ParadasController>(

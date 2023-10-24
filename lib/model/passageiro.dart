@@ -154,17 +154,33 @@ loginPassageiro(String email, String senha) async {
 }
 
 Future<Passageiro> updatePassageiro(Passageiro passageiro) async {
-  Passageiro passageiroUpdate = passageiro;
-  String emailBusca = passageiroUpdate.email;
+  // var collection = FirebaseFirestore.instance.collection('Usuarios');
+  // var docSnapshot = await collection.doc(passageiro.docID).get();
 
-  var collection = FirebaseFirestore.instance.collection('Usuarios');
-  var docSnapshot = await collection.doc(emailBusca).get();
+  // if (docSnapshot.exists) {
+  //   Map<String, dynamic>? data = docSnapshot.data();
+  //   String emailUpdate = data?['email'];
 
-  if (docSnapshot.exists) {
-    Map<String, dynamic>? data = docSnapshot.data();
-    String emailUpdate = data?['email'];
+  //   if (emailUpdate == emailBusca) {}
+  // }
 
-    if (emailUpdate == emailBusca) {}
+  final docPassageiroRef =
+      FirebaseFirestore.instance.collection("Usuarios").doc(passageiro.docID);
+
+  var docPassageiroExist = await docPassageiroRef.get();
+
+  if (docPassageiroExist.exists) {
+    docPassageiroRef.update({
+      "nomeCompleto": passageiro.nomeCompleto,
+      "cpf": passageiro.cpf,
+      "telefone": passageiro.telefone,
+      "email": passageiro.email,
+      "senha": passageiro.senha,
+    }).then(
+        (value) =>
+            Fluttertoast.showToast(msg: 'Usuario atualizado com sucesso.'),
+        onError: (e) => Fluttertoast.showToast(
+            msg: 'Erro ao atualizar usuario ${e.toString()}.'));
   }
 
   return passageiro;

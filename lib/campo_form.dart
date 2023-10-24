@@ -9,18 +9,24 @@ class CampoForm extends StatelessWidget {
     required this.hintText,
     this.inputFormatters,
     this.validator,
+    this.value,
+    this.controller,
   }) : super(key: key);
 
   final String hintText;
   final List<TextInputFormatter>? inputFormatters;
   final String? Function(String?)? validator;
+  final String? value;
+  final TextEditingController? controller;
 
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(0),
       child: TextFormField(
+        controller: controller,
         inputFormatters: inputFormatters,
+        initialValue: value,
         validator: validator,
         decoration: InputDecoration(
           labelText: hintText,
