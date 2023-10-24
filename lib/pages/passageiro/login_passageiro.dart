@@ -17,6 +17,7 @@ class _LoginPassageiroPageState extends State<LoginPassageiroPage> {
   final _formKey = GlobalKey<FormState>();
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
+  bool passToggle = true;
   String email = "", senha = "", nomePassageiro = "";
 
   @override
@@ -89,10 +90,10 @@ class _LoginPassageiroPageState extends State<LoginPassageiroPage> {
   }
 
   _getTextFormField(TextEditingController? controller, String labelText,
-      String textIfFieldEmpty, bool obscureText) {
+      String textIfFieldEmpty, bool isPassword) {
     return TextFormField(
       controller: controller,
-      obscureText: obscureText,
+      obscureText: passToggle,
       validator: (text) {
         if (text == null || text.isEmpty) {
           return textIfFieldEmpty;
@@ -101,6 +102,17 @@ class _LoginPassageiroPageState extends State<LoginPassageiroPage> {
       },
       decoration: InputDecoration(
         labelText: labelText,
+        suffix: isPassword
+            ? InkWell(
+                onTap: () {
+                  setState(() {
+                    passToggle = !passToggle;
+                  });
+                },
+                child:
+                    Icon(passToggle ? Icons.visibility : Icons.visibility_off),
+              )
+            : null,
         enabledBorder: const OutlineInputBorder(
           borderSide: BorderSide(
               color: Colors.black, width: 2, style: BorderStyle.solid),
