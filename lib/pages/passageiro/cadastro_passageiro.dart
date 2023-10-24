@@ -1,3 +1,6 @@
+import 'dart:convert';
+
+import 'package:brasil_fields/brasil_fields.dart';
 import 'package:flutter/material.dart';
 
 import 'package:connect_bus/campo_form.dart';
@@ -5,6 +8,7 @@ import 'package:connect_bus/extensoes.dart';
 import 'package:connect_bus/pages/passageiro/login_passageiro.dart';
 import 'package:connect_bus/model/passageiro.dart';
 import 'package:connect_bus/widgets/button.dart';
+import 'package:flutter/services.dart';
 
 class CadastroPassageiroPage extends StatefulWidget {
   const CadastroPassageiroPage({Key? key}) : super(key: key);
@@ -15,6 +19,21 @@ class CadastroPassageiroPage extends StatefulWidget {
 
 class _CadastroPassageiroPageState extends State<CadastroPassageiroPage> {
   final _formKey = GlobalKey<FormState>();
+  final nameController = TextEditingController();
+  final cpfController = TextEditingController();
+  final phoneController = TextEditingController();
+  final emailController = TextEditingController();
+  final passwordController = TextEditingController();
+
+  @override
+  void dispose() {
+    nameController.dispose();
+    cpfController.dispose();
+    phoneController.dispose();
+    emailController.dispose();
+    passwordController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -44,12 +63,13 @@ class _CadastroPassageiroPageState extends State<CadastroPassageiroPage> {
             _getText(),
 
             CampoForm(
+              controller: nameController,
               hintText: 'Nome Completo',
+              isPassword: false,
               validator: (value) {
-                nome = value.toString();
-                if (nome.isEmpty) {
+                if (value!.isEmpty) {
                   return 'Digite seu nome.';
-                } else if (nome.isValidName) {
+                } else if (value.isValidName) {
                   return 'Digite um nome válido.';
                 }
                 return null;
@@ -58,54 +78,75 @@ class _CadastroPassageiroPageState extends State<CadastroPassageiroPage> {
 
             //CPF
             CampoForm(
+              controller: cpfController,
               hintText: 'CPF',
+              isPassword: false,
+              inputFormatters: [
+                FilteringTextInputFormatter.digitsOnly,
+                CpfInputFormatter(),
+              ],
               validator: (value) {
-                cpf = value.toString();
-                if (cpf.isEmpty) {
+                bool cpfValid = UtilBrasilFields.isCPFValido(value);
+
+                if (value!.isEmpty) {
                   return 'Digite seu CPF.';
-                } else if (cpf.isValidCPF) {
+                } else if (cpfValid == false) {
                   return 'Digite um CPF válido.';
                 }
+                return null;
               },
             ),
 
             //telefone
             CampoForm(
+              controller: phoneController,
+              isPassword: false,
               hintText: 'Telefone',
+              inputFormatters: [
+                FilteringTextInputFormatter.digitsOnly,
+                TelefoneInputFormatter(),
+              ],
               validator: (value) {
-                telefone = value.toString();
-                if (telefone.isEmpty) {
+                if (value!.isEmpty) {
                   return 'Digite seu telefone.';
-                } else if (telefone.isValidPhone) {
+                } else if (value.isValidPhone) {
                   return 'Digite um telefone válido.';
                 }
+                return null;
               },
             ),
 
             //email
             CampoForm(
+              controller: emailController,
+              isPassword: false,
               hintText: 'E-mail',
               validator: (value) {
-                email = value.toString();
-                if (email.isEmpty) {
+                // Coloquei o Regex aqui porque no arquivo extensoes.dart nao estava funcionando.
+                final bool emailValid = RegExp(
+                        r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
+                    .hasMatch(value!);
+                if (value.isEmpty) {
                   return 'Digite seu email.';
-                } else if (email.isValidEmail) {
+                } else if (emailValid == false) {
                   return 'Digite um email valido';
                 }
+                return null;
               },
             ),
 
             //senha
             CampoForm(
+              controller: passwordController,
+              isPassword: false,
               hintText: 'Senha',
               validator: (value) {
-                senha = value.toString();
-                if (senha.isEmpty) {
+                if (value!.isEmpty) {
                   return 'Digite sua senha.';
-                }
-                if (senha.isValidPassword) {
+                } else if (value.isValidPassword) {
                   return 'Digite uma senha válida';
                 }
+                return null;
               },
             ),
 
@@ -135,16 +176,18 @@ class _CadastroPassageiroPageState extends State<CadastroPassageiroPage> {
       onPressed: () {
         if (_formKey.currentState!.validate()) {
           Passageiro passageiro = Passageiro(
-              nomeCompleto: nome,
-              cpf: cpf,
-              telefone: telefone,
-              email: email,
-              senha: senha);
+              nomeCompleto: nameController.text,
+              cpf: cpfController.text,
+              telefone: phoneController.text,
+              email: emailController.text,
+              senha: passwordController.text);
 
-          passageiro.registrarPassageiro();
+          print(passageiro.cpf);
 
-          Navigator.of(context).push(
-              MaterialPageRoute(builder: (_) => const LoginPassageiroPage()));
+          // passageiro.registrarPassageiro();
+
+          // Navigator.of(context).push(
+          //     MaterialPageRoute(builder: (_) => const LoginPassageiroPage()));
         }
       },
     );

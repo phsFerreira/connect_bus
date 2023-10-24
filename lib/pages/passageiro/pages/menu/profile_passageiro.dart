@@ -78,6 +78,7 @@ class _PassageiroPageState extends State<PassageiroPage> {
                   child: CampoForm(
                     controller: nameController,
                     hintText: 'Nome Completo',
+                    isPassword: false,
                     validator: (value) {
                       nome = value.toString();
                       if (nome.isEmpty) {
@@ -96,6 +97,7 @@ class _PassageiroPageState extends State<PassageiroPage> {
                   child: CampoForm(
                     controller: cpfController,
                     hintText: 'CPF',
+                    isPassword: false,
                     validator: (value) {
                       cpf = value.toString();
                       if (cpf.isEmpty) {
@@ -113,6 +115,7 @@ class _PassageiroPageState extends State<PassageiroPage> {
                   child: CampoForm(
                     controller: phoneController,
                     hintText: 'Telefone',
+                    isPassword: false,
                     validator: (value) {
                       telefone = value.toString();
                       if (telefone.isEmpty) {
@@ -130,6 +133,7 @@ class _PassageiroPageState extends State<PassageiroPage> {
                   child: CampoForm(
                     controller: emailController,
                     hintText: 'E-mail',
+                    isPassword: false,
                     validator: (value) {
                       email = value.toString();
                       if (email.isEmpty) {
@@ -147,6 +151,7 @@ class _PassageiroPageState extends State<PassageiroPage> {
                   child: CampoForm(
                     controller: passwordController,
                     hintText: 'Senha',
+                    isPassword: true,
                     validator: (value) {
                       senha = value.toString();
                       if (senha.isEmpty) {

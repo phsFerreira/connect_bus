@@ -65,6 +65,9 @@ dependencies:
 
   # Plugin usado para permitir que usemos variaveis de ambiente 'env' 
   flutter_config: ^2.0.0
+  
+  # Formatar campos no formato BR
+  brasil_fields: ^1.14.0
 
   
 dev_dependencies:
