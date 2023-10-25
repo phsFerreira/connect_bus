@@ -93,7 +93,7 @@ class _LoginPassageiroPageState extends State<LoginPassageiroPage> {
       String textIfFieldEmpty, bool isPassword) {
     return TextFormField(
       controller: controller,
-      obscureText: passToggle,
+      obscureText: isPassword ? passToggle : false,
       validator: (text) {
         if (text == null || text.isEmpty) {
           return textIfFieldEmpty;
