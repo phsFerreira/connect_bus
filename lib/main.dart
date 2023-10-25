@@ -36,7 +36,6 @@ class MainPage extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Connect Bus', // Nome do aplicativo nos recentes
       theme: ThemeData(fontFamily: 'Comfortaa'),
-      darkTheme: ThemeData(brightness: Brightness.dark),
       // initialRoute: '/main', // Specify your initial route here
       routes: {
         '/main': (context) => this,
