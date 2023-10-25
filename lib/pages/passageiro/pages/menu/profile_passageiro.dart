@@ -1,6 +1,8 @@
+import 'package:brasil_fields/brasil_fields.dart';
 import 'package:connect_bus/model/passageiro.dart';
 import 'package:connect_bus/widgets/button.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
 import 'package:connect_bus/campo_form.dart';
@@ -67,10 +69,7 @@ class _PassageiroPageState extends State<PassageiroPage> {
               overflowAlignment: OverflowBarAlignment.center,
               overflowSpacing: 20,
               children: <Widget>[
-                Icon(
-                  Icons.person,
-                  size: 90,
-                ),
+                Image.asset('assets/images/bus-icon.png', height: 90),
 
                 //nome completo
                 SizedBox(
@@ -80,10 +79,9 @@ class _PassageiroPageState extends State<PassageiroPage> {
                     hintText: 'Nome Completo',
                     isPassword: false,
                     validator: (value) {
-                      nome = value.toString();
-                      if (nome.isEmpty) {
+                      if (value!.isEmpty) {
                         return 'Digite seu nome.';
-                      } else if (nome.isValidName) {
+                      } else if (value.isValidName) {
                         return 'Digite um nome válido.';
                       }
                       return null;
@@ -98,13 +96,19 @@ class _PassageiroPageState extends State<PassageiroPage> {
                     controller: cpfController,
                     hintText: 'CPF',
                     isPassword: false,
+                    inputFormatters: [
+                      FilteringTextInputFormatter.digitsOnly,
+                      CpfInputFormatter(),
+                    ],
                     validator: (value) {
-                      cpf = value.toString();
-                      if (cpf.isEmpty) {
+                      bool cpfValid = UtilBrasilFields.isCPFValido(value);
+
+                      if (value!.isEmpty) {
                         return 'Digite seu CPF.';
-                      } else if (cpf.isValidCPF) {
+                      } else if (cpfValid == false) {
                         return 'Digite um CPF válido.';
                       }
+                      return null;
                     },
                   ),
                 ),
@@ -114,15 +118,19 @@ class _PassageiroPageState extends State<PassageiroPage> {
                   width: 360,
                   child: CampoForm(
                     controller: phoneController,
-                    hintText: 'Telefone',
                     isPassword: false,
+                    hintText: 'Telefone',
+                    inputFormatters: [
+                      FilteringTextInputFormatter.digitsOnly,
+                      TelefoneInputFormatter(),
+                    ],
                     validator: (value) {
-                      telefone = value.toString();
-                      if (telefone.isEmpty) {
+                      if (value!.isEmpty) {
                         return 'Digite seu telefone.';
-                      } else if (telefone.isValidPhone) {
+                      } else if (value.isValidPhone) {
                         return 'Digite um telefone válido.';
                       }
+                      return null;
                     },
                   ),
                 ),
@@ -132,15 +140,19 @@ class _PassageiroPageState extends State<PassageiroPage> {
                   width: 360,
                   child: CampoForm(
                     controller: emailController,
-                    hintText: 'E-mail',
                     isPassword: false,
+                    hintText: 'E-mail',
                     validator: (value) {
-                      email = value.toString();
-                      if (email.isEmpty) {
+                      // Coloquei o Regex aqui porque no arquivo extensoes.dart nao estava funcionando.
+                      final bool emailValid = RegExp(
+                              r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
+                          .hasMatch(value!);
+                      if (value.isEmpty) {
                         return 'Digite seu email.';
-                      } else if (email.isValidEmail) {
+                      } else if (emailValid == false) {
                         return 'Digite um email valido';
                       }
+                      return null;
                     },
                   ),
                 ),
@@ -150,16 +162,15 @@ class _PassageiroPageState extends State<PassageiroPage> {
                   width: 360,
                   child: CampoForm(
                     controller: passwordController,
-                    hintText: 'Senha',
                     isPassword: true,
+                    hintText: 'Senha',
                     validator: (value) {
-                      senha = value.toString();
-                      if (senha.isEmpty) {
+                      if (value!.isEmpty) {
                         return 'Digite sua senha.';
-                      }
-                      if (senha.isValidPassword) {
+                      } else if (value.isValidPassword) {
                         return 'Digite uma senha válida';
                       }
+                      return null;
                     },
                   ),
                 ),
