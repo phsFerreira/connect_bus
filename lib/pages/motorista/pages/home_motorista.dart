@@ -68,7 +68,11 @@ class _HomeMotoristaPage extends State<HomeMotoristaPage> {
                   _getGreySquareButton(Icons.bus_alert, "Ônibus",
                       BusStatusPage(codigoOnibus: widget.codigoOnibus)),
                   _getGreySquareButton(
-                      Icons.person, "Perfil", const ProfileMotorista()),
+                      Icons.person,
+                      "Perfil",
+                      ProfileMotorista(
+                        codigoOnibus: widget.codigoOnibus!,
+                      )),
                 ],
               ),
               Row(
