@@ -109,7 +109,7 @@ class _MenuDrawerState extends State<MenuDrawer> {
       ),
       title: Text(
         texto,
-        style: const TextStyle(color: Colors.black, fontSize: 16),
+        style: const TextStyle(color: Colors.black, fontSize: 18),
       ),
       onTap: onTap,
     );
