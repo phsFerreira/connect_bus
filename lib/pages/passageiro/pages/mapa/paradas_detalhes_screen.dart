@@ -38,14 +38,8 @@ class _ParadaDetalhesScreenState extends State<ParadaDetalhesScreen> {
     if (listLinhas.isEmpty) {
       return const Scaffold(
         body: Center(
-            child: Text(
-          textAlign: TextAlign.center,
-          'Ainda não tem horários para este bairro :c',
-          style: TextStyle(
-            color: Colors.black,
-            fontSize: 20,
-          ),
-        )),
+          child: CircularProgressIndicator(),
+        ),
       );
     }
 
