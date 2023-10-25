@@ -113,6 +113,7 @@ class _LoginPassageiroPageState extends State<LoginPassageiroPage> {
                     Icon(passToggle ? Icons.visibility : Icons.visibility_off),
               )
             : null,
+        border: OutlineInputBorder(),
         enabledBorder: const OutlineInputBorder(
           borderSide: BorderSide(
               color: Colors.black, width: 2, style: BorderStyle.solid),
