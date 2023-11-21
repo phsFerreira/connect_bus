@@ -1,7 +1,14 @@
 extension ExtString on String {
   bool get isValidEmail {
-    final emailRegExp = RegExp(r'/^[a-z0-9.]+@[a-z0-9]+\.[a-z]+\.([a-z]+)?$/i');
-    return emailRegExp.hasMatch(this);
+    // final emailRegExp = RegExp(
+    //     r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+");
+    // return emailRegExp.hasMatch(this);
+
+    final bool emailValid = RegExp(
+            r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
+        .hasMatch(this);
+
+    return emailValid;
   }
 
   bool get isValidName {
@@ -22,8 +29,11 @@ extension ExtString on String {
   }
 
   bool get isValidCPF {
-    final cpfRegExp = RegExp(
-        r'/^([0-9]{3}\.?[0-9]{3}\.?[0-9]{3}\-?[0-9]{2}|[0-9]{2}\.?[0-9]{3}\.?[0-9]{3}\/?[0-9]{4}\-?[0-9]{2})$/');
+    //   final cpfRegExp = RegExp(
+    //       r'/^([0-9]{3}\.?[0-9]{3}\.?[0-9]{3}\-?[0-9]{2}|[0-9]{2}\.?[0-9]{3}\.?[0-9]{3}\/?[0-9]{4}\-?[0-9]{2})$/');
+
+    final cpfRegExp =
+        RegExp(r'/^([0-9]{3}\.?[0-9]{3}\.?[0-9]{3}\-?[0-9]{2})$/');
     return cpfRegExp.hasMatch(this);
   }
 }

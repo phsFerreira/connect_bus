@@ -107,6 +107,7 @@ class ParadasController extends ChangeNotifier {
   loadParadas() async {
     var paradaRepository = ParadasRepository();
     var paradaMarkers = await paradaRepository.getParadas();
+    print(paradaMarkers);
     for (var parada in paradaMarkers) {
       addMarker(parada);
       print(parada);
@@ -130,7 +131,7 @@ class ParadasController extends ChangeNotifier {
 
     markers.add(
       Marker(
-        markerId: MarkerId(parada.id!),
+        markerId: MarkerId(parada.latitude.toString()!),
         position: LatLng(parada.latitude!, parada.longitude!),
         infoWindow: InfoWindow(title: parada.bairro),
         icon: await BitmapDescriptor.fromAssetImage(

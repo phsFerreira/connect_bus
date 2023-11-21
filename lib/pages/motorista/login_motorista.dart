@@ -13,6 +13,7 @@ class LoginMotoristaPage extends StatefulWidget {
 class _LoginMotoristaPageState extends State<LoginMotoristaPage> {
   final _formKey = GlobalKey<FormState>();
   bool isLoading = false;
+  bool passToggle = true;
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
 
@@ -85,10 +86,10 @@ class _LoginMotoristaPageState extends State<LoginMotoristaPage> {
   }
 
   _getTextFormField(TextEditingController? controller, String labelText,
-      String textIfFieldEmpty, bool obscureText) {
+      String textIfFieldEmpty, bool isPassword) {
     return TextFormField(
       controller: controller,
-      obscureText: obscureText,
+      obscureText: isPassword ? passToggle : false,
       validator: (text) {
         if (text == null || text.isEmpty) {
           return textIfFieldEmpty;
@@ -96,7 +97,19 @@ class _LoginMotoristaPageState extends State<LoginMotoristaPage> {
         return null;
       },
       decoration: InputDecoration(
+        suffix: isPassword
+            ? InkWell(
+                onTap: () {
+                  setState(() {
+                    passToggle = !passToggle;
+                  });
+                },
+                child:
+                    Icon(passToggle ? Icons.visibility : Icons.visibility_off),
+              )
+            : null,
         labelText: labelText,
+        border: OutlineInputBorder(),
         enabledBorder: const OutlineInputBorder(
           borderSide: BorderSide(
               color: Colors.black, width: 2, style: BorderStyle.solid),
@@ -125,7 +138,7 @@ class _LoginMotoristaPageState extends State<LoginMotoristaPage> {
       setState(() {
         isLoading = false;
       });
-      if (e.code == 'user-not-found') {
+      if (e.code == 'user-not-found' || e.code == 'invalid-email') {
         return ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
             content: Text('Email não cadastrado.'),

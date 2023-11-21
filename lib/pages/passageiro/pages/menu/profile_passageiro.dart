@@ -1,28 +1,51 @@
-// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
-
+import 'package:brasil_fields/brasil_fields.dart';
 import 'package:connect_bus/model/passageiro.dart';
+import 'package:connect_bus/widgets/button.dart';
 import 'package:flutter/material.dart';
-import 'package:connect_bus/profile_widget.dart';
-import 'package:connect_bus/campo_form.dart';
-import 'package:connect_bus/extensoes.dart';
+import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
+import 'package:connect_bus/campo_form.dart';
+import 'package:connect_bus/extensoes.dart';
+
 class PassageiroPage extends StatefulWidget {
-  const PassageiroPage({super.key});
+  const PassageiroPage({super.key, required this.passageiro});
+  final Passageiro passageiro;
 
   @override
   State<PassageiroPage> createState() => _PassageiroPageState();
 }
 
 class _PassageiroPageState extends State<PassageiroPage> {
+  final _formKey = GlobalKey<FormState>();
+  final nameController = TextEditingController();
+  final cpfController = TextEditingController();
+  final phoneController = TextEditingController();
+  final emailController = TextEditingController();
+  final passwordController = TextEditingController();
+
+  @override
+  void dispose() {
+    nameController.dispose();
+    cpfController.dispose();
+    phoneController.dispose();
+    emailController.dispose();
+    passwordController.dispose();
+    super.dispose();
+  }
+
+  @override
+  void initState() {
+    nameController.text = widget.passageiro.nomeCompleto;
+    cpfController.text = widget.passageiro.cpf;
+    phoneController.text = widget.passageiro.telefone;
+    emailController.text = widget.passageiro.email;
+    passwordController.text = widget.passageiro.senha;
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
-    //final args=ModalRoute.of(context)!.settings.arguments as String;
-
-    // Passageiro passageiroLogado;
-
-    // passageiroLogado=buscaPassageiro(args) as Passageiro;
-
     String nome = "";
     String cpf = "";
     String telefone = "";
@@ -31,143 +54,168 @@ class _PassageiroPageState extends State<PassageiroPage> {
 
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.grey[700],
+        backgroundColor: const Color.fromARGB(255, 13, 106, 212),
+        title: const Text('Seu Perfil',
+            style: TextStyle(fontWeight: FontWeight.w900)),
+        centerTitle: true,
       ),
-      resizeToAvoidBottomInset: false,
+      // resizeToAvoidBottomInset: false,
       body: SafeArea(
-          child: Center(
-        child: Column(
-          children: <Widget>[
-            Padding(
-              padding: const EdgeInsets.only(top: 40.0),
-              child: Text(
-                'teste',
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 30),
-              ),
-            ),
-            SizedBox(height: 30),
-            ProfileWidget(
-              imagePath:
-                  "https://i.pinimg.com/736x/8b/16/7a/8b167af653c2399dd93b952a48740620.jpg",
-              width: 90,
-              height: 90,
-            ),
-            SizedBox(height: 40),
+        child: Container(
+          margin: EdgeInsets.only(top: 20),
+          child: Form(
+            key: _formKey,
+            child: OverflowBar(
+              overflowAlignment: OverflowBarAlignment.center,
+              overflowSpacing: 20,
+              children: <Widget>[
+                Image.asset('assets/images/bus-icon.png', height: 90),
 
-            //nome completo
-            SizedBox(
-              width: 360,
-              child: CampoForm(
-                hintText: 'Nome Completo',
-                validator: (value) {
-                  nome = value.toString();
-                  if (nome.isEmpty) {
-                    return 'Digite seu nome.';
-                  } else if (nome.isValidName) {
-                    return 'Digite um nome válido.';
-                  }
-                  return null;
-                },
-              ),
-            ),
-            SizedBox(height: 20),
-
-            //CPF
-            IgnorePointer(
-              child: SizedBox(
-                width: 360,
-                child: CampoForm(
-                  hintText: 'CPF',
-                  validator: (value) {
-                    cpf = value.toString();
-                    if (cpf.isEmpty) {
-                      return 'Digite seu CPF.';
-                    } else if (cpf.isValidCPF) {
-                      return 'Digite um CPF válido.';
-                    }
-                  },
+                //nome completo
+                SizedBox(
+                  width: 360,
+                  child: CampoForm(
+                    controller: nameController,
+                    hintText: 'Nome Completo',
+                    isPassword: false,
+                    validator: (value) {
+                      if (value!.isEmpty) {
+                        return 'Digite seu nome.';
+                      } else if (value.isValidName) {
+                        return 'Digite um nome válido.';
+                      }
+                      return null;
+                    },
+                  ),
                 ),
-              ),
-            ),
-            SizedBox(height: 20),
 
-            //telefone
-            SizedBox(
-              width: 360,
-              child: CampoForm(
-                hintText: 'Telefone',
-                validator: (value) {
-                  telefone = value.toString();
-                  if (telefone.isEmpty) {
-                    return 'Digite seu telefone.';
-                  } else if (telefone.isValidPhone) {
-                    return 'Digite um telefone válido.';
-                  }
-                },
-              ),
-            ),
-            SizedBox(height: 20),
+                //CPF
+                SizedBox(
+                  width: 360,
+                  child: CampoForm(
+                    controller: cpfController,
+                    hintText: 'CPF',
+                    isPassword: false,
+                    inputFormatters: [
+                      FilteringTextInputFormatter.digitsOnly,
+                      CpfInputFormatter(),
+                    ],
+                    validator: (value) {
+                      bool cpfValid = UtilBrasilFields.isCPFValido(value);
 
-            //email
-            SizedBox(
-              width: 360,
-              child: CampoForm(
-                hintText: 'E-mail',
-                validator: (value) {
-                  email = value.toString();
-                  if (email.isEmpty) {
-                    return 'Digite seu email.';
-                  } else if (email.isValidEmail) {
-                    return 'Digite um email valido';
-                  }
-                },
-              ),
-            ),
-            SizedBox(height: 20),
+                      if (value!.isEmpty) {
+                        return 'Digite seu CPF.';
+                      } else if (cpfValid == false) {
+                        return 'Digite um CPF válido.';
+                      }
+                      return null;
+                    },
+                  ),
+                ),
 
-            //senha
-            SizedBox(
-              width: 360,
-              child: CampoForm(
-                hintText: 'Senha',
-                validator: (value) {
-                  senha = value.toString();
-                  if (senha.isEmpty) {
-                    return 'Digite sua senha.';
-                  }
-                  if (senha.isValidPassword) {
-                    return 'Digite uma senha válida';
-                  }
-                },
-              ),
-            ),
-            SizedBox(height: 20),
+                //telefone
+                SizedBox(
+                  width: 360,
+                  child: CampoForm(
+                    controller: phoneController,
+                    isPassword: false,
+                    hintText: 'Telefone',
+                    inputFormatters: [
+                      FilteringTextInputFormatter.digitsOnly,
+                      TelefoneInputFormatter(),
+                    ],
+                    validator: (value) {
+                      if (value!.isEmpty) {
+                        return 'Digite seu telefone.';
+                      } else if (value.isValidPhone) {
+                        return 'Digite um telefone válido.';
+                      }
+                      return null;
+                    },
+                  ),
+                ),
 
-            //voltar button
-            SizedBox(
-              width: 360,
-              height: 60,
-              child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.black,
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(12)))),
-                  onPressed: () {
-                    Fluttertoast.showToast(
-                        msg: "Preencha todos os campos.",
-                        toastLength: Toast.LENGTH_LONG);
-                  },
-                  child: Text(
-                    "Salvar",
-                    style: TextStyle(
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 20),
-                  )),
-            )
-          ],
+                //email
+                SizedBox(
+                  width: 360,
+                  child: CampoForm(
+                    controller: emailController,
+                    isPassword: false,
+                    hintText: 'E-mail',
+                    validator: (value) {
+                      // Coloquei o Regex aqui porque no arquivo extensoes.dart nao estava funcionando.
+                      final bool emailValid = RegExp(
+                              r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
+                          .hasMatch(value!);
+                      if (value.isEmpty) {
+                        return 'Digite seu email.';
+                      } else if (emailValid == false) {
+                        return 'Digite um email valido';
+                      }
+                      return null;
+                    },
+                  ),
+                ),
+
+                //senha
+                SizedBox(
+                  width: 360,
+                  child: CampoForm(
+                    controller: passwordController,
+                    isPassword: true,
+                    hintText: 'Senha',
+                    validator: (value) {
+                      if (value!.isEmpty) {
+                        return 'Digite sua senha.';
+                      } else if (value.isValidPassword) {
+                        return 'Digite uma senha válida';
+                      }
+                      return null;
+                    },
+                  ),
+                ),
+
+                //voltar button
+                ButtonWidget(
+                    textButton: "SALVAR",
+                    colorTextButton: Colors.white,
+                    widthButton: 360,
+                    borderButton: Colors.black,
+                    backgroundButton: Colors.black,
+                    onPressed: () {
+                      if (_formKey.currentState!.validate()) {
+                        print('Atualizando dados do usuario...');
+                        Passageiro passageiroEdited = Passageiro(
+                          nomeCompleto: nameController.text,
+                          cpf: cpfController.text,
+                          telefone: phoneController.text,
+                          email: emailController.text,
+                          senha: passwordController.text,
+                          docID: widget.passageiro.docID,
+                        );
+
+                        updatePassageiro(passageiroEdited);
+                      }
+                    }),
+
+                ButtonWidget(
+                    textButton: "APAGAR CONTA",
+                    colorTextButton: Colors.white,
+                    widthButton: 200,
+                    borderButton: Color.fromARGB(255, 180, 18, 18),
+                    backgroundButton: Color.fromARGB(255, 180, 18, 18),
+                    onPressed: () async {
+                      bool deleteSuccess =
+                          await deletePassageiro(widget.passageiro.docID!);
+                      if (deleteSuccess) {
+                        Navigator.of(context).pushReplacementNamed('/main');
+                      }
+                    }),
+              ],
+            ),
+          ),
         ),
-      )),
+      ),
     );
   }
 }

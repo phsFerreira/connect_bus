@@ -1,12 +1,5 @@
-//import 'package:cloud_firestore/cloud_firestore.dart';
-// ignore_for_file: unused_import
-
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_database/firebase_database.dart';
-import 'package:flutter/widgets.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:http/http.dart';
 
 class Passageiro {
   String nomeCompleto = "";
@@ -14,13 +7,16 @@ class Passageiro {
   String telefone = "";
   String email = "";
   String senha = "";
+  String? docID = "";
 
-  Passageiro(
-      {required this.nomeCompleto,
-      required this.cpf,
-      required this.telefone,
-      required this.email,
-      required this.senha});
+  Passageiro({
+    required this.nomeCompleto,
+    required this.cpf,
+    required this.telefone,
+    required this.email,
+    required this.senha,
+    this.docID,
+  });
 
   set setNomeCompleto(String nomeCompleto) {
     this.nomeCompleto = nomeCompleto;
@@ -62,10 +58,9 @@ class Passageiro {
     return senha;
   }
 
-  void registrarPassageiro() {
+  Future<DocumentReference<Map<String, dynamic>>> registrarPassageiro() async {
     var db = FirebaseFirestore.instance;
-
-    Map<String, String> passageiros = {
+    final data = {
       'nomeCompleto': nomeCompleto,
       'cpf': cpf,
       'telefone': telefone,
@@ -73,7 +68,8 @@ class Passageiro {
       'senha': senha,
     };
 
-    db.collection('Usuarios').doc(email).set(passageiros);
+    var docSnapshot = await db.collection('Usuarios').add(data);
+    return docSnapshot;
   }
 
   static Passageiro fromJson(Map<String, dynamic> json) => Passageiro(
@@ -81,7 +77,7 @@ class Passageiro {
       cpf: json['cpf'],
       telefone: json['telefone'],
       email: json['email'],
-      senha: json['cpf']);
+      senha: json['senha']);
 }
 
 Future<String> buscaNomePassageiro(String email) async {
@@ -118,46 +114,114 @@ Future<Passageiro> buscaPassageiro(String email) async {
   return passageiroBusca;
 }
 
-Future<bool> loginPassageiro(String email, String senha) async {
-  String emailBusca = email;
+Future<bool> emailDuplicado(String email) async {
+  try {
+    bool duplicated = true;
+    var usuariosCollectionRef =
+        FirebaseFirestore.instance.collection('Usuarios');
 
-  var collection = FirebaseFirestore.instance.collection('Usuarios');
-  var docSnapshot = await collection.doc(emailBusca).get();
+    var usuarioEmailFoundDocs =
+        await usuariosCollectionRef.where("email", isEqualTo: email).get();
 
-  if (docSnapshot.exists) {
-    Map<String, dynamic>? data = docSnapshot.data();
-    String emailLogin = data?['email'];
-    String senhaLogin = data?['senha'];
-
-    if (emailLogin == email && senhaLogin == senha) {
-      // Fluttertoast.showToast(
-      //     msg: "logado com sucesso.", toastLength: Toast.LENGTH_LONG);
-      return true;
-    } else {
-      Fluttertoast.showToast(
-          msg: "Email ou senha incorretos.", toastLength: Toast.LENGTH_LONG);
-      return false;
+    if (usuarioEmailFoundDocs.docs.isEmpty) {
+      duplicated = false;
     }
-  } else {
+    return duplicated;
+  } catch (e) {
     Fluttertoast.showToast(
-        msg: "Usuário não cadastrado.", toastLength: Toast.LENGTH_LONG);
-    return false;
+        msg: 'Erro ao consultar email do usuario ${e.toString()}.');
+    return true;
   }
 }
 
-Future<Passageiro> updatePassageiro(Passageiro passageiro) async {
-  Passageiro passageiroUpdate = passageiro;
-  String emailBusca = passageiroUpdate.email;
+Future<bool> cpfDuplicado(String cpf) async {
+  try {
+    bool duplicated = true;
+    var usuariosCollectionRef =
+        FirebaseFirestore.instance.collection('Usuarios');
 
-  var collection = FirebaseFirestore.instance.collection('Usuarios');
-  var docSnapshot = await collection.doc(emailBusca).get();
+    var usuarioCPFFoundDocs =
+        await usuariosCollectionRef.where("cpf", isEqualTo: cpf).get();
 
-  if (docSnapshot.exists) {
-    Map<String, dynamic>? data = docSnapshot.data();
-    String emailUpdate = data?['email'];
-
-    if (emailUpdate == emailBusca) {}
+    if (usuarioCPFFoundDocs.docs.isEmpty) {
+      duplicated = false;
+    }
+    return duplicated;
+  } catch (e) {
+    Fluttertoast.showToast(
+        msg: 'Erro ao consultar cpf do usuario ${e.toString()}.');
+    return true;
   }
+}
 
-  return passageiro;
+loginPassageiro(String email, String senha) async {
+  try {
+    var usuariosCollectionRef =
+        FirebaseFirestore.instance.collection('Usuarios');
+
+    var usuarioFoundDocs =
+        await usuariosCollectionRef.where("email", isEqualTo: email).get();
+
+    if (usuarioFoundDocs.docs.isNotEmpty) {
+      for (var docUsuario in usuarioFoundDocs.docs) {
+        print('${docUsuario.id} ===> ${docUsuario.data()}');
+
+        if (docUsuario.data()['senha'] == senha) {
+          var passageiroExist = Passageiro(
+              nomeCompleto: docUsuario.data()['nomeCompleto'],
+              cpf: docUsuario.data()['cpf'],
+              telefone: docUsuario.data()['telefone'],
+              email: docUsuario.data()['email'],
+              senha: docUsuario.data()['senha'],
+              docID: docUsuario.id);
+          return passageiroExist;
+        } else {
+          Fluttertoast.showToast(
+              msg: "Senha incorreta.", toastLength: Toast.LENGTH_LONG);
+          return null;
+        }
+      }
+    } else {
+      Fluttertoast.showToast(
+          msg: "Email não cadastrado ou incorreto.",
+          toastLength: Toast.LENGTH_LONG);
+      return null;
+    }
+  } catch (e) {
+    Fluttertoast.showToast(msg: 'Erro ao consultar usuario ${e.toString()}.');
+    return null;
+  }
+}
+
+Future<bool> deletePassageiro(String docID) {
+  Future<bool> deleteSuccess = FirebaseFirestore.instance
+      .collection("Usuarios")
+      .doc(docID)
+      .delete()
+      .then(
+        (doc) => true,
+        onError: (e) => Fluttertoast.showToast(msg: "Erro ao deletar conta $e"),
+      );
+  return deleteSuccess;
+}
+
+updatePassageiro(Passageiro passageiro) async {
+  final docPassageiroRef =
+      FirebaseFirestore.instance.collection("Usuarios").doc(passageiro.docID);
+
+  var docPassageiroExist = await docPassageiroRef.get();
+
+  if (docPassageiroExist.exists) {
+    docPassageiroRef.update({
+      "nomeCompleto": passageiro.nomeCompleto,
+      "cpf": passageiro.cpf,
+      "telefone": passageiro.telefone,
+      "email": passageiro.email,
+      "senha": passageiro.senha,
+    }).then(
+        (value) =>
+            Fluttertoast.showToast(msg: 'Usuario atualizado com sucesso.'),
+        onError: (e) => Fluttertoast.showToast(
+            msg: 'Erro ao atualizar usuario ${e.toString()}.'));
+  }
 }

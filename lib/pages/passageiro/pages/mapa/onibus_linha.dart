@@ -17,7 +17,7 @@ class OnibusLinhaPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Onibus"),
+        title: Text(nomeLinha),
         centerTitle: true,
       ),
       body: StreamBuilder<QuerySnapshot>(

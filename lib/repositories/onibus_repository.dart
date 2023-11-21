@@ -84,7 +84,7 @@ class OnibusRepository extends ChangeNotifier {
     }
   }
 
-  findByCodigoOnibus(String codigoOnibus) async {
+  Future<List> findByCodigoOnibus(String codigoOnibus) async {
     try {
       var onibusCollectionRef = db.collection('Onibus');
 

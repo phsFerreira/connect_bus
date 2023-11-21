@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:connect_bus/model/passageiro.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
@@ -15,12 +16,13 @@ GlobalKey<State<StatefulWidget>> paradaScreenContextKey = GlobalKey();
 class ParadasScreen extends StatefulWidget {
   const ParadasScreen({
     Key? key,
-    required this.emailPassageiro,
-    required this.nomePassageiro,
+    required this.passageiro,
+    // required this.emailPassageiro,
+    // required this.nomePassageiro,
   }) : super(key: key);
-  final String emailPassageiro;
-  final String nomePassageiro;
-
+  // final String emailPassageiro;
+  // final String nomePassageiro;
+  final Passageiro passageiro;
   @override
   State<ParadasScreen> createState() => ParadasScreenState();
 }
@@ -44,14 +46,14 @@ class ParadasScreenState extends State<ParadasScreen> {
 
       // Barra superior
       appBar: AppBar(
-        backgroundColor: Colors.grey[700],
-        title: const Text('Connect Bus'),
+        backgroundColor: const Color.fromARGB(255, 13, 106, 212),
+        title: const Text('CONNECT BUS',
+            style: TextStyle(fontWeight: FontWeight.w900)),
+        centerTitle: true,
       ),
 
       // Menu lateral
-      drawer: MenuDrawer(
-          emailPassageiro: widget.emailPassageiro,
-          nomePassageiro: widget.nomePassageiro),
+      drawer: MenuDrawer(passageiro: widget.passageiro),
 
       // Mapa com as paradas de onibus
       body: ChangeNotifierProvider<ParadasController>(
