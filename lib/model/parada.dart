@@ -1,12 +1,9 @@
 class Parada {
-  Parada({
-    required this.id,
-    required this.bairro,
-    required this.latitude,
-    required this.longitude,
-    required this.onibus,
-  });
-  String? id;
+  Parada(
+      {required this.bairro,
+      required this.latitude,
+      required this.longitude,
+      this.onibus});
   String? bairro;
   double? latitude;
   double? longitude;

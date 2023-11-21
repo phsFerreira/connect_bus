@@ -33,27 +33,27 @@ class _CadastroParadaFormState extends State<CadastroParadaForm> {
                   SizedBox(
                     height: 30,
                   ),
-                  CampoForm(
-                    hintText: 'Endereço',
-                    validator: (value) {
-                      endereco = value.toString();
-                      if (endereco.isEmpty) {
-                        return 'Digite o endereço.';
-                      }
-                      return null;
-                    },
-                  ),
+                  // CampoForm(
+                  //   hintText: 'Endereço',
+                  //   validator: (value) {
+                  //     endereco = value.toString();
+                  //     if (endereco.isEmpty) {
+                  //       return 'Digite o endereço.';
+                  //     }
+                  //     return null;
+                  //   },
+                  // ),
                   SizedBox(height: 20),
-                  CampoForm(
-                    hintText: 'idOnibus',
-                    validator: (value) {
-                      complemento = value.toString();
-                      if (endereco.isEmpty) {
-                        return 'Digite o endereço.';
-                      }
-                      return null;
-                    },
-                  ),
+                  // CampoForm(
+                  //   hintText: 'idOnibus',
+                  //   validator: (value) {
+                  //     complemento = value.toString();
+                  //     if (endereco.isEmpty) {
+                  //       return 'Digite o endereço.';
+                  //     }
+                  //     return null;
+                  //   },
+                  // ),
                   SizedBox(height: 20),
                   ElevatedButton(
                       style: ElevatedButton.styleFrom(

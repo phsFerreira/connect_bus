@@ -1,5 +1,3 @@
-import 'dart:ui';
-
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
@@ -19,6 +17,7 @@ class _LoginPassageiroPageState extends State<LoginPassageiroPage> {
   final _formKey = GlobalKey<FormState>();
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
+  bool passToggle = true;
   String email = "", senha = "", nomePassageiro = "";
 
   @override
@@ -91,10 +90,10 @@ class _LoginPassageiroPageState extends State<LoginPassageiroPage> {
   }
 
   _getTextFormField(TextEditingController? controller, String labelText,
-      String textIfFieldEmpty, bool obscureText) {
+      String textIfFieldEmpty, bool isPassword) {
     return TextFormField(
       controller: controller,
-      obscureText: obscureText,
+      obscureText: isPassword ? passToggle : false,
       validator: (text) {
         if (text == null || text.isEmpty) {
           return textIfFieldEmpty;
@@ -103,6 +102,18 @@ class _LoginPassageiroPageState extends State<LoginPassageiroPage> {
       },
       decoration: InputDecoration(
         labelText: labelText,
+        suffix: isPassword
+            ? InkWell(
+                onTap: () {
+                  setState(() {
+                    passToggle = !passToggle;
+                  });
+                },
+                child:
+                    Icon(passToggle ? Icons.visibility : Icons.visibility_off),
+              )
+            : null,
+        border: OutlineInputBorder(),
         enabledBorder: const OutlineInputBorder(
           borderSide: BorderSide(
               color: Colors.black, width: 2, style: BorderStyle.solid),
@@ -135,15 +146,14 @@ class _LoginPassageiroPageState extends State<LoginPassageiroPage> {
     senha = passwordController.text;
 
     try {
-      var loginSuccess = await loginPassageiro(email, senha);
-      print('Login deu sucesso? ===> $loginSuccess');
-
-      if (loginSuccess) {
-        nomePassageiro = await buscaNomePassageiro(email);
-        _pageRedirect();
+      var passageiroExist = await loginPassageiro(email, senha);
+      if (passageiroExist != null) {
+        print('Login deu sucesso? ===> ${passageiroExist.email}');
+        // nomePassageiro = await buscaNomePassageiro(email);
+        _pageRedirect(passageiroExist);
       }
     } catch (e) {
-      Fluttertoast.showToast(msg: "error ==> $e");
+      Fluttertoast.showToast(msg: "Erro ao fazer login ==> $e");
     }
   }
 
@@ -161,12 +171,13 @@ class _LoginPassageiroPageState extends State<LoginPassageiroPage> {
     );
   }
 
-  void _pageRedirect() {
+  void _pageRedirect(Passageiro passageiro) {
     Navigator.push(
       context,
       MaterialPageRoute(
         builder: (context) => ParadasScreen(
-            emailPassageiro: email, nomePassageiro: nomePassageiro),
+          passageiro: passageiro,
+        ),
       ),
     );
   }

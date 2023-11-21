@@ -38,21 +38,17 @@ class _ParadaDetalhesScreenState extends State<ParadaDetalhesScreen> {
     if (listLinhas.isEmpty) {
       return const Scaffold(
         body: Center(
-            child: Text(
-          textAlign: TextAlign.center,
-          'Ainda não tem horários para este bairro :c',
-          style: TextStyle(
-            color: Colors.black,
-            fontSize: 20,
-          ),
-        )),
+          child: CircularProgressIndicator(),
+        ),
       );
     }
 
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.grey[700],
-        title: const Text('Parada'),
+        backgroundColor: const Color.fromARGB(255, 13, 106, 212),
+        title:
+            const Text('Parada', style: TextStyle(fontWeight: FontWeight.w900)),
+        centerTitle: true,
       ),
 
       // Lista de Horários

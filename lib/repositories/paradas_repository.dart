@@ -8,24 +8,20 @@ class ParadasRepository {
 
   Future<List<Parada>> getParadas() async {
     try {
-      var bairroCollection = await db.collection("Bairros").get();
+      print("BUSCANDO PARADAS NO BANCO");
+      var paradaCollection = await db.collection("Paradas").get();
 
-      for (var bairroDoc in bairroCollection.docs) {
-        var paradaCollection =
-            await db.collection("Bairros/${bairroDoc.id}/Paradas").get();
+      for (var paradaDoc in paradaCollection.docs) {
+        var parada = paradaDoc.data();
 
-        for (var paradaDoc in paradaCollection.docs) {
-          print('PARADADOC ${paradaDoc.id} ===> ${paradaDoc.data()}');
-          var parada = Parada(
-            bairro: bairroDoc.get('nome'),
-            id: paradaDoc.get('id'),
-            latitude: paradaDoc.get('latitude'),
-            longitude: paradaDoc.get('longitude'),
-            onibus: bairroDoc.get('onibus'),
-          );
+        var paradaInCollection = new Parada(
+          bairro: parada['bairro'],
+          latitude: parada['latitude'],
+          longitude: parada['longitude'],
+        );
+        print('PARADA  ?=> ${paradaInCollection}');
 
-          _listParadas.add(parada);
-        }
+        _listParadas.add(paradaInCollection);
       }
       return _listParadas;
     } catch (e) {
