@@ -27,8 +27,10 @@ class OnibusLinhaPage extends StatelessWidget {
             .snapshots(),
         builder: (context, snapshot) {
           if (!snapshot.hasData) {
-            return const Center(
-              child: CircularProgressIndicator(),
+            return const Scaffold(
+              body: Center(
+                child: CircularProgressIndicator(),
+              ),
             );
           } else {
             return ListView(
@@ -45,6 +47,7 @@ class OnibusLinhaPage extends StatelessWidget {
                   child: Card(
                     child: ListTile(
                       title: Text('Ônibus ${doc.get('codigo')}'),
+                      subtitle: Text(doc.get('estadoFisico')),
                     ),
                   ),
                 );

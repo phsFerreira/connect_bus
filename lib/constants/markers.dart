@@ -1,5 +1,3 @@
-import 'dart:ffi';
-
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class MapMarkerBusStop {
@@ -12,6 +10,8 @@ class MapMarkerBusStop {
   final LatLng latlgnPosition;
   final String neighborhood;
 }
+
+LatLng latlgnPositionPassenger = LatLng(0, 0);
 
 final mapMarkerBusStops = [
   MapMarkerBusStop(
