@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:connect_bus/constants/markers.dart';
 import 'package:connect_bus/model/parada.dart';
 import 'package:connect_bus/repositories/onibus_repository.dart';
 import 'package:flutter/material.dart';
@@ -39,6 +40,7 @@ class ParadasController extends ChangeNotifier {
       latitude = posicao.latitude;
       longitude = posicao.longitude;
       // print('latitude: $latitude, longitude: $longitude');
+      latlgnPositionPassenger = LatLng(latitude, longitude);
 
       // Movendo a camera do google maps para a localizaçaõ do usuario
       await _mapsController.animateCamera(
@@ -135,7 +137,7 @@ class ParadasController extends ChangeNotifier {
         position: LatLng(parada.latitude!, parada.longitude!),
         infoWindow: InfoWindow(title: parada.bairro),
         icon: await BitmapDescriptor.fromAssetImage(
-            const ImageConfiguration(), 'assets/images/bus-stop_64_green.png'),
+            const ImageConfiguration(), 'assets/images/bus-stop_64_orange.png'),
         onTap: () => {
           Navigator.push(
             paradaScreenContextKey.currentState!.context,

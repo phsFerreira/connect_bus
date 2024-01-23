@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:connect_bus/constants/markers.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
@@ -20,17 +21,24 @@ class OnibusLocalizacaoState extends State<OnibusLocalizacao> {
   final Completer<GoogleMapController> googleMapController =
       Completer<GoogleMapController>();
   bool _added = false;
-  BitmapDescriptor myIcon = BitmapDescriptor.defaultMarker;
+  BitmapDescriptor iconBus = BitmapDescriptor.defaultMarker;
+  BitmapDescriptor iconPassenger = BitmapDescriptor.defaultMarker;
 
   @override
   void initState() {
     super.initState();
 
-    // Carregando a ícone do ônibus e atribuiundo a variável `myIcon`
+    // Carregando a ícone do ônibus e atribuiundo a variável `iconBus`
     BitmapDescriptor.fromAssetImage(
-            const ImageConfiguration(), 'assets/images/bus-moving.png')
+            const ImageConfiguration(), 'assets/images/bus_128_128.png')
         .then((onValue) {
-      myIcon = onValue;
+      iconBus = onValue;
+    });
+    // Carregando a ícone do passageiro e atribuiundo a variável `iconPassenger`
+    BitmapDescriptor.fromAssetImage(
+            const ImageConfiguration(), 'assets/images/person_128_128.png')
+        .then((onValue) {
+      iconPassenger = onValue;
     });
   }
 
@@ -53,6 +61,11 @@ class OnibusLocalizacaoState extends State<OnibusLocalizacao> {
             mapType: MapType.normal,
             markers: {
               Marker(
+                  infoWindow: InfoWindow(title: 'Você esta aqui'),
+                  position: latlgnPositionPassenger,
+                  markerId: const MarkerId('id'),
+                  icon: iconPassenger),
+              Marker(
                   position: LatLng(
                     snapshot.data!.docs.singleWhere((element) =>
                         element.get('codigo').toString() ==
@@ -62,7 +75,7 @@ class OnibusLocalizacaoState extends State<OnibusLocalizacao> {
                         widget.codigoOnibus)['longitude'],
                   ),
                   markerId: const MarkerId('id'),
-                  icon: myIcon),
+                  icon: iconBus),
             },
             initialCameraPosition: CameraPosition(
                 target: LatLng(
