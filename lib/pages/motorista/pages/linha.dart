@@ -51,52 +51,52 @@ class _LinhaPageState extends State<LinhaPage> {
                 ),
               ),
               _getCard(
-                'Linha 001 Azul',
+                'Linha 001 AZUL',
                 const Color.fromARGB(255, 3, 110, 197),
               ),
               _getCard(
-                'Linha 002 (A) Laranja',
+                'Linha 002 (A) LARANJA',
                 const Color.fromRGBO(247, 124, 0, 1),
               ),
               _getCard(
-                'Linha 002 (B) Laranja',
+                'Linha 002 (B) LARANJA',
                 const Color.fromRGBO(247, 124, 0, 1),
               ),
               _getCard(
-                'Linha 003 Verde',
+                'Linha 003 VERDE',
                 const Color.fromRGBO(0, 176, 80, 1),
               ),
-              _getCard('Linha 004 Vermelha', Colors.red),
+              _getCard('Linha 004 VERMELHA', Colors.red),
               _getCard(
-                'Linha 005 Coral',
+                'Linha 005 CORAL',
                 const Color.fromRGBO(255, 51, 153, 1),
               ),
               _getCard(
-                'Linha 006 Lilas',
+                'Linha 006 LILAS',
                 const Color.fromRGBO(239, 25, 208, 1),
               ),
               _getCard(
-                'Linha 007 (A) Expressa',
+                'Linha 007 (A) EXPRESSA',
                 const Color.fromARGB(255, 3, 110, 197),
               ),
               _getCard(
-                'Linha 007 (B) Expressa',
+                'Linha 007 (B) EXPRESSA',
                 const Color.fromARGB(255, 3, 110, 197),
               ),
               _getCard(
-                'Linha 008 Perimetral',
+                'Linha 008 PERIMETRAL',
                 const Color.fromRGBO(51, 51, 51, 1),
               ),
               _getCard(
-                'Linha 009 Bronze',
+                'Linha 009 BRONZE',
                 const Color.fromRGBO(217, 108, 31, 1),
               ),
               _getCard(
-                'Linha 010 Prata',
+                'Linha 010 PRATA',
                 const Color.fromRGBO(95, 95, 95, 1),
               ),
               _getCard(
-                'Linha 011 Turistica',
+                'Linha 011 TURISTICA',
                 const Color.fromRGBO(116, 85, 189, 1),
               ),
             ],

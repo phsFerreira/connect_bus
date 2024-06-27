@@ -175,7 +175,6 @@ class _PassageiroPageState extends State<PassageiroPage> {
                   ),
                 ),
 
-                //voltar button
                 ButtonWidget(
                     textButton: "SALVAR",
                     colorTextButton: Colors.white,
@@ -195,6 +194,8 @@ class _PassageiroPageState extends State<PassageiroPage> {
                         );
 
                         updatePassageiro(passageiroEdited);
+                        Fluttertoast.showToast(
+                            msg: "Dados atuaizados com sucesso!");
                       }
                     }),
 
