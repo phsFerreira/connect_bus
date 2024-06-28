@@ -116,7 +116,7 @@ Follow these steps to install and run ConnectBus on your system.
 2. Use the following command to clone the ConnectBus repository:
 
 ```sh
-$ git clone https://github.com/jenniferVC/connect_bus.git
+$ git clone https://github.com/phsFerreira/connect_bus.git
 $ cd connect_bus/
 ```
 
@@ -144,7 +144,7 @@ $ cd connect_bus/
 ## Contributing ❤️
 
 Thank you for choosing ConnectBus! If you encounter any issues or have suggestions for improvements,
-please don't hesitate to [create an issue](https://github.com/jenniferVC/connect-bus/issues). We
+please don't hesitate to [create an issue](https://github.com/phsFerreira/connect_bus/issues). We
 look forward to your feedback and collaboration.
 
 Please star⭐ the repo if you like it.
